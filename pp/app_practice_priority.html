@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Practice Priority List -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Priority List</title>
+    <link rel="stylesheet" href="app_practice_priority.css?v=0.7"> <!-- Link to the external CSS file -->
+</head>
+<body>
+
+<h1>Practice Priority List</h1>
+<p>release 0.7  2024-09-11</p>
+
+<!-- Control panel for the first row of buttons -->
+<div id="controlPanel1">
+    <!-- First row of buttons (Save, Load, Sample Data, Clear) -->
+    <div class="buttons">
+		<button id="loadSampleData">Demo Data</button>
+		<button id="clearTable">Clear Table</button>
+		<button id="addRow">Add Row</button>
+		<button id="deleteRow">Delete Row</button>
+		
+		<!-- 'expert' buttons -->
+		<button id="load" class="admin-only" style="display: none;">Import</button>
+		<button id="save" class="admin-only" style="display: none;">Export</button>		
+		<button id="clearLocalStorage" class="admin-only" style="display: none;">x Storage</button>
+    </div>
+
+    <!-- Second row for Practice button -->
+    <div class="buttons">
+        <button id="startPractice">Practice</button>
+    </div>
+</div>
+
+<!-- Second row of buttons for practice mode (hidden initially) -->
+<div class="buttons hidden" id="controlPanel2">
+    <button id="grade1">Grade 1</button>
+    <button id="grade2">Grade 2</button>
+    <button id="grade3">Grade 3</button>
+    <button id="skip">Skip</button>
+    <button id="stop">Stop</button>
+</div>
+
+<!-- Practice table wrapper -->
+<div class="practice-table-wrapper">
+    <table id="practiceTable">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Item</th>
+                <th>Last Practiced</th>
+                <th></th> <!-- Blank title for the Status column -->
+                <th>Grade</th>
+                <th>Aged Grade</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<!-- Collapsible Panel for Instructions -->
+<button class="collapsible">Show Instructions</button>
+<div class="collapsible-content" id="instructions" >
+<!-- insert html here ------------------------------------------ -->
+
+
+<h2 id="what-is-practice-priority-">What is Practice Priority?</h2>
+<p>This app keeps your practice items in order using a system
+similar to Dr. Molly Gebrian&#39;s red-yellow-green method. </p>
+<ol>
+<li><p>Divide your music into sections based on difficulty:</p>
+<ul>
+<li>Green = Grade 3 = Ready to perform</li>
+<li>Yellow = Grade 2 = I could struggle through it</li>
+<li>Red = Grade 1 = This is embarassing</li>
+</ul>
+</li>
+<li><p>Practice red items first. After a few days, the reds will (hopefully) move up to yellows or greens.</p>
+</li>
+<li><p>Items you don&#39;t practice lose 10% of their grade each day you don&#39;t practice them. 
+That&#39;s the &quot;aged grade&quot;. A green drop to a blue if you don&#39;t practice it for 4 days. 
+It drops all the way to red in 11 days.</p>
+</li>
+</ol>
+<p>Keeping your practice list in aged-grade order focuses your practice on areas that need the most work,
+without totally ignoring the easier sections.</p>
+<h2 id="basic-commands">Basic Commands</h2>
+<p><strong>Demo Data: </strong> Loads some sample data.   </p>
+<p><strong>Clear Table: </strong>  Remove all rows.  </p>
+<p><strong>Add Row: </strong> Add a new practice item at the top. Don&#39;t forget to fill in the name of the item. Other columns will be filled automatically as you practice.</p>
+<p><strong>Delete Row: </strong> Delete the selected row</p>
+<p><strong>Practice: </strong> Start practicing. The app steps through the items one at a time, starting at the top. </p>
+<p>Practice the selected item and click one of the grade buttons to assign a grade. The app records the date and grade then advances to the next item</p>
+<p>If you prefer not to practice an item, click <strong>Skip</strong> to advance to the next one. To skip more than one item, click on a radio button in the <strong>Select</strong> column</p>
+<p>When you complete the list the app stops and re-sorts the items by Aged Grade. You can also click <strong>Stop</strong> to quit before you have practiced all items.</p>
+<h2 id="references-">References:</h2>
+<p><a href="https://youtu.be/AdzqvsbV05Q" target="_blank"> Dr. Molly Grebrian September Practice Challenge, Day 4 </a></p>
+
+
+
+<!------------------------------------------- -->
+</div>
+<p>(c) Marilyn Fleming, 
+    <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
+</p>
+
+<!-- Admin mode checkbox at the bottom -->
+<div style="margin-top: 60px;">
+    <label><input type="checkbox" id="adminCheckbox"> Enable 'Expert' Functions</label>
+</div>
+
+<!-- jQuery and custom script -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="app_practice_priority.js?v=0.7"></script>
+
+</body>
+</html>

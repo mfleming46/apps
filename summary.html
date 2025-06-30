@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Log Summary by Page</title>
+</head>
+<body>
+  <h1>Log Summary by App/Page</h1>
+
+  <button onclick="clearLog()">Clear Log</button>
+  <pre id="summary">Loading...</pre>
+
+  <script>
+    function loadSummary() {
+      fetch('/apps/log_summary.php')
+        .then(response => {
+          if (!response.ok) throw new Error("Failed to load log");
+          return response.text();
+        })
+        .then(text => {
+          const lines = text.trim().split('\n').filter(line => line.trim() !== "");
+          const pages = {};
+          const visitors = new Set();
+          const dates = [];
+
+          for (let line of lines) {
+            const [timestamp, ip, page] = line.split(',');
+            if (!timestamp || !ip || !page) continue;
+
+            const date = timestamp.slice(0, 10);
+            const cleanPage = page.trim();
+
+            pages[cleanPage] = (pages[cleanPage] || 0) + 1;
+            visitors.add(ip);
+            dates.push(date);
+          }
+
+          dates.sort();
+          const startDate = dates[0] || 'N/A';
+          const endDate = dates[dates.length - 1] || 'N/A';
+
+          let report = `Date range: ${startDate} to ${endDate}\n\n`;
+          report += 'Hits per app/page:\n';
+          for (let page in pages) {
+            report += `  ${page}: ${pages[page]}\n`;
+          }
+
+          report += `\nTotal hits: ${lines.length}`;
+          report += `\nUnique IPs: ${visitors.size}`;
+
+          document.getElementById('summary').textContent = report;
+        })
+        .catch(err => {
+          console.error("Log fetch error:", err);
+          document.getElementById('summary').textContent = 'Error loading log.';
+        });
+    }
+
+    function clearLog() {
+      if (!confirm("Are you sure you want to clear the log?")) return;
+
+      fetch('/apps/clear_log.php', { method: 'POST' })
+        .then(response => response.text())
+        .then(msg => {
+          alert(msg);
+          loadSummary();  // Refresh view
+        })
+        .catch(err => {
+          alert("Error clearing log.");
+          console.error(err);
+        });
+    }
+
+    // Initial load
+    loadSummary();
+  </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+body {
+    font-family: sans-serif;
+    font-size: 12px;
+}
+
+.buttons {
+    margin-bottom: 10px;
+}
+
+.buttons button {
+    width: 120px; /* Set a fixed width */
+    height: 28px; /* Adjust height to accommodate three lines of text */
+    margin-right: 10px;
+}
+
+table {
+    width: 100%;
+    max-width: 1024px; /* Set max width of table */
+    border-collapse: collapse;
+    table-layout: fixed; /* Ensure table fits within the viewport */
+    margin-left: 0; /* Left justify the table */
+    margin-bottom: 20px; /* Extra space between table and instructions button */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+th, td:nth-child(n+2) { /* Apply to all columns except the first one */
+    width: 40px; /* Width for checkbox columns */
+}
+
+th:first-child, td:first-child {
+    text-align: left;
+    width: calc(3 * 40px); /* Width for Item column based on 3-4 checkbox columns */
+    min-width: 120px; /* Minimum width for the Item column */
+}
+
+.collapsible {
+    background-color: #f2f2f2;
+    color: #333;
+    cursor: pointer;
+    padding: 10px;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 14px; /* Match the font size with the table text */
+    margin-top: 10px; /* Add some margin on top */
+    width: auto; /* Auto width to fit the text */
+}
+
+.collapsible.active, .collapsible:hover {
+    background-color: #ddd;
+}
+
+.content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    font-size: 14px; /* Larger font size for the instructions */
+	line-height: 1.25
+}

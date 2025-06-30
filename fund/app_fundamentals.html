@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundamentals Practice</title>
+    <link rel="stylesheet" href="app_fundamentals_styles.css">
+</head>
+<body>
+	<h1>Fundamentals Practice Tracker</h1>
+	<p>release 0.5  2024-08-15</p>
+    <div class="buttons">
+        <input type="file" id="fileInput" style="display:none;">
+        <button onclick="loadData()">Load</button>
+        <button onclick="saveData()">Save</button>
+        <button onclick="addRow()">Append Row</button>
+        <button onclick="deleteRows()">Delete Row(s)</button>
+        <button onclick="shiftChecksRight()">Shift Right</button>
+        <button onclick="shiftChecksLeft()">Shift Left</button>
+        <button onclick="clearAllChecks()">Clear</button>
+    </div>
+    <table id="checkboxGrid">
+        <thead>
+            <tr id="headerRow">
+                <th>Item</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <button class="collapsible"><b>Show Instructions</b></button>
+    <div class="content">
+        <p>
+            <!-- Add your instructions here -->
+            <b>Load: </b> load data from a .json file.<br>
+            <b>Save: </b> save data to a .json file.<br>
+            <b>Append Row: </b> add a new row to the table.<br>
+            <b>Delete Row(s): </b> remove for which 'Select' is checked.<br>
+            <b>Shift Right or Left: </b> scroll the current date.<br>
+            <b>Clear: </b> clear all checkboxes.<br>
+			You can also edit the row names by typing over what's there
+        </p>
+    </div>
+	<p>(c) Marilyn Fleming, 
+	     <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
+	</p>
+
+    <script src="app_fundamentals_script.js"></script>
+</body>
+</html>

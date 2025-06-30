@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Logger Test</title>
+</head>
+<body>
+  <h1>Logger Test Page</h1>
+  <button onclick="logClick()">Click to Log</button>
+
+  <script>
+    function logClick() {
+      fetch('/apps/log.php?page=test', { method: 'GET' })
+        .then(() => alert('Logged!'))
+        .catch(err => alert('Failed to log: ' + err));
+    }
+  </script>
+</body>
+</html>

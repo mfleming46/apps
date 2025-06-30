@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="app_interleave.css?v=0.5"> <!-- Link to the external CSS file -->	
+    </head>		
+    <body  onload="initForm()">
+        
+        		<form name="frmLeave" action="" onsubmit="return false;" >
+			<input name="hidStrk01" type="hidden" >
+			<input name="hidStrk02" type="hidden" >
+			<input name="hidStrk03" type="hidden" >
+			<input name="hidStrk04" type="hidden" >
+			<input name="hidStrk05" type="hidden" >
+			
+			<p><b>Usage:</b></p>
+			<ul>
+			<li>Play the highlighted item once, then click <b>Pass</b> or <b>Fail</b>.</li>
+			<li><b>Blocked: </b> Moves to the next item after passing 5 times in a row.</li>
+			<li><b>Interleaved: </b> Moves to the next item after each try, pass or fail.</li>
+			<li><b>Streak: </b> Number of consecutive passed attenots</li>
+			<li>Changing modes resets all streaks.</li>
+			<li>You can edit the practice item names.</li>
+			</ul>
+		
+			<select name="cbMode" onchange="cbMode_change()">
+				<option value="BLOCKMODE">Blocked Mode</option>
+				<option value="LEAVEMODE">Interleaved Mode</option>
+			</select>
+			<button  type="button" onclick="btnReset_click();" name="btnReset" tabIndex=-1 class="bland"> Reset Streaks</button>
+			<button  type="button" onclick="btnRandomize_click();" name="btnRandomize" tabIndex=-1 class="bland"> Randomize</button>
+
+			<br><br>
+
+			<table>
+				<thead>
+					<tr>
+
+						<th style="text-align: left;"> &nbsp;Practice Item </th>
+						<th style="text-align: left;"> Streak </th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr >
+
+						<td> <input name="txtItm01" placeholder="Practice Item 1" size="25" maxlength="40"
+							type="text"> </td>
+						<td> <input name="txtStrk01" size="6" maxlength="6" value="" type="text" readonly tabindex=-1>
+						</td>
+					</tr>
+					<tr>
+
+						<td> <input name="txtItm02" placeholder="Practice Item 2" size="25" maxlength="40"
+							type="text"> </td>
+						<td> <input name="txtStrk02" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+					</tr>
+					<tr>
+
+						<td> <input name="txtItm03" placeholder="Practice Item 3" size="25" maxlength="40"
+							type="text"> </td>
+						<td> <input name="txtStrk03" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+					</tr>
+					<tr>
+
+						<td> <input name="txtItm04" placeholder="Practice Item 4" size="25" maxlength="40"
+
+							type="text"> </td>
+						<td> <input name="txtStrk04" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+					</tr>
+					<tr>
+
+						<td> <input name="txtItm05" placeholder="Practice Item 5" size="25" maxlength="40"
+
+							type="text"> </td>
+						<td> <input name="txtStrk05" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+					</tr>
+				</tbody>
+			</table>
+			<br>
+
+			<button type="button" onclick="btnPass_click();" name="btnPass" class="bland"> Pass </button>
+			<button  type="button" onclick="btnFail_click();" name="btnFail" class="bland"> Fail </button>
+			<button  type="button" onclick="btnSkip_click();" name="btnSkip" class="bland"> Skip </button>
+		</form>
+<!-- jQuery and custom script -->
+
+<script src="app_interleave.js?v=0.5alt"></script>
+    </body>
+</html>

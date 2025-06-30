@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interleaved Clickup</title>
+  <link rel="stylesheet" href="iclick_styles.css?v=0.7"> <!-- Link to the external CSS file -->
+</head>
+<body>
+
+<div class="container">
+  <table id="bpmTable">
+    <thead>
+      <tr><th>BPM</th><th>Segments</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="controls">
+    <label>Start BPM: &nbsp; <input id="startBpm" type="number" value="60"></label>
+    <label>Target BPM: &nbsp; <input id="targetBpm" type="number" value="120"></label>
+    <label>BPM Step: &nbsp; <input id="bpmDelta" type="number" value="5"></label>
+
+    <button id="btnReset">Reset</button>
+    <p>&nbsp;</p>
+
+    <div class="segment-buttons" style="margin-left: 50px">
+       <button id="btnDecBpm">Prior BPM</button>
+    </div>
+
+    <div class="segment-buttons">
+      <button id="btnDecSeg">Prior Seg</button>
+      <button id="btnIncSeg">Next Seg</button>
+    </div>
+
+    <div class="segment-buttons" style="margin-left: 50px">
+      <button id="btnIncBpm">Next BPM</button>
+    </div>
+  </div>
+</div>
+
+<!-- jQuery and custom script -->
+<script src="iclick_script.js?v=0.7"></script>
+
+</body>
+</html>
