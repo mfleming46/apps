@@ -10,19 +10,26 @@
 	<h1>Interleaved Clickup Practice Method</h1>
 
 <div class="container">
+
+  <div class="left">
   <table id="bpmTable">
     <thead>
       <tr><th>BPM</th><th>Segments</th></tr>
     </thead>
     <tbody></tbody>
   </table>
+  <p></p>
+  </div>
 
   <div class="controls">
     <label>Start BPM: &nbsp; <input id="startBpm" type="number" value="60"></label>
     <label>Target BPM: &nbsp; <input id="targetBpm" type="number" value="120"></label>
     <label>BPM Step: &nbsp; <input id="bpmDelta" type="number" value="5"></label>
 
-    <button id="btnReset">Reset</button>
+	<div class="apply-buttons">
+    <button id="btnReset">Apply</button>
+	<button id="btnDefaults">Factory Reset</button>
+	</div>
     <p>&nbsp;</p>
 
     <div class="segment-buttons" style="margin-left: 50px">
@@ -40,8 +47,13 @@
   </div>
 </div>
 
-<div style="max-width: 450px;">
+<div style="max-width: 600px;">
 <p><b>Reference:</b> Gebrian, Molly, Learn Faster, Perform Better: A Musician's Guide to the Neuroscience of Practicing</p>
+</div>
+
+<div style="max-width: 600px;">
+<p>This app uses cookies to remember your inputs between sessions — just on your device, nothing is tracked or shared.
+</p>
 </div>
 
 	<p><br>(c) Marilyn Fleming, 
@@ -50,6 +62,7 @@
 	</p>	
 
 <!-- jQuery and custom script -->
+<script src="../safe_storage.js"></script>
 <script src="iclick_script.js?v=0.7"></script>
 
 </body>

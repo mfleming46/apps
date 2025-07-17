@@ -9,69 +9,84 @@
   <button onclick="clearLog()">Clear Log</button>
   <pre id="summary">Loading...</pre>
 
-  <script>
-    function loadSummary() {
-      fetch('/apps/log_summary.php')
-        .then(response => {
-          if (!response.ok) throw new Error("Failed to load log");
-          return response.text();
-        })
-        .then(text => {
-          const lines = text.trim().split('\n').filter(line => line.trim() !== "");
-          const pages = {};
-          const visitors = new Set();
-          const dates = [];
+<script>
+  let myIp = null;
 
-          for (let line of lines) {
-            const [timestamp, ip, page] = line.split(',');
-            if (!timestamp || !ip || !page) continue;
+  // Fetch user's IP address before loading summary
+  fetch('https://api.ipify.org?format=json')
+    .then(res => res.json())
+    .then(data => {
+      myIp = data.ip;
+	  console.log(myIp);
+      loadSummary(); // Only load summary after we know IP
+    })
+    .catch(() => {
+      console.warn("Could not determine client IP. Showing all data.");
+      loadSummary(); // Proceed anyway if fetch fails
+    });
 
-            const date = timestamp.slice(0, 10);
-            const cleanPage = page.trim();
+  function loadSummary() {
+    fetch('/apps/log_summary.php')
+      .then(response => {
+        if (!response.ok) throw new Error("Failed to load log");
+        return response.text();
+      })
+      .then(text => {
+        const lines = text.trim().split('\n').filter(line => line.trim() !== "");
+        const pages = {};
+        const visitors = new Set();
+        const dates = [];
 
-            pages[cleanPage] = (pages[cleanPage] || 0) + 1;
-            visitors.add(ip);
-            dates.push(date);
-          }
+        for (let line of lines) {
+          const [timestamp, ip, page] = line.split(',');
+          if (!timestamp || !ip || !page) continue;
 
-          dates.sort();
-          const startDate = dates[0] || 'N/A';
-          const endDate = dates[dates.length - 1] || 'N/A';
+          if (ip === myIp) continue; // 👈 Skip entries from current user
 
-          let report = `Date range: ${startDate} to ${endDate}\n\n`;
-          report += 'Hits per app/page:\n';
-          for (let page in pages) {
-            report += `  ${page}: ${pages[page]}\n`;
-          }
+          const date = timestamp.slice(0, 10);
+          const cleanPage = page.trim();
 
-          report += `\nTotal hits: ${lines.length}`;
-          report += `\nUnique IPs: ${visitors.size}`;
+          pages[cleanPage] = (pages[cleanPage] || 0) + 1;
+          visitors.add(ip);
+          dates.push(date);
+        }
 
-          document.getElementById('summary').textContent = report;
-        })
-        .catch(err => {
-          console.error("Log fetch error:", err);
-          document.getElementById('summary').textContent = 'Error loading log.';
-        });
-    }
+        dates.sort();
+        const startDate = dates[0] || 'N/A';
+        const endDate = dates[dates.length - 1] || 'N/A';
 
-    function clearLog() {
-      if (!confirm("Are you sure you want to clear the log?")) return;
+        let report = `Date range: ${startDate} to ${endDate}\n\n`;
+        report += 'Hits per app/page:\n';
+        for (let page in pages) {
+          report += `  ${page}: ${pages[page]}\n`;
+        }
 
-      fetch('/apps/clear_log.php', { method: 'POST' })
-        .then(response => response.text())
-        .then(msg => {
-          alert(msg);
-          loadSummary();  // Refresh view
-        })
-        .catch(err => {
-          alert("Error clearing log.");
-          console.error(err);
-        });
-    }
+        report += `\nTotal hits: ${lines.length}`;
+        report += `\nUnique IPs (excluding yours): ${visitors.size}`;
 
-    // Initial load
-    loadSummary();
-  </script>
+        document.getElementById('summary').textContent = report;
+      })
+      .catch(err => {
+        console.error("Log fetch error:", err);
+        document.getElementById('summary').textContent = 'Error loading log.';
+      });
+  }
+
+  function clearLog() {
+    if (!confirm("Are you sure you want to clear the log?")) return;
+
+    fetch('/apps/clear_log.php', { method: 'POST' })
+      .then(response => response.text())
+      .then(msg => {
+        alert(msg);
+        loadSummary();  // Refresh view
+      })
+      .catch(err => {
+        alert("Error clearing log.");
+        console.error(err);
+      });
+  }
+</script>
+
 </body>
 </html>
