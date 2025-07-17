@@ -1,12 +1,14 @@
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Simple Interleaved Practice</title>
-        <link rel="stylesheet" href="app_interleave.css?v=0.5"> <!-- Link to the external CSS file -->	
-    </head>		
+	<link rel="stylesheet" href="app_interleave.css?v=0.5"> <!-- Link to the external CSS file -->	
+</head>		
     <body  onload="initForm()">
+		<h1>Simple Interleaved/Blocked Practce</h1>
         
-        		<form name="frmLeave" action="" onsubmit="return false;" >
+		<form name="frmLeave" action="" onsubmit="return false;" >
 			<input name="hidStrk01" type="hidden" >
 			<input name="hidStrk02" type="hidden" >
 			<input name="hidStrk03" type="hidden" >
@@ -87,8 +89,14 @@
 			<button  type="button" onclick="btnFail_click();" name="btnFail" class="bland"> Fail </button>
 			<button  type="button" onclick="btnSkip_click();" name="btnSkip" class="bland"> Skip </button>
 		</form>
+		
+	<p><br>(c) Marilyn Fleming, 
+	     <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
+		 <br>release 2025-07-01
+	</p>		
+		
+		
 <!-- jQuery and custom script -->
-
 <script src="app_interleave.js?v=0.5alt"></script>
     </body>
 </html>

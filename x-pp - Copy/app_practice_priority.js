@@ -1,8 +1,12 @@
 // ver 0.7
 
 $(document).ready(function() {
-
+	// Global flag to track if we should save to localStorage
+    //let doNotSaveToStorage = false;
 	let clearingLocalStorage = false; // for not saving when storage cleared
+	
+	let allowLocalStorageDebugSwitch = true; // disable storage for debugging
+	
 	let changeCount = 0;
 	const changeThreshold = 0;   // <<<<<<<<<<<<<<<<<
 	
@@ -15,6 +19,7 @@ $(document).ready(function() {
 	
 	// log state flags at startup
 	console.log('storageKey', storageKey);
+	console.log('allowLocalStorageDebugSwitch',allowLocalStorageDebugSwitch);
 	console.log('changeThreshold',changeThreshold);
 	
 	
@@ -31,8 +36,6 @@ $(document).ready(function() {
 
     // Show practice control panel and hide row 1 buttons
     function startPracticeCycle() {
-		console.log('start practicing');
-		logClick();
         toggleFirstRowButtons(true);
         $('#controlPanel2').show(); // Show second row of buttons
         isPracticing = true;
@@ -48,6 +51,7 @@ $(document).ready(function() {
         $('#practiceTable tbody tr').removeClass('highlighted');
         recalculateAgedGrades();
         sortTableByAgedGrade(); // Automatically sort at the end of practice
+		//saveTableToLocalStorage(); 
 		periodicAutoSave(999,'stopPracticeCycle');
     }
 
@@ -56,6 +60,7 @@ $(document).ready(function() {
 		console.log('clearTable click');
 		// Clear all rows in the tbody of the practice table
 		$('#practiceTable tbody').empty();
+		//saveTableToLocalStorage(); 
 		periodicAutoSave(999,'delete all rows click');
 	});
 
@@ -304,46 +309,66 @@ $(document).ready(function() {
 	
     // Function to save table data to localStorage
     function saveTableToLocalStorage() {
-    changeCount = 0;
-    if (clearingLocalStorage) return;
+		changeCount = 0;  // just assume it worked 
+		
+		if (!allowLocalStorageDebugSwitch) {
+		    //console.log('saveTableToLocalStorage - localStorage is disabled');
+			return;
+		}
+		//console.log('saveTableToLocalStorage - localStorage is enabled');
 
-    const tableData = [];
-    $('#practiceTable tbody tr').each(function() {
-        const row = $(this);
-        const rowData = {
-            item: row.find('td:eq(1)').text(),
-            lastPracticed: row.find('td:eq(2)').text(),
-            grade: row.find('td:eq(4)').text()
-        };
-        tableData.push(rowData);
-    });
+        if (clearingLocalStorage) {
+            //console.log('Skipping save to localStorage due to flag');
+            return;
+        }
+		
+        const tableData = [];
 
-    SafeStorage.setItem(storageKey, tableData);
-    console.log('Table data saved to storage', tableData);
-}
+        // Loop through table rows and gather data
+        $('#practiceTable tbody tr').each(function() {
+            const row = $(this);
+            const rowData = {
+                item: row.find('td:eq(1)').text(), // Get Item name
+                lastPracticed: row.find('td:eq(2)').text(), // Get Last Practiced date
+                grade: row.find('td:eq(4)').text() // Get Grade
+            };
+            tableData.push(rowData);
+        });
+
+        // Convert the table data to JSON string and save it to localStorage
+        localStorage.setItem(storageKey, JSON.stringify(tableData));
+        console.log('Table data saved to localStorage', tableData);
+    }
 
     // Function to load table data from localStorage
     function loadTableFromLocalStorage() {
-    changeCount = 0;
+		changeCount = 0;
+		
+		if (!allowLocalStorageDebugSwitch) {
+		    console.log('loadTableToLocalStorage - localStorage is disabled');
+			return;
+		}
+		console.log('loadTableToLocalStorage - localStorage is enabled');
+		
+        const tableDataJSON = localStorage.getItem(storageKey);
 
-    const tableData = SafeStorage.getItem(storageKey);
-
-    if (tableData && Array.isArray(tableData)) {
-        populateTable(tableData);
-        console.log('Table data loaded from storage');
-    } else {
-        console.log('No data found in storage, loading sample data');
-        loadSampleData();
-        sortTableByAgedGrade();
+        if (tableDataJSON) {
+            const tableData = JSON.parse(tableDataJSON);
+            populateTable(tableData);
+            console.log('Table data loaded from localStorage');
+        } else {
+            console.log('No data found in localStorage, loading sample data');
+            loadSampleData(); // If no localStorage data, load sample data
+			sortTableByAgedGrade();
+        }
     }
-}
-
 
     // Function to load sample data
     function loadSampleData() {
         populateTable(sampleData); // Use the sampleData array
 		recalculateAgedGrades();
 		sortTableByAgedGrade();
+		//saveTableToLocalStorage(); 
 		periodicAutoSave(999,'loadSampleData');
     }
 	
@@ -373,12 +398,18 @@ $(document).ready(function() {
         loadSampleData(); // Load sample data when this button is clicked
     });
 	
-$('#clearLocalStorage').on('click', function() {
-    SafeStorage.removeItem(storageKey);
-    $('#practiceTable tbody').empty();
-    clearingLocalStorage = true;
-    console.log('Storage cleared');
-});
+	$('#clearLocalStorage').on('click', function() {
+		if (!allowLocalStorageDebugSwitch) {
+		    console.log('clearLocalStorage - localStorage is disabled');
+			return;
+		}
+		console.log('clearTableToLocalStorage - localStorage is enabled');
+		
+		localStorage.removeItem(storageKey); // Clear the data from localStorage
+		$('#practiceTable tbody').empty(); // Optionally clear the table
+		clearingLocalStorage = true; // Set the flag to prevent saving
+		console.log('LocalStorage cleared');
+	});
 	
 	
 	// Listeners -------------------------------------------------------------
@@ -429,8 +460,3 @@ $('#clearLocalStorage').on('click', function() {
 
 
 });
-
-
-function logClick() {
-  fetch('/apps/log.php?page=practice_priority', { method: 'GET' })
-}
