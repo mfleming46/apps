@@ -7,18 +7,35 @@ var currentID=0;
 var maxID=5;
 var strkGoal=5;
 var strkMode=blockMode;
+var lastFocusedItemID = null;
 
-function initForm()
-{
-	console.clear()	;
+
+function initForm() {
+	console.clear();
 	fillAll();
 	setCurrent(1);
+
+	// Attach focus listeners to both columns
+	for (let i = 1; i <= maxID; i++) {
+		const inputName = objItm(i);
+		const inputStrk = objStrk(i);
+
+		inputName.addEventListener("focus", function () {
+			lastFocusedItemID = i;
+		});
+
+		inputStrk.addEventListener("focus", function () {
+			lastFocusedItemID = i;
+		});
+	}
 }
+
+
 
 function btnRandomize_click()
 {
     list = [];
-	for (i=1; i<=5; i++)
+	for (i=1; i<=maxID; i++)
 	{
 		ord = Math.random();
 		name = objItm(i).value; 
@@ -29,7 +46,7 @@ function btnRandomize_click()
 		list.push ([ord, name, strkH]);
 	}
 	list.sort();
-	for (i=1; i<=5; i++)
+	for (i=1; i<=maxID; i++)
 	{
 		[ord,name,strkH]=list.pop();
 		v=parseInt(strkH);
@@ -165,58 +182,112 @@ logClick()
 	return v;
 }
 
+
 function addItem() {
-    maxID += 1;
-    const i = maxID;
-    const s = ("00" + i).slice(-2);
-    const tbody = document.querySelector("table tbody");
+	maxID += 1;
+	const i = maxID;
+	const s = ("00" + i).slice(-2);
+	const tbody = document.querySelector("table tbody");
 
-    // Create new row
-    const row = document.createElement("tr");
-    row.innerHTML = `
-        <td><input name="txtItm${s}" placeholder="Practice Item ${i}" size="25" maxlength="40" type="text"></td>
-        <td><input name="txtStrk${s}" size="6" maxlength="6" type="text" readonly tabindex="-1"></td>
-    `;
+	// Create new row
+	const row = document.createElement("tr");
+	row.innerHTML = `
+		<td><input name="txtItm${s}" placeholder="Practice Item ${i}" size="25" maxlength="40" type="text"></td>
+		<td><input name="txtStrk${s}" size="6" maxlength="6" type="text" readonly tabindex="-1"></td>
+	`;
 
-    // Hidden field for streak value
-    const hidden = document.createElement("input");
-    hidden.type = "hidden";
-    hidden.name = "hidStrk" + s;
+	// Append row first
+	tbody.appendChild(row);
 
-    document.forms["frmLeave"].appendChild(hidden);
-    tbody.appendChild(row);
+	// Add focus listener to the name input
+	const inputName = row.querySelector(`input[name="txtItm${s}"]`);
+	if (inputName) {
+		inputName.addEventListener("focus", function () {
+			lastFocusedItemID = i;
+		});
+	}
 
-    // Optional: auto-focus new item
-    //objItm(i).focus();
+	// Add focus listener to the streak input
+	const inputStrk = row.querySelector(`input[name="txtStrk${s}"]`);
+	if (inputStrk) {
+		inputStrk.addEventListener("focus", function () {
+			lastFocusedItemID = i;
+		});
+	}
+
+	// Hidden field for streak value
+	const hidden = document.createElement("input");
+	hidden.type = "hidden";
+	hidden.name = "hidStrk" + s;
+	document.forms["frmLeave"].appendChild(hidden);
+
+	// Initialize values
+	objStrk(i).value = "";
+	objStrkH(i).value = 0;
 }
+
 
 function deleteItem() {
-    if (maxID <= 1) {
-        alert("At least one item must remain.");
-        return;
-    }
+	const i = lastFocusedItemID;
 
-    const i = maxID;
-    const s = ("00" + i).slice(-2);
+	if (!i || i < 1 || i > maxID) {
+		alert("Place your cursor inside the item you want to delete.");
+		return;
+	}
 
-    // Remove input row
-    const tbody = document.querySelector("table tbody");
-    tbody.removeChild(tbody.lastElementChild);
+	if (maxID <= 1) {
+		alert("At least one item must remain.");
+		return;
+	}
 
-    // Remove hidden input
-    const hidden = document.getElementsByName("hidStrk" + s)[0];
-    if (hidden) hidden.remove();
+	const s = ("00" + i).slice(-2);
+	const tbody = document.querySelector("table tbody");
+	const rows = tbody.querySelectorAll("tr");
 
-    maxID -= 1;
+	const rowIndex = i - 1;
+	if (rows[rowIndex]) {
+		tbody.removeChild(rows[rowIndex]);
+	}
 
-    // Update currentID if necessary
-    if (currentID > maxID) {
-        setCurrent(maxID);
-    }
+	const hidden = document.getElementsByName("hidStrk" + s)[0];
+	if (hidden) hidden.remove();
+
+	// Shift fields up for all rows after the one being deleted
+	for (let j = i + 1; j <= maxID; j++) {
+		const oldS = ("00" + j).slice(-2);
+		const newS = ("00" + (j - 1)).slice(-2);
+
+		const itm = document.getElementsByName("txtItm" + oldS)[0];
+		const strk = document.getElementsByName("txtStrk" + oldS)[0];
+		const hid = document.getElementsByName("hidStrk" + oldS)[0];
+
+		if (itm) {
+			itm.name = "txtItm" + newS;
+			itm.placeholder = "Practice Item " + (j - 1);
+			itm.addEventListener("focus", function () {
+				lastFocusedItemID = j - 1;
+			});
+	 }
+
+		if (strk) strk.name = "txtStrk" + newS;
+		if (hid) hid.name = "hidStrk" + newS;
+	}
+
+	maxID--;
+	
+	if (currentID === i) {
+		setCurrent(1);  // Deleted the highlighted row — move highlight to top
+	} else if (currentID > i) {
+		currentID--;    // Deleted a row before the highlight — shift it down
+	}
+
+	lastFocusedItemID = null;
 }
 
 
-    function logClick() {
-      fetch('/apps/log.php?page=interleave', { method: 'GET' })
-    }
+function logClick() {
+  fetch('/apps/log.php?page=interleave', { method: 'GET' })
+}
+
+
 
