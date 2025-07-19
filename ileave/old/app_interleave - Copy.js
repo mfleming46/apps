@@ -227,6 +227,66 @@ function addItem() {
 }
 
 
+function XdeleteItem() {
+	const i = lastFocusedItemID;
+
+	if (!i || i < 1 || i > maxID) {
+		alert("Place your cursor inside the item you want to delete.");
+		return;
+	}
+
+	if (maxID <= 1) {
+		alert("At least one item must remain.");
+		return;
+	}
+
+	const s = ("00" + i).slice(-2);
+	const tbody = document.querySelector("table tbody");
+	const rows = tbody.querySelectorAll("tr");
+
+	const rowIndex = i - 1;
+	if (rows[rowIndex]) {
+		tbody.removeChild(rows[rowIndex]);
+	}
+
+	const hidden = document.getElementsByName("hidStrk" + s)[0];
+	if (hidden) hidden.remove();
+
+	// Shift fields up for all rows after the one being deleted
+	for (let j = i + 1; j <= maxID; j++) {
+		const oldS = ("00" + j).slice(-2);
+		const newS = ("00" + (j - 1)).slice(-2);
+
+		const itm = document.getElementsByName("txtItm" + oldS)[0];
+		const strk = document.getElementsByName("txtStrk" + oldS)[0];
+		const hid = document.getElementsByName("hidStrk" + oldS)[0];
+
+		if (itm) {
+			itm.name = "txtItm" + newS;
+			itm.placeholder = "Practice Item " + (j - 1);
+			itm.addEventListener("focus", function () {
+				lastFocusedItemID = j - 1;
+			});
+	 }
+
+		if (strk) strk.name = "txtStrk" + newS;
+		if (hid) hid.name = "hidStrk" + newS;
+	}
+
+	maxID--;
+	
+	if (currentID === i) {
+		setCurrent(1);  // Deleted the highlighted row — move highlight to top
+	} else if (currentID > i) {
+		currentID--;    // Deleted a row before the highlight — shift it down
+	}
+
+	const index = items.indexOf(lastFocused);
+	items.splice(index, 1);
+	lastFocused = items[index] ?? items[items.length - 1] ?? null;
+}
+
+
 function deleteItem() {
 	const i = lastFocusedItemID;
 
@@ -306,6 +366,8 @@ function deleteItem() {
 }
 
 
+
+
 function saveStateToStorage() {
     const data = {
         items: [],
@@ -365,4 +427,11 @@ function logClick() {
 }
 
 
+window.onload = function () {
+  loadStateFromStorage();
+  drawTable();
+  highlightRow(stashCurrentRow);
+};
+
+window.onbeforeunload = saveStateToStorage;
 

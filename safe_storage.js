@@ -49,3 +49,5 @@
 
   global.SafeStorage = SafeStorage;
 })(this);
+
+console.log("✅ safe_storage.js loaded");

@@ -29,4 +29,9 @@ button {
 	line-height: 1.8;
 	min-width: 60px;
 }
+
+inputXXX:focus {
+  outline: none;
+  box-shadow: none;
+}
 	
