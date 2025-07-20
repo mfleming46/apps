@@ -35,3 +35,14 @@ inputXXX:focus {
   box-shadow: none;
 }
 	
+	
+.button-container {
+  margin-top: 6px;
+  height: 30px;
+  width: 500px;
+  display: flex;
+}
+
+.button-container button {
+  flex: 1;
+}

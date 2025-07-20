@@ -24,17 +24,26 @@
 			<li>Changing modes resets all streaks.</li>
 			<li>You can edit the practice item names.</li>
 			</ul>
-		
-
-
-			<select name="cbMode" onchange="cbMode_change()">
+			
+			<div class=button-container>
+			<button type="button" id="btnAddItem" class="bland" tabIndex=-1>Add Item</button>
+            <button type="button" id="btnDeleteItem" class="bland" tabIndex=-1>Delete Item</button>
+			<button type="button" id="btnFReset" class="bland" tabIndex=-1>Factory Reset</button>
+			</div>
+			
+			
+			<div class=button-container>
+			<select id="cbMode" >
 				<option value="BLOCKMODE">Blocked Mode</option>
 				<option value="LEAVEMODE">Interleaved Mode</option>
 			</select>
-			<button  type="button" onclick="btnReset_click();" name="btnReset" tabIndex=-1 class="bland"> Reset Streaks</button>
-			<button  type="button" onclick="btnRandomize_click();" name="btnRandomize" tabIndex=-1 class="bland"> Randomize</button>
-			<button type="button" onclick="addItem()" class="bland" tabIndex=-1>Add Item</button>
-                        <button type="button" onclick="deleteItem()" class="bland" tabIndex=-1>Delete Item</button>
+			<button type="button" id="btnAlphaSort" class="bland" tabIndex=-1>Sort A-Z</button>
+			<button  type="button" id="btnRandomize" tabIndex=-1 class="bland"> Randomize</button>			
+			<button  type="button" id="btnReset" tabIndex=-1 class="bland"> Reset Streaks</button>
+			</div>
+
+			
+
 
 			<br><br>
 
@@ -85,9 +94,9 @@
 			</table>
 			<br>
 
-			<button type="button" onclick="btnPass_click();" name="btnPass" class="bland"> Pass </button>
-			<button  type="button" onclick="btnFail_click();" name="btnFail" class="bland"> Fail </button>
-			<button  type="button" onclick="btnSkip_click();" name="btnSkip" class="bland"> Skip </button>
+			<button type="button" id="btnPass" class="bland"> Pass </button>
+			<button type="button" id="btnFail" class="bland"> Fail </button>
+			<button type="button" id="btnSkip" class="bland"> Skip </button>
 		</form>
 		
 	<p><br>(c) Marilyn Fleming, 

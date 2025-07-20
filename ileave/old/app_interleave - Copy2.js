@@ -12,8 +12,8 @@ var lastFocusedItemID = null;
 
 function initForm() {
 	console.clear();
-	fillAll();
-	setCurrent(1);
+	//fillAll();
+	//setCurrent(1);
 
 	// Attach focus listeners to both columns
 	for (let i = 1; i <= maxID; i++) {
@@ -32,8 +32,8 @@ function initForm() {
 
 
 
-function btnRandomize_click() {
-	console.log("btnRandomize_click");
+function btnRandomize_click()
+{
     list = [];
 	for (i=1; i<=maxID; i++)
 	{
@@ -50,7 +50,7 @@ function btnRandomize_click() {
 	{
 		[ord,name,strkH]=list.pop();
 		v=parseInt(strkH);
-		//console.log(ord,name,v);
+		console.log(ord,name,v);
 		objItm(i).value = name;
 		objStrkH(i).value = v;
 		objStrk(i).value = strkDisplay(v);
@@ -59,30 +59,29 @@ function btnRandomize_click() {
 }
 
 function cbMode_change() {
-	console.log("cbMode_change");
-	obj = document.getElementById("cbMode");
+	obj = document.getElementsByName("cbMode")[0];
 	strkMode = obj.value;
-	console.log("strkMode", strkMode);
 	btnReset_click();
 }
 
-function btnSkip_click() {
-	console.log("btnskip.click ");
+function btnSkip_click()
+{
 	setCurrent( (currentID % maxID) + 1 );
 }
 
-function btnFail_click() {
-	console.log("btnFail.click ");
+function btnFail_click()
+{
+	console.log("FAIL ",currentID);
 	doFail(currentID);
 	if (strkMode==leaveMode) {
 		btnSkip_click();
 	}
 }
 
-function btnPass_click() {
-	console.log("btnPass_click");
+function btnPass_click()
+{
 	v = doPass(currentID);
-	// console.log("PASS ",currentID,strkMode,v);
+	console.log("PASS ",currentID,strkMode,v);
 
 	switch (strkMode) {
 		case blockMode:
@@ -96,38 +95,44 @@ function btnPass_click() {
 	}
 }
 
-function btnReset_click() {
+function btnReset_click()
+{
 	console.log("btnReset_click()");
 	fillAll();
 	setCurrent(1);
 }
 
-function fillAll() {
+function fillAll()
+{
 	for (i = 1; i <= maxID; i++) {
 		objStrk(i).value = "";
 		objStrkH(i).value = 0;
 	}
 }
 
-function objItm(i) {
+function objItm(i)
+{
 	s = ("00" + i).slice (-2);
 	result= document.getElementsByName("txtItm"+s)[0];
 	return result;
 }
 
-function objStrk(i) {
+function objStrk(i)
+{
 	s = ("00" + i).slice (-2);
 	result= document.getElementsByName("txtStrk"+s)[0];
 	return result;
 }
 
-function objStrkH(i) {
+function objStrkH(i)
+{
 	s = ("00" + i).slice (-2);
 	result= document.getElementsByName("hidStrk"+s)[0];
 	return result;
 }
 
-function strkDisplay(v) {
+function strkDisplay(v)
+{
 	switch (v) {
 		case 0: newVal="";
 			break;
@@ -146,7 +151,8 @@ function strkDisplay(v) {
 	return newVal;
 }
 
-function setCurrent(i) {
+function setCurrent(i)
+{
 logClick()
 	j = currentID
 	if (j>0) {
@@ -159,16 +165,17 @@ logClick()
 	console.log("currentID=",currentID);
 }
 
-function doFail(i) {
-	logClick()
+function doFail(i)
+{
+logClick()
 	s = ("00" + i).slice (-2);
 	objStrk(i).value= "";
 	objStrkH(i).value=0;
 	return 0;
 }
-
-function doPass(i) {
-	logClick()
+function doPass(i)
+{
+logClick()
 	v = parseInt(objStrkH(i).value)+1;
 	objStrk(i).value = strkDisplay(v);
 	objStrkH(i).value = v;
@@ -177,7 +184,6 @@ function doPass(i) {
 
 
 function addItem() {
-	console.log("addItem");
 	maxID += 1;
 	const i = maxID;
 	const s = ("00" + i).slice(-2);
@@ -222,7 +228,6 @@ function addItem() {
 
 
 function deleteItem() {
-	console.log("deleteItem");
 	const i = lastFocusedItemID;
 
 	if (!i || i < 1 || i > maxID) {
@@ -302,6 +307,7 @@ function deleteItem() {
 
 
 function saveStateToStorage() {
+	console.log("saveStateToStorage"_
     const data = {
         items: [],
         mode: strkMode,
@@ -320,7 +326,7 @@ function saveStateToStorage() {
     console.log("State saved", data);
 }
 
-function loadStateFromStorage() {
+function XloadStateFromStorage() {
     const data = SafeStorage.getItem("interleave_state");
     if (!data) return false;
 
@@ -341,8 +347,8 @@ function loadStateFromStorage() {
     });
 
     // Restore mode
-    document.getElementById("cbMode").value = strkMode;
     strkMode = data.mode;
+    document.getElementsByName("cbMode")[0].value = strkMode;
 
     // Restore highlight
     if (data.currentID >= 1 && data.currentID <= maxID) {
@@ -353,27 +359,94 @@ function loadStateFromStorage() {
 	return true
 }
 
-function doFactoryReset() {
-	console.log("doFactoryReset");
+function deleteItemSilent(itemID) {
+	const row = document.querySelector(`input[name="txtItm${("00" + itemID).slice(-2)}"]`);
+	if (row) {
+		const rowContainer = row.closest('.item-row'); // or however the row is structured
+		if (rowContainer) {
+			rowContainer.remove(); // or logic to clean up data only, if preferred
+		}
+		// Optionally, clean up internal data here
+	}
 }
 
-function doAlphaSort() {
-	console.log("doAlphaSort");
+function loadFromStorageOrDefaults() {
+	console.log("loadFromStorageOrDefaults")
+	try {
+		const saved = SafeStorage.getItem("rc_ileave");
+		console.log("saved=",saved)
+		if (!saved) throw new Error("No saved data");
+
+		const data = JSON.parse(saved);
+		console.log(data)
+		if (!Array.isArray(data)) throw new Error("Malformed data");
+
+		resetItemsFromData(data);  // this should silently reset without UI issues
+	} catch (error) {
+		console.warn("Failed to load saved data. Loading defaults instead.", error);
+		// loadDefaultData();  // your function to load predefined defaults
+		fillAll();
+		setCurrent(1);
+	}
 }
+
+
+function loadStateFromStorage() {
+	
+	const data = SafeStorage.getItem("rc_ileave");
+	if (!data) return false;
+
+	// Reset everything to match saved data
+	// 1. Remove all existing rows
+	while (maxID > 0) {
+		const row = document.querySelector(`input[name="txtItm${("00" + maxID).slice(-2)}"]`);
+		if (row) {
+			lastFocusedItemID = maxID;
+			deleteItemSilent();  // use existing logic to remove rows
+		} else {
+			maxID--;  // fallback in case of bad DOM
+		}
+	}
+
+	// 2. Rebuild rows based on saved data
+	data.items.forEach((item, index) => {
+		addItem();  // adds +1 to maxID
+		const i = maxID;
+		objItm(i).value = item.name;
+		objStrkH(i).value = item.streak;
+		objStrk(i).value = strkDisplay(item.streak);
+	});
+
+	// 3. Restore mode
+	strkMode = data.mode;
+	document.getElementsByName("cbMode")[0].value = strkMode;
+
+	// 4. Restore highlight
+	const restoreID = data.currentID;
+	if (restoreID >= 1 && restoreID <= maxID) {
+		setCurrent(restoreID);
+	} else {
+		setCurrent(1);
+	}
+
+	console.log("State loaded", data);
+	return true;
+}
+
+function clearStateFromStorage() {
+	SafeStorage.removeItem("interleave_state");
+	alert("Saved state cleared.");
+}
+
 
 function logClick() {
   fetch('/apps/log.php?page=interleave', { method: 'GET' })
 }
 
 
-// Bind buttons
-document.getElementById('btnFReset').addEventListener('click', doFactoryReset);
-document.getElementById('btnAlphaSort').addEventListener('click', doAlphaSort);
-document.getElementById('btnReset').addEventListener('click', btnReset_click);
-document.getElementById('btnRandomize').addEventListener('click', btnRandomize_click);
-document.getElementById('btnAddItem').addEventListener('click', addItem);
-document.getElementById('btnDeleteItem').addEventListener('click', deleteItem);
-document.getElementById('cbMode').addEventListener('change', cbMode_change);
-document.getElementById('btnPass').addEventListener('click', btnPass_click);
-document.getElementById('btnFail').addEventListener('click', btnFail_click);
-document.getElementById('btnSkip').addEventListener('click', btnSkip_click);
+
+window.onload = function () {
+  loadFromStorageOrDefaults();  // this function now handles everything, including fallback
+};
+
+window.onbeforeunload = saveStateToStorage();
