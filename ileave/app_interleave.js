@@ -12,13 +12,14 @@ var lastFocusedItemID = null;
 
 function initForm() {
 	console.clear();
-	fillAll();
-	setCurrent(1);
+	doFactoryReset()
+}
 
-	// Attach focus listeners to both columns
-	for (let i = 1; i <= maxID; i++) {
+function attachFocusListeners() {
+		for (let i = 1; i <= maxID; i++) {
 		const inputName = objItm(i);
 		const inputStrk = objStrk(i);
+		const inputBpm = objBpm(i);
 
 		inputName.addEventListener("focus", function () {
 			lastFocusedItemID = i;
@@ -27,9 +28,12 @@ function initForm() {
 		inputStrk.addEventListener("focus", function () {
 			lastFocusedItemID = i;
 		});
+		
+		inputBpm.addEventListener("focus", function () {
+			lastFocusedItemID = i;
+		});
 	}
 }
-
 
 
 function btnRandomize_click() {
@@ -42,18 +46,46 @@ function btnRandomize_click() {
 		if (name=="") {
 			name=objItm(i).placeholder;
 		}
+		bpm = objBpm(i).value;
+		strk = objStrk(i).value;
 		strkH = objStrkH(i).value;
-		list.push ([ord, name, strkH]);
+		list.push ([ord, name, bpm, strk, strkH]);
 	}
 	list.sort();
 	for (i=1; i<=maxID; i++)
 	{
-		[ord,name,strkH]=list.pop();
-		v=parseInt(strkH);
-		//console.log(ord,name,v);
+		[ord,name,bpm, strk, strkH]=list.pop();
 		objItm(i).value = name;
-		objStrkH(i).value = v;
-		objStrk(i).value = strkDisplay(v);
+		objBpm(i).value = bpm;
+		objStrk(i).value = strk;
+		objStrkH(i).value = strkH;
+		
+	}
+	setCurrent(1)
+}
+
+function doAlphaSort() {
+	console.log("doAlphaSort");
+	list = [];
+	for (i=1; i<=maxID; i++)
+	{
+		name = objItm(i).value; 
+		if (name=="") {
+			name=objItm(i).placeholder;
+		}
+		bpm = objBpm(i).value;
+		strk = objStrk(i).value;
+		strkH = objStrkH(i).value;
+		list.push ([name, bpm, strk, strkH]);
+	}
+	list.sort();
+	for (i=1; i<=maxID; i++)
+	{ 
+		[name,bpm, strk, strkH]=list.shift();
+		objItm(i).value = name;
+		objBpm(i).value = bpm;
+		objStrk(i).value = strk;
+		objStrkH(i).value = strkH;
 	}
 	setCurrent(1)
 }
@@ -103,6 +135,7 @@ function btnReset_click() {
 }
 
 function fillAll() {
+	// reset streaks
 	for (i = 1; i <= maxID; i++) {
 		objStrk(i).value = "";
 		objStrkH(i).value = 0;
@@ -118,6 +151,12 @@ function objItm(i) {
 function objStrk(i) {
 	s = ("00" + i).slice (-2);
 	result= document.getElementsByName("txtStrk"+s)[0];
+	return result;
+}
+
+function objBpm(i) {
+	s = ("00" + i).slice (-2);
+	result= document.getElementsByName("txtBpm"+s)[0];
 	return result;
 }
 
@@ -147,14 +186,16 @@ function strkDisplay(v) {
 }
 
 function setCurrent(i) {
-logClick()
+	logClick()
 	j = currentID
 	if (j>0) {
 		objItm(j).style=styleNormal;
 		objStrk(j).style=styleNormal;
+		objBpm(j).style=styleNormal;
 	}
 	objItm(i).style=styleHilite;
 	objStrk(i).style=styleHilite;
+	objBpm(i).style=styleHilite;
 	currentID = i;
 	console.log("currentID=",currentID);
 }
@@ -187,6 +228,7 @@ function addItem() {
 	const row = document.createElement("tr");
 	row.innerHTML = `
 		<td><input name="txtItm${s}" placeholder="Practice Item ${i}" size="25" maxlength="40" type="text"></td>
+		<td> <input name="txtBpm${s}" size="6" maxlength="6" value="" type="text" tabindex=-1>
 		<td><input name="txtStrk${s}" size="6" maxlength="6" type="text" readonly tabindex="-1"></td>
 	`;
 
@@ -205,6 +247,14 @@ function addItem() {
 	const inputStrk = row.querySelector(`input[name="txtStrk${s}"]`);
 	if (inputStrk) {
 		inputStrk.addEventListener("focus", function () {
+			lastFocusedItemID = i;
+		});
+	}
+	
+		// Add focus listener to the streak input
+	const inputBpm = row.querySelector(`input[name="txtBpm${s}"]`);
+	if (inputBpm) {
+		inputBpm.addEventListener("focus", function () {
 			lastFocusedItemID = i;
 		});
 	}
@@ -355,11 +405,53 @@ function loadStateFromStorage() {
 
 function doFactoryReset() {
 	console.log("doFactoryReset");
+	const table = document.getElementById("dataTable");
+	table.tBodies[0].innerHTML = `
+<tr >
+	<td> <input name="txtItm01" placeholder="Practice Item 1" size="25" maxlength="40" type="text"> </td>
+	<td> <input name="txtBpm01" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
+	<td> <input name="txtStrk01" size="6" maxlength="6" value="" type="text" readonly tabindex=-1>	</td>
+</tr>
+<tr>
+
+	<td> <input name="txtItm02" placeholder="Practice Item 2" size="25" maxlength="40"	type="text"> </td>
+	<td> <input name="txtBpm02" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
+	<td> <input name="txtStrk02" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+</tr>
+<tr>
+
+	<td> <input name="txtItm03" placeholder="Practice Item 3" size="25" maxlength="40"	type="text"> </td>
+	<td> <input name="txtBpm03" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
+	<td> <input name="txtStrk03" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+</tr>
+<tr>
+
+	<td> <input name="txtItm04" placeholder="Practice Item 4" size="25" maxlength="40"	type="text"> </td>
+	<td> <input name="txtBpm04" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
+	<td> <input name="txtStrk04" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+</tr>
+<tr>
+
+	<td> <input name="txtItm05" placeholder="Practice Item 5" size="25" maxlength="40" type="text"> </td>
+	<td> <input name="txtBpm05" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
+	<td> <input name="txtStrk05" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+</tr>`
+
+	currentID=0;
+    maxID=5;
+	strkMode=blockMode;
+	lastFocusedItemID = null;
+	
+	obj = document.getElementById("cbMode");
+	obj.value = blockMode;
+	
+	attachFocusListeners();
+	
+	fillAll();
+	setCurrent(1);
 }
 
-function doAlphaSort() {
-	console.log("doAlphaSort");
-}
+
 
 function logClick() {
   fetch('/apps/log.php?page=interleave', { method: 'GET' })
