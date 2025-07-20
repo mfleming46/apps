@@ -5,16 +5,12 @@
 	<title>Simple Interleaved Practice</title>
 	<link rel="stylesheet" href="app_interleave.css?v=0.5"> <!-- Link to the external CSS file -->	
 </head>		
-    <body  onload="initForm()">
+    <body>
 		<h1>Simple Interleaved/Blocked Practce</h1>
         
 		<form name="frmLeave" action="" onsubmit="return false;" >
-			<input name="hidStrk01" type="hidden" >
-			<input name="hidStrk02" type="hidden" >
-			<input name="hidStrk03" type="hidden" >
-			<input name="hidStrk04" type="hidden" >
-			<input name="hidStrk05" type="hidden" >
 			
+			<!--
 			<p><b>Usage:</b></p>
 			<ul>
 			<li>Play the highlighted item once, then click <b>Pass</b> or <b>Fail</b>.</li>
@@ -24,13 +20,13 @@
 			<li>Changing modes resets all streaks.</li>
 			<li>You can edit the practice item names.</li>
 			</ul>
+			-->
 			
 			<div class=button-container>
 			<button type="button" id="btnAddItem" class="bland" tabIndex=-1>Add Item</button>
             <button type="button" id="btnDeleteItem" class="bland" tabIndex=-1>Delete Item</button>
 			<button type="button" id="btnFReset" class="bland" tabIndex=-1>Factory Reset</button>
 			</div>
-			
 			
 			<div class=button-container>
 			<select id="cbMode" >
@@ -42,10 +38,7 @@
 			<button  type="button" id="btnReset" tabIndex=-1 class="bland"> Reset Streaks</button>
 			</div>
 
-			
-
-
-			<br><br>
+			<br>
 
 			<table id="dataTable">
 				<thead>
@@ -54,39 +47,19 @@
 						<th style="text-align: left;"> &nbsp;Practice Item </th>
 						<th style="text-align: left;"> BPM </th>
 						<th style="text-align: left;"> Streak </th>
+						<th style="display: none;"> hidden </th>
 					</tr>
 				</thead>
 				<tbody>
-
+					<!-- example -- this will be filled at startup >
 					<tr >
 						<td> <input name="txtItm01" placeholder="Practice Item 1" size="25" maxlength="40" type="text"> </td>
 						<td> <input name="txtBpm01" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
 						<td> <input name="txtStrk01" size="6" maxlength="6" value="" type="text" readonly tabindex=-1>	</td>
+						<td style="display: none;"> <input name="hidStrk01" type="hidden" > </td>
 					</tr>
-					<tr>
-
-						<td> <input name="txtItm02" placeholder="Practice Item 2" size="25" maxlength="40"	type="text"> </td>
-						<td> <input name="txtBpm02" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
-						<td> <input name="txtStrk02" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
-					</tr>
-					<tr>
-
-						<td> <input name="txtItm03" placeholder="Practice Item 3" size="25" maxlength="40"	type="text"> </td>
-						<td> <input name="txtBpm03" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
-						<td> <input name="txtStrk03" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
-					</tr>
-					<tr>
-
-						<td> <input name="txtItm04" placeholder="Practice Item 4" size="25" maxlength="40"	type="text"> </td>
-						<td> <input name="txtBpm04" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
-						<td> <input name="txtStrk04" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
-					</tr>
-					<tr>
-
-						<td> <input name="txtItm05" placeholder="Practice Item 5" size="25" maxlength="40" type="text"> </td>
-						<td> <input name="txtBpm05" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
-						<td> <input name="txtStrk05" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
-					</tr>
+					-->
+					
 				</tbody>
 			</table>
 			<br>
@@ -96,9 +69,21 @@
 			<button type="button" id="btnSkip" class="bland"> Skip </button>
 		</form>
 		
+		<br>
+		
+		<p><b>Usage:</b></p>
+		<ul>
+		<li>Play the highlighted item once, then click <b>Pass</b> or <b>Fail</b>.</li>
+		<li><b>Blocked: </b> Moves to the next item after passing 5 times in a row.</li>
+		<li><b>Interleaved: </b> Moves to the next item after each try, pass or fail.</li>
+		<li><b>Streak: </b> Number of consecutive passed attenots</li>
+		<li>Changing modes resets all streaks.</li>
+		<li>You can edit the practice item names.</li>
+		</ul>
+		
 	<p><br>(c) Marilyn Fleming, 
 	     <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
-		 <br>release 2025-07-01
+		 <br>release 2025-07-20
 	</p>		
 		
 		

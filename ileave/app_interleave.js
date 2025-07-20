@@ -16,23 +16,27 @@ function initForm() {
 }
 
 function attachFocusListeners() {
-		for (let i = 1; i <= maxID; i++) {
-		const inputName = objItm(i);
-		const inputStrk = objStrk(i);
-		const inputBpm = objBpm(i);
-
-		inputName.addEventListener("focus", function () {
-			lastFocusedItemID = i;
-		});
-
-		inputStrk.addEventListener("focus", function () {
-			lastFocusedItemID = i;
-		});
-		
-		inputBpm.addEventListener("focus", function () {
-			lastFocusedItemID = i;
-		});
+	for (let i = 1; i <= maxID; i++) {
+		attachOneFocusListener(i)
 	}
+}
+
+function attachOneFocusListener(i) {
+	const inputName = objItm(i);
+	const inputStrk = objStrk(i);
+	const inputBpm = objBpm(i);
+
+	inputName.addEventListener("focus", function () {
+		lastFocusedItemID = i;
+	});
+
+	inputStrk.addEventListener("focus", function () {
+		lastFocusedItemID = i;
+	});
+	
+	inputBpm.addEventListener("focus", function () {
+		lastFocusedItemID = i;
+	});
 }
 
 
@@ -62,6 +66,7 @@ function btnRandomize_click() {
 		
 	}
 	setCurrent(1)
+	attachFocusListeners()
 }
 
 function doAlphaSort() {
@@ -88,6 +93,7 @@ function doAlphaSort() {
 		objStrkH(i).value = strkH;
 	}
 	setCurrent(1)
+	attachFocusListeners()
 }
 
 function cbMode_change() {
@@ -188,11 +194,13 @@ function strkDisplay(v) {
 function setCurrent(i) {
 	logClick()
 	j = currentID
+	console.log("j",j)
 	if (j>0) {
 		objItm(j).style=styleNormal;
 		objStrk(j).style=styleNormal;
 		objBpm(j).style=styleNormal;
 	}
+	console.log("i",i,objItm(i))
 	objItm(i).style=styleHilite;
 	objStrk(i).style=styleHilite;
 	objBpm(i).style=styleHilite;
@@ -229,45 +237,13 @@ function addItem() {
 	row.innerHTML = `
 		<td><input name="txtItm${s}" placeholder="Practice Item ${i}" size="25" maxlength="40" type="text"></td>
 		<td> <input name="txtBpm${s}" size="6" maxlength="6" value="" type="text" tabindex=-1>
-		<td><input name="txtStrk${s}" size="6" maxlength="6" type="text" readonly tabindex="-1"></td>
+		<td><input name="txtStrk${s}" size="6" maxlength="6" type="text" value="" readonly tabindex="-1"></td>
+		<td style="display: none;"> <input name="hidStrk${s}" type="hidden" value=0> </td>
 	`;
 
 	// Append row first
 	tbody.appendChild(row);
-
-	// Add focus listener to the name input
-	const inputName = row.querySelector(`input[name="txtItm${s}"]`);
-	if (inputName) {
-		inputName.addEventListener("focus", function () {
-			lastFocusedItemID = i;
-		});
-	}
-
-	// Add focus listener to the streak input
-	const inputStrk = row.querySelector(`input[name="txtStrk${s}"]`);
-	if (inputStrk) {
-		inputStrk.addEventListener("focus", function () {
-			lastFocusedItemID = i;
-		});
-	}
-	
-		// Add focus listener to the streak input
-	const inputBpm = row.querySelector(`input[name="txtBpm${s}"]`);
-	if (inputBpm) {
-		inputBpm.addEventListener("focus", function () {
-			lastFocusedItemID = i;
-		});
-	}
-
-	// Hidden field for streak value
-	const hidden = document.createElement("input");
-	hidden.type = "hidden";
-	hidden.name = "hidStrk" + s;
-	document.forms["frmLeave"].appendChild(hidden);
-
-	// Initialize values
-	objStrk(i).value = "";
-	objStrkH(i).value = 0;
+	attachOneFocusListener(i)
 }
 
 
@@ -293,41 +269,26 @@ function deleteItem() {
 	if (rows[rowIndex]) {
 		tbody.removeChild(rows[rowIndex]);
 	}
-
-	// Remove corresponding hidden input
-	const hidden = document.getElementsByName("hidStrk" + s)[0];
-	if (hidden) hidden.remove();
-
+	
 	// Shift up all fields after the deleted one
 	for (let j = i + 1; j <= maxID; j++) {
 		const oldS = ("00" + j).slice(-2);
 		const newS = ("00" + (j - 1)).slice(-2);
 
 		const itm = document.getElementsByName("txtItm" + oldS)[0];
+		const bpm = document.getElementsByName("txtBpm" + oldS)[0];
 		const strk = document.getElementsByName("txtStrk" + oldS)[0];
 		const hid = document.getElementsByName("hidStrk" + oldS)[0];
 
-		if (itm) {
-			itm.name = "txtItm" + newS;
-			itm.placeholder = "Practice Item " + (j - 1);
-			itm.addEventListener("focus", function () {
-				lastFocusedItemID = j - 1;
-			});
-	 }
-
-		if (strk) {
-			strk.name = "txtStrk" + newS;
-			strk.addEventListener("focus", function () {
-				lastFocusedItemID = j - 1;
-			});
-	 }
-
-		if (hid) {
-			hid.name = "hidStrk" + newS;
-		}
+		itm.name = "txtItm" + newS;
+		itm.placeholder = "Practice Item " + (j - 1);
+		strk.name = "txtStrk" + newS;
+		hid.name = "hidStrk" + newS;
+		bpm.name = "txtBpm" + newS;
 	}
-
+	
 	maxID--;
+	attachFocusListeners()
 
 	// Update current highlight
 	if (currentID === i) {
@@ -411,30 +372,35 @@ function doFactoryReset() {
 	<td> <input name="txtItm01" placeholder="Practice Item 1" size="25" maxlength="40" type="text"> </td>
 	<td> <input name="txtBpm01" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
 	<td> <input name="txtStrk01" size="6" maxlength="6" value="" type="text" readonly tabindex=-1>	</td>
+	<td style="display: none;"> <input name="hidStrk01" type="hidden" > </td>
 </tr>
 <tr>
 
 	<td> <input name="txtItm02" placeholder="Practice Item 2" size="25" maxlength="40"	type="text"> </td>
 	<td> <input name="txtBpm02" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
 	<td> <input name="txtStrk02" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+	<td style="display: none;"> <input name="hidStrk02" type="hidden" > </td>
 </tr>
 <tr>
 
 	<td> <input name="txtItm03" placeholder="Practice Item 3" size="25" maxlength="40"	type="text"> </td>
 	<td> <input name="txtBpm03" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
 	<td> <input name="txtStrk03" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+	<td style="display: none;"> <input name="hidStrk03" type="hidden" > </td>
 </tr>
 <tr>
 
 	<td> <input name="txtItm04" placeholder="Practice Item 4" size="25" maxlength="40"	type="text"> </td>
 	<td> <input name="txtBpm04" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
 	<td> <input name="txtStrk04" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+	<td style="display: none;"> <input name="hidStrk04" type="hidden" > </td>
 </tr>
 <tr>
 
 	<td> <input name="txtItm05" placeholder="Practice Item 5" size="25" maxlength="40" type="text"> </td>
 	<td> <input name="txtBpm05" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
 	<td> <input name="txtStrk05" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
+	<td style="display: none;"> <input name="hidStrk05" type="hidden" > </td>
 </tr>`
 
 	currentID=0;
@@ -469,3 +435,13 @@ document.getElementById('cbMode').addEventListener('change', cbMode_change);
 document.getElementById('btnPass').addEventListener('click', btnPass_click);
 document.getElementById('btnFail').addEventListener('click', btnFail_click);
 document.getElementById('btnSkip').addEventListener('click', btnSkip_click);
+
+
+window.onload = function () {
+  //loadStateFromStorage();
+  doFactoryReset()
+};
+
+window.onbeforeunload = function() {
+	//saveStateToStorage;
+}
