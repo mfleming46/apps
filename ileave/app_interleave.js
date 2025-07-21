@@ -405,7 +405,7 @@ function saveStateToStorage() {
 		strkMode: strkMode,
 		currentID: currentID
 	}
-	SafeStorage.setItem("storageKey", state);
+	SafeStorage.setItem(storageKey, state);
 	console.log(state);
 	
 	return list;
@@ -413,56 +413,82 @@ function saveStateToStorage() {
 
 function loadStateFromStorage() {
 	console.log("loadStateFromStorage");
-	const state = SafeStorage.getItem("storageKey");
+	const state = SafeStorage.getItem(storageKey);
 	console.log(state);
 	if (!state) {
 		return false;
 	}
-
-	// construct the table
-	const table = document.getElementById("dataTable");
-	const tbody = table.tBodies[0];
-	tbody.innerHTML = ""
 	
-	maxID = 0;
-	while ( maxID < state.maxID  ) {	
-		maxID += 1;
-		const i = maxID;
-		const s = ("00" + i).slice(-2);
-
-		// Create new row
-		const row = document.createElement("tr");
-		row.innerHTML = `
-			<td><input name="txtItm${s}" placeholder="Practice Item ${i}" size="25" maxlength="40" type="text"></td>
-			<td> <input name="txtBpm${s}" size="6" maxlength="6" value="" type="text" >
-			<td><input name="txtStrk${s}" size="6" maxlength="6" type="text" value="" readonly tabindex="-1"></td>
-			<td style="display: none;"> <input name="hidStrk${s}" type="hidden" value=0> </td>
-		`;
-		// Append row first
-		tbody.appendChild(row);
+	try {
+		// construct the table
+		const table = document.getElementById("dataTable");
+		const tbody = table.tBodies[0];
+		tbody.innerHTML = ""
 		
-		name = state.tableItems[i-1][1];
-		bpm = state.tableItems[i-1][2];
-		strkH = state.tableItems[i-1][3];
-		objItm(i).value = name;
-		objBpm(i).value = bpm;
-		objStrkH(i).value = strkH;
-		v = parseInt(strkH)
-		objStrk(i).value = strkDisplay(v);
-		attachOneFocusListener(i);
-	}
-	lastFocusedItemID=null;
-	setCurrent(state.currentID)
-	strkMode= state.strkMode,
-	obj = document.getElementById("cbMode");
-	obj.value = strkMode
-	return true;
+		maxID = 0;
+		while ( maxID < state.maxID  ) {	
+			maxID += 1;
+			const i = maxID;
+			const s = ("00" + i).slice(-2);
+
+			// Create new row
+			const row = document.createElement("tr");
+			row.innerHTML = `
+				<td><input name="txtItm${s}" placeholder="Practice Item ${i}" size="25" maxlength="40" type="text"></td>
+				<td> <input name="txtBpm${s}" size="6" maxlength="6" value="" type="text" >
+				<td><input name="txtStrk${s}" size="6" maxlength="6" type="text" value="" readonly tabindex="-1"></td>
+				<td style="display: none;"> <input name="hidStrk${s}" type="hidden" value=0> </td>
+			`;
+			// Append row first
+			tbody.appendChild(row);
+			
+			name = state.tableItems[i-1][1];
+			bpm = state.tableItems[i-1][2];
+			strkH = state.tableItems[i-1][3];
+			objItm(i).value = name;
+			objBpm(i).value = bpm;
+			objStrkH(i).value = strkH;
+			v = parseInt(strkH)
+			objStrk(i).value = strkDisplay(v);
+			attachOneFocusListener(i);
+		}
+		lastFocusedItemID=null;
+		setCurrent(state.currentID)
+		strkMode= state.strkMode,
+		obj = document.getElementById("cbMode");
+		obj.value = strkMode
+		
+	} catch (e) {
+        console.error("Error during loadStateFromStorage:", e);
+        return false;
+    }
+
+    return true;
 }
 
 
 
 function logClick() {
   fetch('/apps/log.php?page=interleave', { method: 'GET' });
+}
+
+function btnHelp_click() {
+    const button = document.getElementById('btnHelp');
+    const panel = document.getElementById('divHelp');
+
+    if (panel.style.display === "block") {
+        // Hide panel and change button text
+        panel.style.display = "none";
+        button.textContent = "Show Instructions";
+    } else {
+        // Show panel and change button text
+        panel.style.display = "block";
+        button.textContent = "Hide Instructions";
+    }
+}
+
+function btnDemo_click() {
+	alert("Coming Soon")
 }
 
 
@@ -479,6 +505,8 @@ document.getElementById('btnFail').addEventListener('click', btnFail_click);
 document.getElementById('btnSkip').addEventListener('click', btnSkip_click);
 document.getElementById('btnFaster').addEventListener('click', btnFaster_click);
 document.getElementById('btnSlower').addEventListener('click', btnSlower_click);
+document.getElementById('btnHelp').addEventListener('click', btnHelp_click);
+document.getElementById('btnDemo').addEventListener('click', btnDemo_click);
 
 //document.getElementById('btnDebug').addEventListener('click', saveStateToStorage);
 document.getElementById('btnDebug2').addEventListener('click', saveStateToStorage);

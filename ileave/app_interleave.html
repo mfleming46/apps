@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="app_interleave.css?v=0.5"> <!-- Link to the external CSS file -->	
 </head>		
     <body>
-		<h1>Simple Interleaved/Blocked Practce</h1>
+		<h1>Simple Interleaved/Blocked Practice</h1>
         
 			<div class=button-container>
 			<button type="button" id="btnAddItem" class="bland" tabIndex=-1>Add Item</button>
@@ -61,32 +61,38 @@
 		
 		<br><br>
 		
+		<!-- COOKIE NOTICE -->
 		<div style="max-width: 500px;">
+		<p>This app uses cookies to remember your inputs between sessions — just on your device, nothing is tracked or shared.
+		</p>
+		</div>
+		
+		<!-- INSTRUCTIONS -->
+		<button type="button" id="btnHelp" > Read Instructions </button>
+		<button type="button" id="btnDemo" > Short Video Demo </button>
+		<div style="max-width: 500px; display: none;" id="divHelp">
 		<p><b>Usage:</b></p>
 		<ul>
-		<li>Play the highlighted item once, then click <b>Pass</b> or <b>Fail</b>.</li>
-		<li>Or <b>Skip</b> to skip the item, <b>Faster/Slower</b> to change its tempo and reset its streak.</li>
-		<li><b>Blocked: </b> Moves to the next item after passing 5 times in a row.</li>
-		<li><b>Interleaved: </b> Moves to the next item after each try, pass or fail.</li>
-		<li><b>Streak: </b> Number of consecutive passed attempts</li>
-		<li>Changing modes resets all streaks.</li>
-		<li>You can edit the practice item names and (optional) tempos.</li>
-			</ul>
+			<li>Play the highlighted item once, then click <b>Pass</b> or <b>Fail</b>.</li>
+			<li>Or <b>Skip</b> to skip the item, <b>Faster/Slower</b> to change its tempo and reset its streak.</li>
+			<li><b>Blocked: </b> Moves to the next item after passing 5 times in a row.</li>
+			<li><b>Interleaved: </b> Moves to the next item after each try, pass or fail.</li>
+			<li><b>Streak: </b> Number of consecutive passed attempts</li>
+			<li>Changing modes resets all streaks.</li>
+			<li>You can edit the practice item names and (optional) tempos.</li>
+		</ul>
 		</div>
 			
-	<div style="max-width: 500px;">
-	<p>This app uses cookies to remember your inputs between sessions — just on your device, nothing is tracked or shared.
-	</p>
-	</div>
 
-		
+
+	<!-- COPYRIGHT -->	
 	<p><br>(c) Marilyn Fleming, 
 	     <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
 		 <br>release 2025-07-20
 	</p>		
 	
 	<!-- HIDDEN DEBUG BUTTONS -->
-	<div class=button-container style="display: none;">
+	<div class=button-container style="display: block;">
 	<button type="button" id="btnDebug" class="bland" tabIndex=-1>Debug</button>
 	<button type="button" id="btnDebug2" class="bland" tabIndex=-1>Data Dump</button>
 	<button type="button" id="btnDebug3" class="bland" tabIndex=-1>Data Load</button>
