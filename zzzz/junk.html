@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>beforeunload Test</title>
+  <script>
+    window.addEventListener("beforeunload", function (e) {
+      // Save something (for demonstration)
+      localStorage.setItem("testKey", "Saved on unload");
+
+      // Uncomment below to trigger browser confirmation dialog
+      // (Only works in some browsers, especially if there's user interaction)
+      // e.preventDefault();
+      // e.returnValue = '';
+    });
+
+    function showStoredValue() {
+      alert("Stored value: " + localStorage.getItem("testKey"));
+    }
+  </script>
+</head>
+<body>
+  <h1>beforeunload Demo</h1>
+  <button onclick="showStoredValue()">Show Stored Value</button>
+  <p>Reload or close the tab to trigger beforeunload.</p>
+</body>
+</html>

@@ -309,78 +309,6 @@ function deleteItem() {
 
 
 
-function saveStateToStorage() {
-	alert("bye");
-	const table = document.getElementById("dataTable");
-	
-	
-	
-	//console.log(table);
-	
-	//const tbody = document.querySelector("table tbody");
-	//console.log(tbody);
-	
-	
-	
-	const data = {
-		innerHtml: table.tBodies[0].innerHTML, 
-		maxID: maxID,
-		currentID: currentID,
-		cbMode: document.getElementById("cbMode").value = strkMode
-	};
-	console.log("saveStateToStorage",storageKey, data);
-
-    SafeStorage.setItem(storageKey, data);
-    alert("State saved");
-}
-
-function xxxxloadStateFromStorage() {
-    const data = SafeStorage.getItem(storageKey);
-	console.log("loadStateFromStorage",storageKey, data);
-    if (!data) return false;
-
-	const table = document.getElementById("dataTable");
-	table.tBodies[0].innerHTML = data.innerHtml;
-
-
-	currentID=data.currentID;
-    maxID=data.maxID;
-	lastFocusedItemID = null;
-	currentMode = data.cbMode;
-	
-	obj = document.getElementById("cbMode");
-	obj.value = currentMode;
-	
-	attachFocusListeners();
-	
-	fillAll();
-	setCurrent(1);
-
-	console.log("State loaded", data);
-	return true;
-	/*
-    // Restore content
-    data.items.forEach((item, index) => {
-        const i = index + 1;
-        objItm(i).value = item.name;
-        objStrkH(i).value = item.streak;
-        objStrk(i).value = strkDisplay(item.streak);
-    });
-
-    // Restore mode
-    document.getElementById("cbMode").value = strkMode;
-    strkMode = data.mode;
-
-    // Restore highlight
-    if (data.currentID >= 1 && data.currentID <= maxID) {
-        setCurrent(data.currentID);
-    }
-
-    console.log("State loaded", data);
-	return true;
-	*/
-}
-
 function doFactoryReset() {
 	console.log("doFactoryReset");
 	const table = document.getElementById("dataTable");
@@ -433,8 +361,8 @@ function doFactoryReset() {
 // ------------------------------------------------------
 
 
-function dataDump() {
-	console.log("dataDump");
+function saveStateToStorage() {
+	console.log("saveStateToStorage");
 	list = [];
 	for (i=1; i<=maxID; i++)
 	{
@@ -447,7 +375,9 @@ function dataDump() {
 		list.push ([i, name, bpm, strkH]);
 	}
 	
+	const timestamp = new Date().toLocaleString();
 	const state = {
+		date_saved: timestamp,
 		tableItems: list,
 		maxID: maxID,
 		strkMode: strkMode,
@@ -495,7 +425,8 @@ function loadStateFromStorage() {
 		objItm(i).value = name;
 		objBpm(i).value = bpm;
 		objStrkH(i).value = strkH;
-		objStrk(i).value = strkDisplay(strkH);
+		v = parseInt(strkH)
+		objStrk(i).value = strkDisplay(v);
 		attachOneFocusListener(i);
 	}
 	lastFocusedItemID=null;
@@ -526,8 +457,8 @@ document.getElementById('btnPass').addEventListener('click', btnPass_click);
 document.getElementById('btnFail').addEventListener('click', btnFail_click);
 document.getElementById('btnSkip').addEventListener('click', btnSkip_click);
 
-document.getElementById('btnDebug').addEventListener('click', saveStateToStorage);
-document.getElementById('btnDebug2').addEventListener('click', dataDump);
+//document.getElementById('btnDebug').addEventListener('click', saveStateToStorage);
+document.getElementById('btnDebug2').addEventListener('click', saveStateToStorage);
 document.getElementById('btnDebug3').addEventListener('click', loadStateFromStorage);
 
 
@@ -537,6 +468,19 @@ window.onload = function () {
 	}
 }
 
+/*
 window.onbeforeunload = function() {
   alert("onbeforeunload");
 }
+*/
+
+window.addEventListener("beforeunload", function (e) {
+    // Your save logic here
+	alert("boo");
+	saveStateToStorage();
+    //localStorage.setItem("savedState", JSON.stringify(state));
+
+    // Optionally show confirmation dialog (not recommended in most cases)
+    // e.preventDefault();
+    // e.returnValue = '';
+});
