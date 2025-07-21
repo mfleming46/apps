@@ -21,6 +21,9 @@ p {
 	line-height: 1.2;
 }
 
+ul, li {
+	line-height: 1.4;
+}
 
 
 select {

@@ -9,21 +9,6 @@
     <body>
 		<h1>Simple Interleaved/Blocked Practce</h1>
         
-		<!--form name="frmLeave" action="" onsubmit="return false;" -->
-			
-			<!--
-			<p><b>Usage:</b></p>
-			<ul>
-			<li>Play the highlighted item once, then click <b>Pass</b> or <b>Fail</b>.</li>
-			<li><b>Blocked: </b> Moves to the next item after passing 5 times in a row.</li>
-			<li><b>Interleaved: </b> Moves to the next item after each try, pass or fail.</li>
-			<li><b>Streak: </b> Number of consecutive passed attenots</li>
-			<li>Changing modes resets all streaks.</li>
-			<li>You can edit the practice item names.</li>
-			</ul>
-			-->
-
-			
 			<div class=button-container>
 			<button type="button" id="btnAddItem" class="bland" tabIndex=-1>Add Item</button>
             <button type="button" id="btnDeleteItem" class="bland" tabIndex=-1>Delete Item</button>
@@ -69,19 +54,25 @@
 			<button type="button" id="btnPass" class="bland"> Pass </button>
 			<button type="button" id="btnFail" class="bland"> Fail </button>
 			<button type="button" id="btnSkip" class="bland"> Skip </button>
-		<!--/form-->
+			&nbsp;&nbsp;&nbsp;
+			<button type="button" id="btnFaster" class="bland"> Faster </button>
+			<button type="button" id="btnSlower" class="bland"> Slower </button> 
+
 		
 		<br><br>
 		
+		<div style="max-width: 500px;">
 		<p><b>Usage:</b></p>
 		<ul>
 		<li>Play the highlighted item once, then click <b>Pass</b> or <b>Fail</b>.</li>
+		<li>Or <b>Skip</b> to skip the item, <b>Faster/Slower</b> to change its tempo and reset its streak.</li>
 		<li><b>Blocked: </b> Moves to the next item after passing 5 times in a row.</li>
 		<li><b>Interleaved: </b> Moves to the next item after each try, pass or fail.</li>
-		<li><b>Streak: </b> Number of consecutive passed attenots</li>
+		<li><b>Streak: </b> Number of consecutive passed attempts</li>
 		<li>Changing modes resets all streaks.</li>
-		<li>You can edit the practice item names.</li>
+		<li>You can edit the practice item names and (optional) tempos.</li>
 			</ul>
+		</div>
 			
 	<div style="max-width: 500px;">
 	<p>This app uses cookies to remember your inputs between sessions — just on your device, nothing is tracked or shared.
@@ -94,11 +85,13 @@
 		 <br>release 2025-07-20
 	</p>		
 	
-	<div class=button-container>
+	<!-- HIDDEN DEBUG BUTTONS -->
+	<div class=button-container style="display: none;">
 	<button type="button" id="btnDebug" class="bland" tabIndex=-1>Debug</button>
 	<button type="button" id="btnDebug2" class="bland" tabIndex=-1>Data Dump</button>
 	<button type="button" id="btnDebug3" class="bland" tabIndex=-1>Data Load</button>
 	</div>
+
 		
 		
 <!-- jQuery and custom script -->

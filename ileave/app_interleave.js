@@ -115,6 +115,31 @@ function btnFail_click() {
 	}
 }
 
+function btnFaster_click() {
+	console.log("btnFaster.click ");
+    delta(5)
+}
+
+function btnSlower_click() {
+	console.log("btnSlower.click ");
+	delta(-5)
+}
+
+function delta(increment)
+{
+	i = currentID
+	
+	const bpm = parseInt(objBpm(i).value, 10);
+	if (isNaN(bpm)) {
+		alert("Invalid BPM");
+		return
+	}
+
+	objBpm(i).value = String(bpm + increment);
+	objStrk(i).value = "";
+	objStrkH(i).value = 0;
+}
+
 function btnPass_click() {
 	console.log("btnPass_click");
 	v = doPass(currentID);
@@ -307,8 +332,6 @@ function deleteItem() {
 }
 
 
-
-
 function doFactoryReset() {
 	console.log("doFactoryReset");
 	const table = document.getElementById("dataTable");
@@ -358,7 +381,6 @@ function doFactoryReset() {
 	setCurrent(1);
 }
 
-// ------------------------------------------------------
 
 
 function saveStateToStorage() {
@@ -437,7 +459,6 @@ function loadStateFromStorage() {
 	return true;
 }
 
-// ------------------------------------------------------
 
 
 function logClick() {
@@ -456,29 +477,22 @@ document.getElementById('cbMode').addEventListener('change', cbMode_change);
 document.getElementById('btnPass').addEventListener('click', btnPass_click);
 document.getElementById('btnFail').addEventListener('click', btnFail_click);
 document.getElementById('btnSkip').addEventListener('click', btnSkip_click);
+document.getElementById('btnFaster').addEventListener('click', btnFaster_click);
+document.getElementById('btnSlower').addEventListener('click', btnSlower_click);
 
 //document.getElementById('btnDebug').addEventListener('click', saveStateToStorage);
 document.getElementById('btnDebug2').addEventListener('click', saveStateToStorage);
 document.getElementById('btnDebug3').addEventListener('click', loadStateFromStorage);
 
 
-window.onload = function () {
-	if (!loadStateFromStorage() ) {
-		doFactoryReset();
-	}
-}
-
-/*
-window.onbeforeunload = function() {
-  alert("onbeforeunload");
-}
-*/
+document.addEventListener("DOMContentLoaded", function () {
+    if (!loadStateFromStorage()) {
+        doFactoryReset();
+    }
+});
 
 window.addEventListener("beforeunload", function (e) {
-    // Your save logic here
-	alert("boo");
 	saveStateToStorage();
-    //localStorage.setItem("savedState", JSON.stringify(state));
 
     // Optionally show confirmation dialog (not recommended in most cases)
     // e.preventDefault();
