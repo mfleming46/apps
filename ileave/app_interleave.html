@@ -9,7 +9,7 @@
     <body>
 		<h1>Simple Interleaved/Blocked Practce</h1>
         
-		<form name="frmLeave" action="" onsubmit="return false;" >
+		<!--form name="frmLeave" action="" onsubmit="return false;" -->
 			
 			<!--
 			<p><b>Usage:</b></p>
@@ -22,9 +22,7 @@
 			<li>You can edit the practice item names.</li>
 			</ul>
 			-->
-			<div class=button-container>
-			<button type="button" id="btnDebug" class="bland" tabIndex=-1>Debug</button>
-			</div>
+
 			
 			<div class=button-container>
 			<button type="button" id="btnAddItem" class="bland" tabIndex=-1>Add Item</button>
@@ -71,9 +69,9 @@
 			<button type="button" id="btnPass" class="bland"> Pass </button>
 			<button type="button" id="btnFail" class="bland"> Fail </button>
 			<button type="button" id="btnSkip" class="bland"> Skip </button>
-		</form>
+		<!--/form-->
 		
-		<br>
+		<br><br>
 		
 		<p><b>Usage:</b></p>
 		<ul>
@@ -83,16 +81,28 @@
 		<li><b>Streak: </b> Number of consecutive passed attenots</li>
 		<li>Changing modes resets all streaks.</li>
 		<li>You can edit the practice item names.</li>
-		</ul>
+			</ul>
+			
+	<div style="max-width: 500px;">
+	<p>This app uses cookies to remember your inputs between sessions — just on your device, nothing is tracked or shared.
+	</p>
+	</div>
+
 		
 	<p><br>(c) Marilyn Fleming, 
 	     <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
 		 <br>release 2025-07-20
 	</p>		
+	
+	<div class=button-container>
+	<button type="button" id="btnDebug" class="bland" tabIndex=-1>Debug</button>
+	<button type="button" id="btnDebug2" class="bland" tabIndex=-1>Data Dump</button>
+	<button type="button" id="btnDebug3" class="bland" tabIndex=-1>Data Load</button>
+	</div>
 		
 		
 <!-- jQuery and custom script -->
 <script src="../safe_storage.js"></script>
 <script src="app_interleave.js?v=0.5alt"></script>
-    </body>
+   </body>
 </html>

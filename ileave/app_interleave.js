@@ -11,13 +11,6 @@ var strkMode=blockMode;
 var lastFocusedItemID = null;
 
 
-/*
-function initForm() {
-	console.clear();
-	doFactoryReset()
-}
-*/
-
 function attachFocusListeners() {
 	for (let i = 1; i <= maxID; i++) {
 		attachOneFocusListener(i);
@@ -36,7 +29,7 @@ function attachOneFocusListener(i) {
 	inputStrk.addEventListener("focus", function () {
 		lastFocusedItemID = i;
 	});
-	
+
 	inputBpm.addEventListener("focus", function () {
 		lastFocusedItemID = i;
 	});
@@ -99,6 +92,7 @@ function doAlphaSort() {
 	setCurrent(1);
 	attachFocusListeners();
 }
+
 
 function cbMode_change() {
 	console.log("cbMode_change");
@@ -237,7 +231,7 @@ function addItem() {
 	const row = document.createElement("tr");
 	row.innerHTML = `
 		<td><input name="txtItm${s}" placeholder="Practice Item ${i}" size="25" maxlength="40" type="text"></td>
-		<td> <input name="txtBpm${s}" size="6" maxlength="6" value="" type="text" tabindex=-1>
+		<td> <input name="txtBpm${s}" size="6" maxlength="6" value="" type="text">
 		<td><input name="txtStrk${s}" size="6" maxlength="6" type="text" value="" readonly tabindex="-1"></td>
 		<td style="display: none;"> <input name="hidStrk${s}" type="hidden" value=0> </td>
 	`;
@@ -313,30 +307,7 @@ function deleteItem() {
 }
 
 
-/*
-function loadStateFromStorage() {
-  const state = SafeStorage.getItem(storageKey);
 
-  if (state) {
-    startInput.value = state.start;
-    targetInput.value = state.target;
-    deltaInput.value = state.delta;
-  }
-
-  doReset();
-}
-
-  
-function saveStateToStorage() {
-  const state = {
-    start: parseInt(startInput.value, 10),
-    target: parseInt(targetInput.value, 10),
-    delta: parseInt(deltaInput.value, 10)
-  };
-  SafeStorage.setItem(storageKey, state);
-}
-
-*/
 
 function saveStateToStorage() {
 	alert("bye");
@@ -363,7 +334,7 @@ function saveStateToStorage() {
     alert("State saved");
 }
 
-function loadStateFromStorage() {
+function xxxxloadStateFromStorage() {
     const data = SafeStorage.getItem(storageKey);
 	console.log("loadStateFromStorage",storageKey, data);
     if (!data) return false;
@@ -416,35 +387,31 @@ function doFactoryReset() {
 	table.tBodies[0].innerHTML = `
 <tr >
 	<td> <input name="txtItm01" placeholder="Practice Item 1" size="25" maxlength="40" type="text"> </td>
-	<td> <input name="txtBpm01" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
+	<td> <input name="txtBpm01" size="6" maxlength="6" value="" type="text" ></td>
 	<td> <input name="txtStrk01" size="6" maxlength="6" value="" type="text" readonly tabindex=-1>	</td>
 	<td style="display: none;"> <input name="hidStrk01" type="hidden" > </td>
 </tr>
 <tr>
-
 	<td> <input name="txtItm02" placeholder="Practice Item 2" size="25" maxlength="40"	type="text"> </td>
-	<td> <input name="txtBpm02" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
+	<td> <input name="txtBpm02" size="6" maxlength="6" value="" type="text"></td>
 	<td> <input name="txtStrk02" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
 	<td style="display: none;"> <input name="hidStrk02" type="hidden" > </td>
 </tr>
 <tr>
-
 	<td> <input name="txtItm03" placeholder="Practice Item 3" size="25" maxlength="40"	type="text"> </td>
-	<td> <input name="txtBpm03" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
+	<td> <input name="txtBpm03" size="6" maxlength="6" value="" type="text"></td>
 	<td> <input name="txtStrk03" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
 	<td style="display: none;"> <input name="hidStrk03" type="hidden" > </td>
 </tr>
 <tr>
-
 	<td> <input name="txtItm04" placeholder="Practice Item 4" size="25" maxlength="40"	type="text"> </td>
-	<td> <input name="txtBpm04" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
+	<td> <input name="txtBpm04" size="6" maxlength="6" value="" type="text"></td>
 	<td> <input name="txtStrk04" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
 	<td style="display: none;"> <input name="hidStrk04" type="hidden" > </td>
 </tr>
 <tr>
-
 	<td> <input name="txtItm05" placeholder="Practice Item 5" size="25" maxlength="40" type="text"> </td>
-	<td> <input name="txtBpm05" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
+	<td> <input name="txtBpm05" size="6" maxlength="6" value="" type="text"></td>
 	<td> <input name="txtStrk05" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
 	<td style="display: none;"> <input name="hidStrk05" type="hidden" > </td>
 </tr>`;
@@ -463,6 +430,83 @@ function doFactoryReset() {
 	setCurrent(1);
 }
 
+// ------------------------------------------------------
+
+
+function dataDump() {
+	console.log("dataDump");
+	list = [];
+	for (i=1; i<=maxID; i++)
+	{
+		name = objItm(i).value; 
+		if (name=="") {
+			name=objItm(i).placeholder;
+		}
+		bpm = objBpm(i).value;
+		strkH = objStrkH(i).value;
+		list.push ([i, name, bpm, strkH]);
+	}
+	
+	const state = {
+		tableItems: list,
+		maxID: maxID,
+		strkMode: strkMode,
+		currentID: currentID
+	}
+	SafeStorage.setItem("storageKey", state);
+	console.log(state);
+	
+	return list;
+}
+
+function loadStateFromStorage() {
+	console.log("loadStateFromStorage");
+	const state = SafeStorage.getItem("storageKey");
+	console.log(state);
+	if (!state) {
+		return false;
+	}
+
+	// construct the table
+	const table = document.getElementById("dataTable");
+	const tbody = table.tBodies[0];
+	tbody.innerHTML = ""
+	
+	maxID = 0;
+	while ( maxID < state.maxID  ) {	
+		maxID += 1;
+		const i = maxID;
+		const s = ("00" + i).slice(-2);
+
+		// Create new row
+		const row = document.createElement("tr");
+		row.innerHTML = `
+			<td><input name="txtItm${s}" placeholder="Practice Item ${i}" size="25" maxlength="40" type="text"></td>
+			<td> <input name="txtBpm${s}" size="6" maxlength="6" value="" type="text" >
+			<td><input name="txtStrk${s}" size="6" maxlength="6" type="text" value="" readonly tabindex="-1"></td>
+			<td style="display: none;"> <input name="hidStrk${s}" type="hidden" value=0> </td>
+		`;
+		// Append row first
+		tbody.appendChild(row);
+		
+		name = state.tableItems[i-1][1];
+		bpm = state.tableItems[i-1][2];
+		strkH = state.tableItems[i-1][3];
+		objItm(i).value = name;
+		objBpm(i).value = bpm;
+		objStrkH(i).value = strkH;
+		objStrk(i).value = strkDisplay(strkH);
+		attachOneFocusListener(i);
+	}
+	lastFocusedItemID=null;
+	setCurrent(state.currentID)
+	strkMode= state.strkMode,
+	obj = document.getElementById("cbMode");
+	obj.value = strkMode
+	return true;
+}
+
+// ------------------------------------------------------
 
 
 function logClick() {
@@ -483,17 +527,15 @@ document.getElementById('btnFail').addEventListener('click', btnFail_click);
 document.getElementById('btnSkip').addEventListener('click', btnSkip_click);
 
 document.getElementById('btnDebug').addEventListener('click', saveStateToStorage);
+document.getElementById('btnDebug2').addEventListener('click', dataDump);
+document.getElementById('btnDebug3').addEventListener('click', loadStateFromStorage);
 
 
 window.onload = function () {
-	doFactoryReset();
-/*	
-  //alert("onlosd");
-  if (!loadStateFromStorage()) {
-	doFactoryReset();
-  }
-  */
-};
+	if (!loadStateFromStorage() ) {
+		doFactoryReset();
+	}
+}
 
 window.onbeforeunload = function() {
   alert("onbeforeunload");
