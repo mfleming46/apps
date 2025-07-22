@@ -7,25 +7,6 @@ async function loadLinks() {
   renderLinks(links);
 }
 
-function XparseFlatFile(text) {
-  const entries = text.trim().split(/\r?\n\s*\r?\n/); // split blocks by blank line
-
-  return entries.map(entry => {
-    const lines = entry.split(/\r?\n/); // split lines within a block
-    const link = {};
-    let currentField = '';
-    lines.forEach(line => {
-      const match = line.match(/^(\w+):\s*(.*)$/);
-      if (match) {
-        currentField = match[1].toLowerCase();
-        link[currentField] = match[2];
-      } else if (currentField === 'description') {
-        link.description = (link.description || '') + '\n' + line;
-      }
-    });
-    return link;
-  });
-}
 
 function parseFlatFile(text) {
   const entries = text
@@ -43,7 +24,7 @@ function parseFlatFile(text) {
         currentField = match[1].toLowerCase();
         link[currentField] = match[2];
       } else if (currentField === 'description') {
-        link.description = (link.description || '') + '\n' + line;
+        link.description = (link.description || '') + ' ' + line.trim();
       }
     });
     return link;
@@ -105,6 +86,69 @@ document.addEventListener('keydown', (e) => {
     //alert(showPrivate ? 'Private links shown' : 'Private links hidden');
   }
 });
+
+
+// ----------------------------------------------------
+let tapCount = 0;
+let tapTimer = null;
+
+const title = document.getElementById('title');
+
+title.addEventListener('touchend', handleTitleTap);
+title.addEventListener('click', handleTitleTap); // for desktop
+
+function handleTitleTap() {
+  tapCount++;
+  clearTimeout(tapTimer);
+  tapTimer = setTimeout(() => {
+    if (tapCount >= 3) {
+      document.getElementById('togglePrivate').classList.remove('hidden');
+      alert('Private toggle unlocked');
+    }
+    tapCount = 0;
+  }, 400);
+}
+
+// -------------------------------------
+/*
+document.getElementById('togglePrivate').addEventListener('click', () => {
+	console.log("togglePrivate", showPrivate);
+  showPrivate = !showPrivate;
+  loadLinks();
+  document.getElementById('togglePrivate').textContent = showPrivate
+    ? 'Hide Private Links'
+    : 'Show Private Links';
+});
+*/
+
+  let showPrivate = false; // make sure this is globally defined
+
+  // Attach handler after DOM is ready
+  window.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('togglePrivate');
+    if (!btn) {
+      console.warn("togglePrivate button not found");
+      return;
+    }
+
+    btn.addEventListener('click', togglePrivateView);
+  });
+
+  function togglePrivateView() {
+    console.log("togglePrivate clicked. Current value:", showPrivate);
+
+    showPrivate = !showPrivate;
+
+    console.log("New value of showPrivate:", showPrivate);
+
+    loadLinks();
+
+    document.getElementById('togglePrivate').textContent = showPrivate
+      ? 'Hide Private Links'
+      : 'Show Private Links';
+  }
+
+
 
 
 

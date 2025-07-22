@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <title>Log Summary by Page</title>
+  <style>
+    #env-note {
+      color: #555;
+      font-style: italic;
+      margin-top: -10px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Log Summary by App/Page</h1>
+  <div id="env-note"></div>
+
+  <button onclick="clearLog()">Clear Log</button>
+  <pre id="summary">Loading...</pre>
+
+<script>
+  let myIp = null;
+  const localIps = new Set(['127.0.0.1', '::1']);
+
+  // Fetch user's IP address before loading summary
+  fetch('https://api.ipify.org?format=json')
+    .then(res => res.json())
+    .then(data => {
+      myIp = data.ip;
+      if (location.hostname === 'localhost' || localIps.has(location.hostname)) {
+        document.getElementById('env-note').textContent =
+          "(Running locally — IP filtering includes localhost)";
+      }
+      loadSummary();
+    })
+    .catch(() => {
+      document.getElementById('env-note').textContent =
+        "(Could not determine IP — showing all data)";
+      loadSummary(); // Proceed anyway if fetch fails
+    });
+
+  function loadSummary() {
+    fetch('/apps/log_summary.php')
+      .then(response => {
+        if (!response.ok) throw new Error("Failed to load log");
+        return response.text();
+      })
+      .then(text => {
+        const lines = text.trim().split('\n').filter(line => line.trim() !== "");
+        const pages = {};
+        const visitors = new Set();
+        const ipCounts = {};
+        const dates = [];
+        let validHits = 0;
+
+        for (let line of lines) {
+          const [timestamp, ip, page] = line.split(',');
+          if (!timestamp || !ip || !page) continue;
+
+          if (ip === myIp || ip === '::1' || ip === '127.0.0.1') continue;
+
+          validHits++;
+          const date = timestamp.slice(0, 10);
+          const cleanPage = page.trim();
+
+          pages[cleanPage] = (pages[cleanPage] || 0) + 1;
+          visitors.add(ip);
+          ipCounts[ip] = (ipCounts[ip] || 0) + 1;
+          dates.push(date);
+        }
+
+        dates.sort();
+        const startDate = dates[0] || 'N/A';
+        const endDate = dates[dates.length - 1] || 'N/A';
+
+        let report = `Date range: ${startDate} to ${endDate}\n\n`;
+        report += 'Hits per app/page:\n';
+        for (let page in pages) {
+          report += `  ${page}: ${pages[page]}\n`;
+        }
+
+        report += `\nTotal hits: ${validHits}`;
+        report += `\nUnique IPs (excluding yours): ${visitors.size}`;
+
+        report += `\n\nTop 5 IPs by hit count (excluding yours):\n`;
+        const topIps = Object.entries(ipCounts)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 5);
+
+        topIps.forEach(([ip, count], i) => {
+          report += `  ${i + 1}. ${ip}: ${count} hits\n`;
+        });
+
+        document.getElementById('summary').textContent = report;
+      })
+      .catch(err => {
+        console.error("Log fetch error:", err);
+        document.getElementById('summary').textContent = 'Error loading log.';
+      });
+  }
+
+  function clearLog() {
+    if (!confirm("Are you sure you want to clear the log?")) return;
+
+    fetch('/apps/clear_log.php', { method: 'POST' })
+      .then(response => response.text())
+      .then(msg => {
+        alert(msg);
+        loadSummary();  // Refresh view
+      })
+      .catch(err => {
+        alert("Error clearing log.");
+        console.error(err);
+      });
+  }
+</script>
+
+</body>
+</html>

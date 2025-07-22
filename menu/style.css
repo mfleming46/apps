@@ -107,3 +107,22 @@ body {
 .toggle-private:active {
   background: #ddd;
 }
+
+.menu-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 1em;
+}
+
+
+.logo {
+  height: 36px !important;      /* controls visual size */
+  width: auto !important;       /* maintain aspect ratio */
+  max-width: 100%;              /* never overflow */
+  display: inline-block;        /* ensures it sits properly with text */
+  vertical-align: middle;       /* aligns better with h1 */
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;         /* disables image long-press/save gesture */
+}
