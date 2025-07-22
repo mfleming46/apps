@@ -3,20 +3,18 @@ url: ../ileave/app_interleave.html
 title: Simple Interleaved/Blocked Practice
 classification: oc
 new: true
-description: This tool handles classified features.
-It is not to be accessed without clearance.
+description: blah blah blah
 
 url: ../icu/iclick.html
 title: ICU (Interleaved Clickup)
 classification: WIP
 new: true
-description: This tool handles classified features.
-It is not to be accessed without clearance.
+description: blah blah blah
 
 url: ../pp/app_practice_priority.html
 title: Practice Priority
 classification: oc
-description: Main control panel for internal use
+description: blah blah blah
 
 url: ../fund/app_fundamentals.html
 title: Fundamentals Checklist

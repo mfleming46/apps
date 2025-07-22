@@ -1,7 +1,21 @@
 let showPrivate = false;
 
+/*
 async function loadLinks() {
+	console.log("loadLinks");
   const res = await fetch('links.txt');
+  const text = await res.text();
+  const links = parseFlatFile(text);
+  renderLinks(links);
+}
+*/
+
+async function loadLinks() {
+  console.log("loadLinks");
+
+  // Add a timestamp to prevent caching
+  const res = await fetch('links.txt?v=' + Date.now());
+
   const text = await res.text();
   const links = parseFlatFile(text);
   renderLinks(links);
