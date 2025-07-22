@@ -110,20 +110,10 @@ function handleTitleTap() {
 }
 
 // -------------------------------------
-/*
-document.getElementById('togglePrivate').addEventListener('click', () => {
-	console.log("togglePrivate", showPrivate);
-  showPrivate = !showPrivate;
-  loadLinks();
-  document.getElementById('togglePrivate').textContent = showPrivate
-    ? 'Hide Private Links'
-    : 'Show Private Links';
-});
-*/
-
 
   // Attach handler after DOM is ready
   window.addEventListener('DOMContentLoaded', () => {
+	  console.log("hello wowrld");
     const btn = document.getElementById('togglePrivate');
     if (!btn) {
       console.warn("togglePrivate button not found");
