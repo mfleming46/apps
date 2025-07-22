@@ -121,7 +121,6 @@ document.getElementById('togglePrivate').addEventListener('click', () => {
 });
 */
 
-  let showPrivate = false; // make sure this is globally defined
 
   // Attach handler after DOM is ready
   window.addEventListener('DOMContentLoaded', () => {
