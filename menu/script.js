@@ -50,6 +50,23 @@ function parseFlatFile(text) {
   });
 }
 
+function getClassificationBadge(classification = '') {
+  const code = classification.toLowerCase();
+  const map = {
+    ib: '🧭 ib',
+    oc: '📘 oc',
+    wip: '🚧 wip',
+    private: '🔒 private'
+  };
+  return map[code] || `❓ ${classification}`;
+}
+
+function getNewBadge(flag) {
+  if (flag?.toLowerCase?.() === 'true') {
+    return `<span class="new-badge">NEW</span>`;
+  }
+  return '';
+}
 
 
 
@@ -65,10 +82,14 @@ function renderLinks(links) {
 
     const btn = document.createElement('button');
     btn.className = 'link-button';
-    btn.innerHTML = `
-      <strong>${link.title || 'Untitled'}</strong><br/>
-      <span class="desc">${(link.description || '').replace(/\n/g, '<br>')}</span>
-    `;
+	btn.innerHTML = `
+	  <div class="badge-line">
+		<span class="badge">${getClassificationBadge(link.classification)}</span>
+		${getNewBadge(link.new)}
+	  </div>
+	  <strong>${link.title || 'Untitled'}</strong><br/>
+	  <span class="desc">${(link.description || '').replace(/\n/g, '<br>')}</span>
+	`;
     btn.onclick = () => {
       if (link.url) window.open(link.url, '_blank');
     };
@@ -81,9 +102,12 @@ document.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'p') {
     showPrivate = !showPrivate;
     loadLinks();
-    alert(showPrivate ? 'Private links shown' : 'Private links hidden');
+    //alert(showPrivate ? 'Private links shown' : 'Private links hidden');
   }
 });
+
+
+
 
 // Initial load
 loadLinks();

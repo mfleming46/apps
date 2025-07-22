@@ -1,0 +1,54 @@
+url: ../pp/app_practice_priority.html
+title: Practice Priority
+classification: oc
+description: Main control panel for internal use
+
+url: ../fund/app_fundamentals.html
+title: Fundamentals
+classification: oc
+new: true
+description: Project documentation and guides
+
+url: ../ileave/app_interleave.html
+title: Interleave
+classification: oc
+description: This tool handles classified features.
+It is not to be accessed without clearance.
+
+url: ../ileave/old/app_interleave.html
+title: Interleave - old version
+classification: private
+description: 
+
+url: ../icu/iclick.html
+title: ICU (Interleaved Clickup)
+classification: WIP
+description: This tool handles classified features.
+It is not to be accessed without clearance.
+
+url: ../summary.html
+title: Usage Summary
+classification: private
+description: Hit count report for apps
+
+url: ../chk/log_test.html
+title: Logger Test Page
+classification: private
+description: 
+
+url: ../hello_world.php
+title: hello_world.php
+classification: private
+description:
+
+
+
+
+
+
+
+
+   
+
+
+
