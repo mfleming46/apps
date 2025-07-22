@@ -256,7 +256,7 @@ function addItem() {
 	const row = document.createElement("tr");
 	row.innerHTML = `
 		<td><input name="txtItm${s}" placeholder="Practice Item ${i}" size="25" maxlength="40" type="text"></td>
-		<td> <input name="txtBpm${s}" size="6" maxlength="6" value="" type="text">
+		<td> <input name="txtBpm${s}" size="6" maxlength="6" value="60" type="text">
 		<td><input name="txtStrk${s}" size="6" maxlength="6" type="text" value="" readonly tabindex="-1"></td>
 		<td style="display: none;"> <input name="hidStrk${s}" type="hidden" value=0> </td>
 	`;
@@ -338,31 +338,31 @@ function doFactoryReset() {
 	table.tBodies[0].innerHTML = `
 <tr >
 	<td> <input name="txtItm01" placeholder="Practice Item 1" size="25" maxlength="40" type="text"> </td>
-	<td> <input name="txtBpm01" size="6" maxlength="6" value="" type="text" ></td>
+	<td> <input name="txtBpm01" size="6" maxlength="6" value="60" type="text" ></td>
 	<td> <input name="txtStrk01" size="6" maxlength="6" value="" type="text" readonly tabindex=-1>	</td>
 	<td style="display: none;"> <input name="hidStrk01" type="hidden" > </td>
 </tr>
 <tr>
 	<td> <input name="txtItm02" placeholder="Practice Item 2" size="25" maxlength="40"	type="text"> </td>
-	<td> <input name="txtBpm02" size="6" maxlength="6" value="" type="text"></td>
+	<td> <input name="txtBpm02" size="6" maxlength="6" value="60" type="text"></td>
 	<td> <input name="txtStrk02" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
 	<td style="display: none;"> <input name="hidStrk02" type="hidden" > </td>
 </tr>
 <tr>
 	<td> <input name="txtItm03" placeholder="Practice Item 3" size="25" maxlength="40"	type="text"> </td>
-	<td> <input name="txtBpm03" size="6" maxlength="6" value="" type="text"></td>
+	<td> <input name="txtBpm03" size="6" maxlength="6" value="60" type="text"></td>
 	<td> <input name="txtStrk03" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
 	<td style="display: none;"> <input name="hidStrk03" type="hidden" > </td>
 </tr>
 <tr>
 	<td> <input name="txtItm04" placeholder="Practice Item 4" size="25" maxlength="40"	type="text"> </td>
-	<td> <input name="txtBpm04" size="6" maxlength="6" value="" type="text"></td>
+	<td> <input name="txtBpm04" size="6" maxlength="6" value="60" type="text"></td>
 	<td> <input name="txtStrk04" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
 	<td style="display: none;"> <input name="hidStrk04" type="hidden" > </td>
 </tr>
 <tr>
 	<td> <input name="txtItm05" placeholder="Practice Item 5" size="25" maxlength="40" type="text"> </td>
-	<td> <input name="txtBpm05" size="6" maxlength="6" value="" type="text"></td>
+	<td> <input name="txtBpm05" size="6" maxlength="6" value="60" type="text"></td>
 	<td> <input name="txtStrk05" size="6" maxlength="6" type="text" readonly tabindex=-1> </td>
 	<td style="display: none;"> <input name="hidStrk05" type="hidden" > </td>
 </tr>`;
@@ -466,6 +466,10 @@ function loadStateFromStorage() {
     return true;
 }
 
+function clearStorage() {
+	console.log("clearStorage")
+	
+}
 
 
 function logClick() {
@@ -508,9 +512,17 @@ document.getElementById('btnSlower').addEventListener('click', btnSlower_click);
 document.getElementById('btnHelp').addEventListener('click', btnHelp_click);
 document.getElementById('btnDemo').addEventListener('click', btnDemo_click);
 
-//document.getElementById('btnDebug').addEventListener('click', saveStateToStorage);
+// DEBUG PANEL
+document.getElementById('btnDebug').addEventListener('click', clearStorage);
 document.getElementById('btnDebug2').addEventListener('click', saveStateToStorage);
 document.getElementById('btnDebug3').addEventListener('click', loadStateFromStorage);
+
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.shiftKey && e.altKey && e.key === 'D') {
+	const menu = document.getElementById('debugMenu');
+	menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  }
+});
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -526,3 +538,5 @@ window.addEventListener("beforeunload", function (e) {
     // e.preventDefault();
     // e.returnValue = '';
 });
+
+console.log("✅ app_interleave.js v 2025-07-21 17:55:42 loaded");

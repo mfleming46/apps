@@ -50,4 +50,4 @@
   global.SafeStorage = SafeStorage;
 })(this);
 
-console.log("✅ safe_storage.js loaded");
+console.log("✅ safe_storage.js v 2025-07-21 17:55:42 loaded");

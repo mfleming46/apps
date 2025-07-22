@@ -41,7 +41,7 @@
 					<!-- example: this will be filled at startup 
 					<tr >
 						<td> <input name="txtItm01" placeholder="Practice Item 1" size="25" maxlength="40" type="text"> </td>
-						<td> <input name="txtBpm01" size="6" maxlength="6" value="" type="text" tabindex=-1></td>
+						<td> <input name="txtBpm01" size="6" maxlength="6" value="60" type="text" tabindex=-1></td>
 						<td> <input name="txtStrk01" size="6" maxlength="6" value="" type="text" readonly tabindex=-1>	</td>
 						<td style="display: none;"> <input name="hidStrk01" type="hidden" > </td>
 					</tr>
@@ -88,20 +88,20 @@
 	<!-- COPYRIGHT -->	
 	<p><br>(c) Marilyn Fleming, 
 	     <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
-		 <br>release 2025-07-20
+		 <br>release 2025-07-21
 	</p>		
 	
 	<!-- HIDDEN DEBUG BUTTONS -->
-	<div class=button-container style="display: block;">
-	<button type="button" id="btnDebug" class="bland" tabIndex=-1>Debug</button>
-	<button type="button" id="btnDebug2" class="bland" tabIndex=-1>Data Dump</button>
-	<button type="button" id="btnDebug3" class="bland" tabIndex=-1>Data Load</button>
+	<div class=button-container style="display: none;" id="debugMenu">
+	<button type="button" id="btnDebug" class="bland" tabIndex=-1>Clear Storage</button>
+	<button type="button" id="btnDebug2" class="bland" tabIndex=-1>Save to Storage</button>
+	<button type="button" id="btnDebug3" class="bland" tabIndex=-1>Load from Storage</button>
 	</div>
 
 		
 		
 <!-- jQuery and custom script -->
-<script src="../safe_storage.js"></script>
-<script src="app_interleave.js?v=0.5alt"></script>
+<script src="../safe_storage.js?v=2025.07.21"></script>
+<script src="app_interleave.js?v=2025.07.21"></script>
    </body>
 </html>
