@@ -1,20 +1,40 @@
 
+.layout-600 {
+  max-width: 600px;
+  padding: 0rem 2rem; /* top/bottom 1em, left/right 2em */
+  margin: 0;         /* no centering */
+}
 
 /*
-button.bland {
-	padding: 2px 12px;
-	text-align: center;
-	text-decoration: none;
-	//display: inline-block;		
-	float: none;
+body {
+  font-family: sans-serif;
+  font-size: 1.1rem;
+  //padding: 1em;
+  padding: 1em 2em;
+  max-width: 600px;
+  //margin: auto;
+  margin: 0;
+  background: #f9f9f9;
 }
 */
-	
 
-li,ul,p,tr,td,text,input,placeholder {
+:root {
+  --font-sm: 0.875rem;         /* 14px */
+  --font-base: 1rem;           /* 16px */
+  --font-md: 0.9375rem;        /* 15px */
+  --line-height: 1.8;
+  --control-height: 2.125rem;  /* 34px */
+  --control-padding-x: 0.75rem;/* 12px */
+  --border-radius: 0.125rem;   /* 2px */
+  --container-width: 31.25rem; /* 500px */
+  --container-height: 1.875rem;/* 30px */
+}
+
+
+li, ul, p, tr, td, text, input, placeholder {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
-	line-height: 1.8;
+	font-size: var(--font-base);
+	line-height: var(--line-height);
 }
 
 p {
@@ -25,83 +45,64 @@ ul, li {
 	line-height: 1.4;
 }
 
-
 select {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 15px;
-	line-height: 1.8;
-	padding: 5px 0px;
+	font-size: var(--font-md);
+	height: var(--control-height);
+	line-height: var(--control-height);
+	padding: 0 var(--control-padding-x);
+	border: 1px solid #888;
+	border-radius: var(--border-radius);
+	background-color: #f0f0f0;
+	appearance: none;
+	-webkit-appearance: none;
+	background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="14" viewBox="0 0 20 20" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M5.516 7.548l4.48 4.48 4.48-4.48 1.088 1.088-5.568 5.568-5.568-5.568z"/></svg>');
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+	background-size: 14px;
+	padding-right: 1.75rem; /* space for arrow */
+	color: black;
+	cursor: pointer;
 }
 
 button {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	line-height: 1.8;
-	min-width: 60px;
+	font-size: var(--font-sm);
+	height: var(--control-height);
+	line-height: var(--control-height);
+	padding: 0 var(--control-padding-x);
+	min-width: 3.75rem; /* 60px */
+	border: 1px solid #888;
+	border-radius: var(--border-radius);
+	background-color: #f0f0f0;
+	color: black;
+	appearance: none;
+	-webkit-appearance: none;
+	cursor: pointer;
 }
 
 inputXXX:focus {
-  outline: none;
-  box-shadow: none;
+	outline: none;
+	box-shadow: none;
 }
-	
-	
+
+
 .button-container {
-  margin-top: 6px;
-  height: 30px;
-  width: 500px;
+	height: var(--container-height);
+	width: var(--container-width);
+    margin-bottom: calc(var(--container-height) * 0.4);
+	display: flex;
+}
+/*
+.button-container {
+  height: var(--container-height);
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: calc(var(--container-height) * 0.4);
   display: flex;
 }
+*/
 
 .button-container button {
-  flex: 1;
-}
-
-@supports (-webkit-touch-callout: none) and (not (-ms-ime-align: auto)) {
-  button {
-    all: unset;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    line-height: 1.8;
-    padding: 2px 12px;
-    border: 1px solid #888;
-    background-color: #f0f0f0;
-    color: black;
-    text-align: center;
-    display: inline-block;
-    border-radius: 2px;
-    min-width: 60px;
-    cursor: pointer;
-  }
-}
-
-@supports (-webkit-touch-callout: none) and (not (-ms-ime-align: auto)) {
-  select {
-    all: unset;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 15px;
-    height: 34px;
-    line-height: 34px; /* match height */
-    padding: 0 10px;
-    border: 1px solid #888;
-    background-color: #f0f0f0;
-    color: black;
-    border-radius: 2px;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="14" viewBox="0 0 20 20" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M5.516 7.548l4.48 4.48 4.48-4.48 1.088 1.088-5.568 5.568-5.568-5.568z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 14px;
-    padding-right: 28px;
-  }
-}
-
-
-select {
-  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="14" viewBox="0 0 20 20" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M5.516 7.548l4.48 4.48 4.48-4.48 1.088 1.088-5.568 5.568-5.568-5.568z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  background-size: 14px;
-  padding-right: 24px; /* allow space for icon */
+	flex: 1;
 }
