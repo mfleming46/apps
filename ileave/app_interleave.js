@@ -105,6 +105,9 @@ function cbMode_change() {
 function btnSkip_click() {
 	console.log("btnskip.click ");
 	setCurrent( (currentID % maxID) + 1 );
+	if (isMetronomePlaying()) {
+		refreshMetronome();
+	}
 }
 
 function btnFail_click() {
@@ -125,8 +128,7 @@ function btnSlower_click() {
 	delta(-5)
 }
 
-function delta(increment)
-{
+function delta(increment) {
 	i = currentID
 	const bpm = parseInt(objBpm(i).value, 10);
 	if (isNaN(bpm)) {
@@ -138,39 +140,49 @@ function delta(increment)
 	objBpm(i).value = String(newBpm);
 	objStrk(i).value = "";
 	objStrkH(i).value = 0;
+	if (isMetronomePlaying()) {
+		refreshMetronome();
+	}
 }
 
-function refreshMetronome() {
-	donsole.log("refresh_metronome");
-	if (!isMetronomePlaying()) {
-		return;
-	}
-	i = currentID
-	const bpm = parseInt(objBpm(i).value, 10);
-	if (isNaN(bpm)) {
-		return;
-	}
-	
-    setBPM(bpm);
-	const subdiv = 1;
-    setSubdivision(subdiv);
-    startMetronome();
+
+function handleStart() {
+   const i = currentID
+   const bpm = parseInt(objBpm(i).value, 10);
+   if (isNaN(bpm)) {
+	  return;
+   }
+   // const bpm = document.getElementById("bpm").value;
+   const subdiv = document.getElementById("subdiv").value;
+   setBPM(bpm);
+   setSubdivision(subdiv);
+   startMetronome();
 }
+
+function handleStop() {
+  stopMetronome();
+}
+
+
 
 function btnMetronome_click() {
 	console.log("btnMetronome_click");
-	// alert("metronome_click")
 	if (isMetronomePlaying()) {
 		stopMetronome(); 
+		return;
 	} 
-	else {
-	    setBPM(60);
-        setSubdivision(1);
-		// alert("calling startMetronome");
-        startMetronome();
-	}
+	handleStart();
 }
 
+function refreshMetronome() {
+	console.log("refreshMetronome");
+	handleStart()
+}
+
+function subdiv_change() {
+	console.log("subdiv_change");
+	refreshMetronome();
+}
 
 function btnPass_click() {
 	console.log("btnPass_click");
@@ -258,6 +270,7 @@ function setCurrent(i) {
 	objStrk(i).style=styleHilite;
 	objBpm(i).style=styleHilite;
 	currentID = i;
+	//refreshMetronome();
 	
 }
 
@@ -482,10 +495,10 @@ function loadStateFromStorage() {
 			attachOneFocusListener(i);
 		}
 		lastFocusedItemID=null;
-		setCurrent(state.currentID)
-		strkMode= state.strkMode,
+		setCurrent(state.currentID);
+		strkMode= state.strkMode;
 		obj = document.getElementById("cbMode");
-		obj.value = strkMode
+		obj.value = strkMode;
 		
 	} catch (e) {
         console.error("Error during loadStateFromStorage:", e);
@@ -537,7 +550,9 @@ document.getElementById('btnFail').addEventListener('click', btnFail_click);
 document.getElementById('btnSkip').addEventListener('click', btnSkip_click);
 document.getElementById('btnFaster').addEventListener('click', btnFaster_click);
 document.getElementById('btnSlower').addEventListener('click', btnSlower_click);
+
 document.getElementById('btnMetronome').addEventListener('click', btnMetronome_click);
+document.getElementById('subdiv').addEventListener('change', subdiv_change);
 
 document.getElementById('btnHelp').addEventListener('click', btnHelp_click);
 document.getElementById('btnDemo').addEventListener('click', btnDemo_click);
