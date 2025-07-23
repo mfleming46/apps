@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=600, user-scalable=yes">
 	<title>Simple Interleaved Practice</title>
-	<link rel="stylesheet" href="app_interleave.css?v=2025-07-23 02:23:39"> 
+<link rel="stylesheet" href="app_interleave.css?v=2025-07-23 04:41:56"> 
 </head>		
     <body>
 	<div class="layout-600">
@@ -26,8 +26,8 @@
 			<button  type="button" id="btnReset" tabIndex=-1 class="bland"> Reset Streaks</button>
 			</div>
 
-			<br>
-
+			<!-- COOKIE NOTICE -->
+			<div class="data-table">
 			<table id="dataTable">
 				<thead>
 					<tr>
@@ -50,6 +50,7 @@
 					
 				</tbody>
 			</table>
+			</div>
 			<br>
 
 			<button type="button" id="btnPass" class="bland"> Pass </button>
@@ -63,15 +64,16 @@
 		<br><br>
 		
 		<!-- COOKIE NOTICE -->
-		<div style="max-width: 500px;">
+		<div class="cookie-notice">
 		<p>This app uses cookies to remember your inputs between sessions — just on your device, nothing is tracked or shared.
 		</p>
 		</div>
 		
 		<!-- INSTRUCTIONS -->
+		<!--
 		<button type="button" id="btnHelp" > Read Instructions </button>
 		<button type="button" id="btnDemo" > Short Video Demo </button>
-		<div style="max-width: 500px; display: none;" id="divHelp">
+		<div style="; display: none;" id="divHelp">
 		<p><b>Usage:</b></p>
 		<ul>
 			<li>Play the highlighted item once, then click <b>Pass</b> or <b>Fail</b>.</li>
@@ -83,14 +85,27 @@
 			<li>You can edit the practice item names and (optional) tempos.</li>
 		</ul>
 		</div>
+		-->
+		<button type="button" id="btnHelp" > Read Instructions </button>
+		<button type="button" id="btnDemo" > Short Video Demo </button>
+		<div class="help-block" style="display: none;" id="divHelp">
+			<p><b>Play</b> the highlighted item, then tap <b>Pass</b>, <b>Fail</b>, or <b>Skip</b>.</p>
+			<p><b>Faster</b>/<b>Slower</b> adjusts tempo and resets streak.</p>
+			<p><b>Blocked Mode</b>: Stay on an item until you pass 5 times in a row.</p>
+			<p><b>Interleaved Mode</b>: Move to the next after each try.</p>
+			<p><b>Streak</b> = number of consecutive passes.</p>
+			<p>You can <b>edit item names</b> and optional <b>BPMs</b>.</p>
+		</div>
 			
 
 
 	<!-- COPYRIGHT -->	
+	<div class="copyright-notice">
 	<p><br>(c) Marilyn Fleming, 
 	     <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
 		 <br>release 2025-07-22
 	</p>		
+	</div>
 	
 	<!-- HIDDEN DEBUG BUTTONS -->
 	<div class=button-container style="display: none;" id="debugMenu">
