@@ -1,0 +1,46 @@
+.button {
+  background-color: #000000;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  width: 32pt;
+  height: 22pt;
+}
+
+.buttonSS {
+  background-color: #000000;
+  border: solid;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  padding: 2px;
+  width: 60pt;
+  height: 24pt;
+}
+
+.tblHead {
+  text-align: center;
+  font-size: 12px;
+  font-family: Arial;
+}
+
+.bpminput {
+  width: 48pt;
+  height: 20pt;
+  font-size: 20px;
+  text-align: center;
+}
+
+.form-group {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.divselect {
+  width: 40pt;
+}

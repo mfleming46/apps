@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title></title>
+<!-- this is in Native Libraries  ->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.4/howler.js"></script>
+<!-- -->
+<script>
+  
+/*  
+try {
+  throw 'myException'; // generates an exception
+}
+catch (e) {
+  // statements to handle any exceptions
+  logMyErrors(e); // pass exception object to error handler
+}
+*/
+  
+    var tempoMin = 10;
+    var tempoMax = 400;
+    var bpbMin = 1;
+    var bpbMax = 16;
+    var cpbMin = bpbMin;
+    var cpbMax = bpbMax;
+    var beat = 1; // the current beat in the bar
+    var beatsPerBar = 1; //4;
+    var clicksPerBeat = 1;
+    var tempo = 60; // in beats per minute
+    var isPlaying = false;
+    var interval; // used to hold the setInterval data so it can be cleared when the metronome stops
+
+    // Create the sound effects
+    // Howler.js was used to enable overlapping sound effects  
+    highBlockSound = new Howl({
+        src: ["High-Wood-Block.mp3"]
+    });
+    lowBlockSound = new Howl({
+        src: ["Low-Wood-Block.mp3"]
+    });
+    subdivisionLowBlockSound = new Howl({
+        src: ["N1R-Low-Wood-Block.mp3"]
+    });
+  
+window.makeString=function(string, position){
+ // do whatever you want here
+};  
+  
+window.hello=function () {
+      alert ("Hello World!");
+    };
+  
+window.do_start=function () {
+      if (!isPlaying) btnSS_click();
+    };
+  
+window.do_stop=function () {
+      if (isPlaying) btnSS_click();
+    };
+  
+window.get_bpm=function () {
+      return tempo;
+    };
+  
+window.get_subdiv=function () {
+      return clicksPerBeat;
+    };
+  
+window.do_init=function (bpmx,subx) {
+      changed = false;
+      bpm=bpmx;
+      sub=subx;
+      if (sub===1 || sub===2 || sub===3 || sub===4 || sub===6)
+      {
+        document.getElementById("cbSubdiv").value = sub;
+        clicksPerBeat = sub;
+        changed =true;
+      }  
+      if (bpm>tempoMax)
+      {
+         bpm=tempoMax;
+      }
+      else if (bpm<tempoMin)
+      {
+          bpm=tempoMin;
+      }     
+      if (bpm!=tempo)
+      {
+        tempo = bpm;
+        document.getElementById("txtBPM").value=bpm;
+        changed = true;
+      }  
+      if (changed) tick_reset();
+    };
+
+    // not sure this is being called
+    function loaded() {
+      beatsPerBar = 1; //4; doesn't change
+      clicksPerBeat = 1;
+      tempo = 60; // in beats per minute
+      isPlaying = false;
+      document.getElementById("txtBPM").value = tempo;
+      document.getElementById("cbSubdiv").value = 1;
+     
+      let input = document.getElementById("txtBPM");
+      input.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13 || event.keyCode===9 ) {
+          event.preventDefault();
+          //txtBPM_blur();
+          document.getElementById("cbSubdiv").focus();
+        }  
+      })    
+  } 
+
+
+    function btnUp_click() {
+      txtBPM_blur();
+      console.log("btnUp_click()");
+      x = tempo + 10;
+      if (x>tempoMax) x=tempoMax;
+      if (x<tempoMin) x=tempoMin;
+      document.getElementById("txtBPM").value = x;
+      tempo = x;
+      tick_reset();
+    }
+
+    function btnDown_click() {
+      txtBPM_blur();
+      console.log("btnDown_click()");
+      x = tempo - 10;
+      if (x>tempoMax) x=tempoMax;
+      if (x<tempoMin) x=tempoMin;
+      document.getElementById("txtBPM").value = x;
+      tempo = x;
+      tick_reset();
+    }
+    
+    function txtBPM_input() {
+    }
+    
+    function txtBPM_blur() {
+      console.log("txtBPM_blur()", tempo, clicksPerBeat);
+      x = document.getElementById("txtBPM").value;
+      x = Number(x)
+      console.log(x,x<tempoMin);
+      if (x>tempoMax)
+      {
+         x=tempoMax;
+         document.getElementById("txtBPM").value = x; 
+      }
+      else if (x<tempoMin)
+      {
+          x=tempoMin;
+          document.getElementById("txtBPM").value = x; 
+      }
+      
+      if (x!=tempo)
+      {
+        tempo = x;
+        tick_reset();
+      }  
+    }
+
+    function cbSub_change() {
+      txtBPM_blur();
+      console.log("cbSub_change()");
+      x = document.getElementById("cbSubdiv").value;
+      if (x<1) x=1;
+      clicksPerBeat = Number(x);
+      tick_reset();
+    }
+
+    // Function to handle starting and stopping the metronome
+    function btnSS_click() {
+        txtBPM_blur();
+        console.log("btnSS_click()");
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+            playClick();
+            document.getElementById("btnSS").value = "Stop";
+            interval = setInterval(playClick, (60000 / tempo) / clicksPerBeat);
+        } else {
+            clearInterval(interval); // this stops the sound effects from playing
+            document.getElementById("btnSS").value = "Start";
+            beat = 1; // reset the beat to the down beat
+        }
+    };
+
+    function tick_reset() {
+      console.log("tick_reset()", tempo, clicksPerBeat);
+      if (!isPlaying) return;
+      clearInterval(interval);
+      beat = 1;
+      interval = setInterval(playClick, (60000 / tempo) / clicksPerBeat);
+    }
+
+    // This function handles playing the click sound
+    // Each time playClick() is called, the beat variable is incremented so we know what beat we're on
+    function playClick() {
+      //console.log("playClick()", tempo, clicksPerBeat, beat);     
+      if ((beat % (beatsPerBar * clicksPerBeat)) === 1) {
+          // We're on the down beat of the bar
+          highBlockSound.play();
+      } else if (((beat % clicksPerBeat) === 1) || (clicksPerBeat === 1)) {
+          // We're on a strong beat (aside from the down beat)
+          lowBlockSound.play();
+      } else {
+          // We're on a subdivision of the beat
+          subdivisionLowBlockSound.play();
+      }
+      beat++;
+    }
+</script>
+
+
+<style>
+.button {
+  background-color: #000000;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  width: 32pt;
+  height: 22pt;
+}
+.buttonSS {
+  background-color: #000000; /* #0082fc;    */
+  border: solid;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  padding: 2;
+  width: 60pt;
+  height: 24pt;
+}
+
+.tblHead {
+  text-align: center;
+  font-size: 12px;
+  font-family: Arial;
+}
+.bpminput {
+  width: 48pt;
+  height: 20pt;
+  font-size: 20px;
+  text-align: center;
+}
+.form-group {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.divselect {
+  width: 40pt;
+}
+</style>
+
+</head>
+<body onload="loaded()">
+<form onsubmit="return false">
+  
+        <div class="form-group">
+ <table>
+ <tr>
+ <td></td> <td class="tblHead">BPM</td> <td></td> <td></td> <td class="tblHead">subdiv</td> <td></td> <td></td></tr>
+ </tr>
+ <tr><td>
+          <input type="button" class="button" value="-10" id="btnDown"  onclick="btnDown_click()">
+ </td><td>
+          <input type="number" class="bpminput" id="txtBPM"
+                 min="10" max="400" step="1" value="60" onblur="txtBPM_blur()" oninput="txtBPM_input()">
+ </td><td>
+          <input type="button" class="button" value="+10" id="btnUp" onclick="btnUp_click()">
+ </td><td>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+ </td><td>
+           <select id="cbSubdiv" name="cbSubdiv" class="divselect" onchange="cbSub_change()">
+           <option value="1" selected>1</option>
+           <option value="2">2</option>
+           <option value="3">3</option>
+           <option value="4">4</option>
+           <option value="6">6</option>
+           </select>
+ </td><td>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+ </td><td>
+          <input type="button" value="Start" id="btnSS" class="buttonSS" onclick="btnSS_click()">
+ </td></tr>
+ </table>
+</form>
+</body>
+</html>

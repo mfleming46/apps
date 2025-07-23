@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Metronome</title>
+  <link rel="stylesheet" href="metronome.css" />
+  <script src="howler.min.js"></script>
+  <script src="metronome.js" defer></script>
+</head>
+<body onload="loaded()">
+  <form onsubmit="return false">
+    <div class="form-group">
+      <table>
+        <tr>
+          <td></td>
+          <td class="tblHead">BPM</td>
+          <td></td>
+          <td></td>
+          <td class="tblHead">subdiv</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><input type="button" class="button" value="-10" onclick="btnDown_click()"></td>
+          <td><input type="number" class="bpminput" id="txtBPM" min="10" max="400" step="1" value="60"
+                     onblur="txtBPM_blur()" oninput="txtBPM_input()"></td>
+          <td><input type="button" class="button" value="+10" onclick="btnUp_click()"></td>
+          <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td>
+            <select id="cbSubdiv" name="cbSubdiv" class="divselect" onchange="cbSub_change()">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="6">6</option>
+            </select>
+          </td>
+          <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td><input type="button" value="Start" id="btnSS" class="buttonSS" onclick="btnSS_click()"></td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</body>
+</html>
