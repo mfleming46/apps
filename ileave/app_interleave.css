@@ -171,3 +171,8 @@ inputXXX:focus {
   display: block;
 }
 */
+
+input[name^="txtStrk"] {
+  width: 8rem;
+  box-sizing: border-box;
+}
