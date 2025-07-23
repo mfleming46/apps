@@ -159,14 +159,14 @@ function refreshMetronome() {
 
 function btnMetronome_click() {
 	console.log("btnMetronome_click");
-	alert("metronome_click")
+	// alert("metronome_click")
 	if (isMetronomePlaying()) {
 		stopMetronome(); 
 	} 
 	else {
 	    setBPM(60);
         setSubdivision(1);
-		alert("calling startMetronome");
+		// alert("calling startMetronome");
         startMetronome();
 	}
 }
