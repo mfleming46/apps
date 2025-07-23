@@ -106,7 +106,7 @@ function btnSkip_click() {
 	console.log("btnskip.click ");
 	setCurrent( (currentID % maxID) + 1 );
 	if (isMetronomePlaying()) {
-		refreshMetronome();
+		handleStart();
 	}
 }
 
@@ -141,7 +141,7 @@ function delta(increment) {
 	objStrk(i).value = "";
 	objStrkH(i).value = 0;
 	if (isMetronomePlaying()) {
-		refreshMetronome();
+		handleStart();
 	}
 }
 
@@ -152,7 +152,6 @@ function handleStart() {
    if (isNaN(bpm)) {
 	  return;
    }
-   // const bpm = document.getElementById("bpm").value;
    const subdiv = document.getElementById("subdiv").value;
    setBPM(bpm);
    setSubdivision(subdiv);
@@ -163,8 +162,6 @@ function handleStop() {
   stopMetronome();
 }
 
-
-
 function btnMetronome_click() {
 	console.log("btnMetronome_click");
 	if (isMetronomePlaying()) {
@@ -174,14 +171,10 @@ function btnMetronome_click() {
 	handleStart();
 }
 
-function refreshMetronome() {
-	console.log("refreshMetronome");
-	handleStart()
-}
 
 function subdiv_change() {
 	console.log("subdiv_change");
-	refreshMetronome();
+	handleStart()
 }
 
 function btnPass_click() {
@@ -270,7 +263,6 @@ function setCurrent(i) {
 	objStrk(i).style=styleHilite;
 	objBpm(i).style=styleHilite;
 	currentID = i;
-	//refreshMetronome();
 	
 }
 
