@@ -9,6 +9,7 @@ var maxID=5;
 var strkGoal=5;
 var strkMode=blockMode;
 var lastFocusedItemID = null;
+var metronomeRunning = false;
 
 
 function attachFocusListeners() {
@@ -34,7 +35,6 @@ function attachOneFocusListener(i) {
 		lastFocusedItemID = i;
 	});
 }
-
 
 function btnRandomize_click() {
 	console.log("btnRandomize_click");
@@ -128,17 +128,47 @@ function btnSlower_click() {
 function delta(increment)
 {
 	i = currentID
-	
 	const bpm = parseInt(objBpm(i).value, 10);
 	if (isNaN(bpm)) {
 		alert("Invalid BPM");
 		return
 	}
 
-	objBpm(i).value = String(bpm + increment);
+	const newBpm = bpm + increment
+	objBpm(i).value = String(newBpm);
 	objStrk(i).value = "";
 	objStrkH(i).value = 0;
 }
+
+function refreshMetronome() {
+	donsole.log("refresh_metronome");
+	if (!isMetronomePlaying()) {
+		return;
+	}
+	i = currentID
+	const bpm = parseInt(objBpm(i).value, 10);
+	if (isNaN(bpm)) {
+		return;
+	}
+	
+    setBPM(bpm);
+	const subdiv = 1;
+    setSubdivision(subdiv);
+    startMetronome();
+}
+
+function btnMetronome_click() {
+	console.log("btnMetronome_click");
+	if (isMetronomePlaying()) {
+		stopMetronome(); 
+	} 
+	else {
+	    setBPM(60);
+        setSubdivision(1);
+        startMetronome();
+	}
+}
+
 
 function btnPass_click() {
 	console.log("btnPass_click");
@@ -226,6 +256,7 @@ function setCurrent(i) {
 	objStrk(i).style=styleHilite;
 	objBpm(i).style=styleHilite;
 	currentID = i;
+	
 }
 
 function doFail(i) {
@@ -265,7 +296,6 @@ function addItem() {
 	tbody.appendChild(row);
 	attachOneFocusListener(i);
 }
-
 
 function deleteItem() {
 	console.log("deleteItem");
@@ -331,7 +361,6 @@ function deleteItem() {
 	}
 }
 
-
 function doFactoryReset() {
 	console.log("doFactoryReset");
 	const table = document.getElementById("dataTable");
@@ -380,8 +409,6 @@ function doFactoryReset() {
 	fillAll();
 	setCurrent(1);
 }
-
-
 
 function saveStateToStorage() {
 	console.log("saveStateToStorage");
@@ -467,10 +494,9 @@ function loadStateFromStorage() {
 }
 
 function clearStorage() {
-	console.log("clearStorage")
-	
+	console.log("clearStorage");
+	const state = SafeStorage.removeItem(storageKey);
 }
-
 
 function logClick() {
   fetch('/apps/log.php?page=interleave', { method: 'GET' });
@@ -509,6 +535,8 @@ document.getElementById('btnFail').addEventListener('click', btnFail_click);
 document.getElementById('btnSkip').addEventListener('click', btnSkip_click);
 document.getElementById('btnFaster').addEventListener('click', btnFaster_click);
 document.getElementById('btnSlower').addEventListener('click', btnSlower_click);
+document.getElementById('btnMetronome').addEventListener('click', btnMetronome_click);
+
 document.getElementById('btnHelp').addEventListener('click', btnHelp_click);
 document.getElementById('btnDemo').addEventListener('click', btnDemo_click);
 
@@ -529,6 +557,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!loadStateFromStorage()) {
         doFactoryReset();
     }
+	initMetronome();
 });
 
 window.addEventListener("beforeunload", function (e) {
@@ -539,4 +568,4 @@ window.addEventListener("beforeunload", function (e) {
     // e.returnValue = '';
 });
 
-console.log("✅ app_interleave.js v 2025-07-21 17:55:42 loaded");
+console.log("✅ app_interleave.js loaded");

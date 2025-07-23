@@ -4,7 +4,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=600, user-scalable=yes">
 	<title>Simple Interleaved Practice</title>
-<link rel="stylesheet" href="app_interleave.css?v=2025-07-23 04:41:56"> 
+	<link rel="stylesheet" href="app_interleave.css?v=2025-07-23 12:06:49"> 
+	<script src="..\metronome\howler.min.js?v=2025-07-23 04:41:56"></script>
+	<script src="..\metronome\metronome-core.js?v=2025-07-23 04:41:56"></script>
 </head>		
     <body>
 	<div class="layout-600">
@@ -59,7 +61,17 @@
 			&nbsp;&nbsp;&nbsp;
 			<button type="button" id="btnFaster" class="bland"> Faster </button>
 			<button type="button" id="btnSlower" class="bland"> Slower </button> 
-
+			&nbsp;&nbsp;&nbsp;
+			<button type="button" id="btnMetronome" class="bland" tabIndex=-1> 
+				<img src="../metronome/icons8-metronome-48.png" alt="Metronome" style="width: 20px; height: 20px;">
+			</button>
+			  <select id="subdiv">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="6">6</option>
+			  </select>
 		
 		<br><br>
 		
@@ -70,22 +82,6 @@
 		</div>
 		
 		<!-- INSTRUCTIONS -->
-		<!--
-		<button type="button" id="btnHelp" > Read Instructions </button>
-		<button type="button" id="btnDemo" > Short Video Demo </button>
-		<div style="; display: none;" id="divHelp">
-		<p><b>Usage:</b></p>
-		<ul>
-			<li>Play the highlighted item once, then click <b>Pass</b> or <b>Fail</b>.</li>
-			<li>Or <b>Skip</b> to skip the item, <b>Faster/Slower</b> to change its tempo and reset its streak.</li>
-			<li><b>Blocked: </b> Moves to the next item after passing 5 times in a row.</li>
-			<li><b>Interleaved: </b> Moves to the next item after each try, pass or fail.</li>
-			<li><b>Streak: </b> Number of consecutive passed attempts</li>
-			<li>Changing modes resets all streaks.</li>
-			<li>You can edit the practice item names and (optional) tempos.</li>
-		</ul>
-		</div>
-		-->
 		<button type="button" id="btnHelp" > Read Instructions </button>
 		<button type="button" id="btnDemo" > Short Video Demo </button>
 		<div class="help-block" style="display: none;" id="divHelp">
@@ -112,6 +108,7 @@
 	<button type="button" id="btnDebug" class="bland" tabIndex=-1>Clear Storage</button>
 	<button type="button" id="btnDebug2" class="bland" tabIndex=-1>Save to Storage</button>
 	<button type="button" id="btnDebug3" class="bland" tabIndex=-1>Load from Storage</button>
+	
 	</div>
 
 		

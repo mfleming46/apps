@@ -11,9 +11,10 @@ let highBlockSound, lowBlockSound, subdivisionLowBlockSound;
 
 // Initialize metronome (must be called before using)
 function initMetronome() {
-  highBlockSound = new Howl({ src: ["High-Wood-Block.mp3"] });
-  lowBlockSound = new Howl({ src: ["Low-Wood-Block.mp3"] });
-  subdivisionLowBlockSound = new Howl({ src: ["N1R-Low-Wood-Block.mp3"] });
+  console.log("initMetronome");
+  highBlockSound = new Howl({ src: ["../metronome/../metronome/High-Wood-Block.mp3"] });
+  lowBlockSound = new Howl({ src: ["../metronome/Low-Wood-Block.mp3"] });
+  subdivisionLowBlockSound = new Howl({ src: ["../metronome/N1R-Low-Wood-Block.mp3"] });
 }
 
 // Start metronome
@@ -32,12 +33,17 @@ function stopMetronome() {
   beat = 1;
 }
 
+function isMetronomePlaying() {
+  return isPlaying;
+}
+
 // Set BPM (tempo)
 function setBPM(value) {
   const bpm = Number(value);
   if (bpm < tempoMin || bpm > tempoMax) return;
   tempo = bpm;
   if (isPlaying) resetTick();
+  return tempo;
 }
 
 // Set subdivision (clicks per beat)
@@ -46,6 +52,7 @@ function setSubdivision(value) {
   if (![1, 2, 3, 4, 6].includes(subdiv)) return;
   clicksPerBeat = subdiv;
   if (isPlaying) resetTick();
+  return clicksPerBeat;
 }
 
 // Reset timing interval
@@ -66,3 +73,5 @@ function playClick() {
   }
   beat++;
 }
+
+console.log("✅ metronome-core.js loaded");
