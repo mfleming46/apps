@@ -1,0 +1,88 @@
+/* AFTER: Scalable CSS using rem units and variables */
+
+:root {
+  --font-sm: 0.875rem;         /* 14px */
+  --font-base: 1rem;           /* 16px */
+  --font-md: 0.9375rem;        /* 15px */
+  --line-height: 1.8;
+  --control-height: 2.125rem;  /* 34px */
+  --control-padding-x: 0.75rem;/* 12px */
+  --border-radius: 0.125rem;   /* 2px */
+  --container-width: 31.25rem; /* 500px */
+  --container-height: 1.875rem;/* 30px */
+}
+
+/*
+button.bland {
+	padding: 2px 12px;
+	text-align: center;
+	text-decoration: none;
+	//display: inline-block; 
+	float: none;
+}
+*/
+
+li, ul, p, tr, td, text, input, placeholder {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: var(--font-base);
+	line-height: var(--line-height);
+}
+
+p {
+	line-height: 1.2;
+}
+
+ul, li {
+	line-height: 1.4;
+}
+
+select {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: var(--font-md);
+	height: var(--control-height);
+	line-height: var(--control-height);
+	padding: 0 var(--control-padding-x);
+	border: 1px solid #888;
+	border-radius: var(--border-radius);
+	background-color: #f0f0f0;
+	appearance: none;
+	-webkit-appearance: none;
+	background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="14" viewBox="0 0 20 20" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M5.516 7.548l4.48 4.48 4.48-4.48 1.088 1.088-5.568 5.568-5.568-5.568z"/></svg>');
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+	background-size: 14px;
+	padding-right: 1.75rem; /* space for arrow */
+	color: black;
+}
+
+button {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: var(--font-sm);
+	height: var(--control-height);
+	line-height: var(--control-height);
+	padding: 0 var(--control-padding-x);
+	min-width: 3.75rem; /* 60px */
+	border: 1px solid #888;
+	border-radius: var(--border-radius);
+	background-color: #f0f0f0;
+	color: black;
+	appearance: none;
+	-webkit-appearance: none;
+	cursor: pointer;
+}
+
+inputXXX:focus {
+	outline: none;
+	box-shadow: none;
+}
+
+.button-container {
+	margin-top: 0.375rem; /* 6px */
+	height: var(--container-height);
+	width: var(--container-width);
+	display: flex;
+}
+
+.button-container button {
+	flex: 1;
+}
