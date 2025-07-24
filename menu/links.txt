@@ -1,5 +1,5 @@
 
-url: ../ileave/app_interleave.html
+url: ../random/random.html
 title: Random Practice
 classification: oc
 new: true
@@ -8,22 +8,15 @@ date: released: 2025-07-22
 description: Stay on track in your random practice routine. Automatically record metronome settings and s
 uccessful reps to track progress without breaking focus.
 
-url: ../icu/iclick.html
-title: ICU (Interleaved Clicking Up)
-classification: WIP
-new: true
-image: boxshots/icu2.png
-date: released: 2025-07-22
-description: Dr. Molly Gebrian’s Interleaved Clicking Up method can feel like navigating a maze. This app helps you stay on track. It tells you exactly what segment to play and sets the metronome for you, so you can focus on your musical goals.
-
-url: ../icu/iclick.html
+url: ../icu/icu.html
 title: ICU (Interleaved Clicking Up)
 classification: WIP
 new: true
 image: boxshots/icu2.png
 date: released: 2025-07-22
 description: Dr. Molly Gebrian’s Interleaved Clicking Up method can feel like navigating a maze. 
-This app helps you stay on track. It tells you 
+This app helps you stay on track. It tells you exactly what segment to play and sets the metronome 
+for you, so you can focus on your musical goals.
 
 
 url: ../pp/app_practice_priority.html

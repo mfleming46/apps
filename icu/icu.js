@@ -11,6 +11,7 @@ let stashTarget = 120;
 let stashDelta = 5;
 let stashNSegs = 1;
 let stashCurrentRow = -1;
+let theBpm="zzz";
 
   function cycle(nsegs) {
     const pattern = [];
@@ -57,6 +58,10 @@ let stashCurrentRow = -1;
       rows[index].classList.add('highlight');
     }
     stashCurrentRow = index;
+	const bpm = rows[index].cells[0].textContent.trim();  // ✅ Get column 0 value
+    console.log("bpm =", bpm);
+	//theBpm = bpm;
+	//handleStart();
   }
 
   function doReset() {
@@ -152,11 +157,66 @@ function saveStateToStorage() {
   SafeStorage.setItem(storageKey, state);
 }
 
+// --------------------------------- metronome --------------------------
+function handleStart() {
+/*
+   const bpm = parseInt(theBpm, 10);
+   if (isNaN(bpm)) {
+	  return;
+   }
+ */
+   const bpm=60;
+   const subdiv = document.getElementById("subdiv").value;
+   setBPM(bpm);
+   setSubdivision(subdiv);
+   startMetronome();
+}
+
+function handleStop() {
+  stopMetronome();
+}
+
+function btnMetronome_click() {
+	console.log("btnMetronome_click");
+	if (isMetronomePlaying()) {
+		stopMetronome(); 
+		return;
+	} 
+	handleStart();
+}
+
+
+function subdiv_change() {
+	console.log("subdiv_change");
+	handleStart()
+}
+
+
+function btnHelp_click() {
+    const button = document.getElementById('btnHelp');
+    const panel = document.getElementById('divHelp');
+
+    if (panel.style.display === "block") {
+        // Hide panel and change button text
+        panel.style.display = "none";
+        button.textContent = "Show Instructions";
+    } else {
+        // Show panel and change button text
+        panel.style.display = "block";
+        button.textContent = "Hide Instructions";
+    }
+}
+
+function btnDemo_click() {
+	alert("Coming Soon")
+}
 
 
 function logClick() {
   fetch('/apps/log.php?page=iclick', { method: 'GET' })
 }
+
+// ---------------------------------------------------------------------
   
 
 // Bind buttons
@@ -167,15 +227,30 @@ document.getElementById('btnDecSeg').addEventListener('click', doDecSegment);
 document.getElementById('btnIncBpm').addEventListener('click', doIncBpm);
 document.getElementById('btnDecBpm').addEventListener('click', doDecBpm);
 
-// Initialize
-drawTable();
 
-window.onload = function () {
-  loadStateFromStorage();
+document.getElementById('btnHelp').addEventListener('click', btnHelp_click);
+document.getElementById('btnDemo').addEventListener('click', btnDemo_click);
+
+document.getElementById('btnMetronome').addEventListener('click', btnMetronome_click);
+document.getElementById('subdiv').addEventListener('change', subdiv_change);
+
+
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.shiftKey && e.altKey && e.key === 'D') {
+	const menu = document.getElementById('debugMenu');
+	menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+	loadStateFromStorage();
+	initMetronome();
   drawTable();
   highlightRow(stashCurrentRow);
-};
+});
 
-window.onbeforeunload = saveStateToStorage;
+window.addEventListener("beforeunload", function (e) {
+	saveStateToStorage();
+});
 
 

@@ -1,0 +1,47 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.button-container {
+	height: var(--container-height);
+	width: var(--container-width);
+    margin-bottom: calc(var(--container-height) * 0.4);
+	display: flex;
+}
+
+
+.button-container button {
+	flex: 1;
+}
+
+
+
+
+
+
+.data-table {
+  margin-top: 1.25rem;
+  /* TEMPORARY DEBUG STYLE */
+  //background-color: yellow;
+}
+.data-table li, ul, p, tr, td, text, input, placeholder {
+	line-height: 1.8;
+}
+
+
+
+input[name^="txtStrk"] {
+  width: 8rem;
+  box-sizing: border-box;
+}

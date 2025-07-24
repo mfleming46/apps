@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 
+	?v=2025-07-24_15:02:04
+     -->
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=600, user-scalable=yes">
+	<title>Random Practice</title>
+	<link rel="stylesheet" href="../core.css?v=2025-07-24_15:02:04"> 
+	<link rel="stylesheet" href="random.css?v=2025-07-24_15:02:04"> 
+	<script src="../metronome/howler.min.js?v=2025-07-24_15:02:04"></script>
+	<script src="../metronome/metronome-core.js?v=2025-07-24_15:02:04"></script>
+</head>		
+    <body>
+		<div class="layout-600">
+		<h1>Random Practice</h1>
+		
+		<!-- APP-DESCRIPTION -->
+		<div class="app-description">
+		<p>
+		Stay on track in your random practice routine. Automatically record metronome settings and successful reps to track progress without breaking focus.
+		</p>
+		</div>
+        
+		<!-- BUTTON CONTAINERS  -->
+		<div class=button-container>
+		<button type="button" id="btnAddItem" class="bland" tabIndex=-1>Add Item</button>
+		<button type="button" id="btnDeleteItem" class="bland" tabIndex=-1>Delete Item</button>
+		<button type="button" id="btnFReset" class="bland" tabIndex=-1>Factory Defaults</button>
+		</div>
+		
+		<div class=button-container>
+		<select id="cbMode" >
+			<option value="BLOCKMODE">Blocked Mode</option>
+			<option value="LEAVEMODE">Interleaved Mode</option>
+		</select>
+		<button type="button" id="btnAlphaSort" class="bland" tabIndex=-1>Sort A-Z</button>
+		<button  type="button" id="btnRandomize" tabIndex=-1 class="bland"> Shuffle</button>			
+		<button  type="button" id="btnReset" tabIndex=-1 class="bland"> Reset Streaks</button>
+		</div>
+
+		<!-- DATA-TABLE -->
+		<div class="data-table">
+		<table id="dataTable">
+			<thead>
+				<tr>
+
+					<th style="text-align: left;"> &nbsp;Practice Item </th>
+					<th style="text-align: left;"> BPM </th>
+					<th style="text-align: left;"> Streak </th>
+					<th style="display: none;"> hidden </th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- example: this will be filled at startup 
+				<tr >
+					<td> <input name="txtItm01" placeholder="Practice Item 1" size="25" maxlength="40" type="text"> </td>
+					<td> <input name="txtBpm01" size="6" maxlength="6" value="60" type="text" tabindex=-1></td>
+					<td> <input name="txtStrk01" size="6" maxlength="6" value="" type="text" readonly tabindex=-1>	</td>
+					<td style="display: none;"> <input name="hidStrk01" type="hidden" > </td>
+				</tr>
+				-->
+				
+			</tbody>
+		</table>
+		</div>
+		<br>
+
+		<!-- BUTTON not in container (container would spread them evenly)  -->
+		<button type="button" id="btnPass" class="bland"> Pass </button>
+		<button type="button" id="btnFail" class="bland"> Fail </button>
+		<button type="button" id="btnSkip" class="bland"> Skip </button>
+		&nbsp;&nbsp;&nbsp;
+		<button type="button" id="btnFaster" class="bland"> Faster </button>
+		<button type="button" id="btnSlower" class="bland"> Slower </button> 
+		&nbsp;&nbsp;&nbsp;
+		<button type="button" id="btnMetronome" class="bland" tabIndex=-1> 
+			<img src="../metronome/icons8-metronome-48.png" alt="Metronome" style="width: 20px; height: 20px;">
+		</button>
+		<select id="subdiv">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="6">6</option>
+		</select>
+	
+		<br><br>
+		
+		<!-- COOKIE NOTICE -->
+		<div class="cookie-notice">
+		<p>This app uses cookies to remember your inputs between sessions — just on your device, nothing is tracked or shared.
+		</p>
+		</div>
+		
+		<!-- REFERENCES -->
+		<div class="references">
+		<p><b>Reference: </b> 
+		Gebrian, Molly, Learn Faster, Perform Better: A Musician's Guide to the Neuroscience of Practicing,
+		Oxford University Press, 2024
+		</p>	
+		</div>
+		
+		<!-- INSTRUCTIONS -->
+		<br>
+		<button type="button" id="btnHelp" > Read Instructions </button>
+		<button type="button" id="btnDemo" > Short Video Demo </button>
+		<div class="help-block" style="display: none;" id="divHelp">
+			<p><b>Play</b> the highlighted item, then tap <b>Pass</b>, <b>Fail</b>, or <b>Skip</b>.</p>
+			<p><b>Faster</b>/<b>Slower</b> adjusts tempo and resets streak.</p>
+			<p><b>Blocked Mode</b>: Stay on an item until you pass 5 times in a row.</p>
+			<p><b>Interleaved Mode</b>: Move to the next after each try.</p>
+			<p><b>Streak</b> = number of consecutive passes.</p>
+			<p>You can <b>edit item names</b> and optional <b>BPMs</b>.</p>
+			<p><b>Metronome Icon</b> toggles audible metronome; Number dropdown selects metronome subdivision.</p>
+		</div>
+			
+
+		<!-- COPYRIGHT -->	
+		<div class="copyright-notice">
+		<p><br>(c) Marilyn Fleming, 
+			 <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
+			 <br>release 2025-07-22
+		</p>		
+		</div>
+	
+	<!-- HIDDEN DEBUG BUTTONS -->
+	<div class=button-container style="display: none;" id="debugMenu">
+	<button type="button" id="btnDebug" class="bland" tabIndex=-1>Clear Storage</button>
+	<button type="button" id="btnDebug2" class="bland" tabIndex=-1>Save to Storage</button>
+	<button type="button" id="btnDebug3" class="bland" tabIndex=-1>Load from Storage</button>
+	</div>
+
+		
+		
+<!-- jQuery and custom script -->
+<script src="../safe_storage.js?v=2025-07-24_15:02:04"></script>
+<script src="random.js?v=2025-07-24_15:02:04"></script>
+   </div>
+   </body>
+</html>
