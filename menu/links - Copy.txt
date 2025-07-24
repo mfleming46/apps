@@ -4,7 +4,7 @@ title: Random Practice
 classification: oc
 new: true
 image: boxshots/random_practice3.png
-date: released: 2025-07-22
+date: release 2025-07-22
 description: Stay on track in your random practice routine. Automatically record metronome settings and s
 uccessful reps to track progress without breaking focus.
 
@@ -12,21 +12,47 @@ url: ../icu/iclick.html
 title: ICU (Interleaved Clicking Up)
 classification: WIP
 new: true
-image: boxshots/icu2.png
-date: released: 2025-07-22
+image: boxshots/icu1.png
+date: release 2025-07-22
+description: A roadmap for practicing with Dr. Molly Gebrian's <i>Interleaved Clicking Up</i> (ICU) method without
+getting lost along the way. Step-by-step guide to what comes next, including automatic metronome
+settings.
+
+url: ../icu/iclick.html
+title: ICU (Interleaved Clicking Up)
+classification: WIP
+new: true
+image: boxshots/icu1.png
+date: release 2025-07-22
+description: Follow the Interleaved Clicking Up method with automatic metronome guidance. Stay on track with a clear 
+visual roadmap of what's next.
+
+url: ../icu/iclick.html
+title: ICU (Interleaved Clicking Up)
+classification: WIP
+new: true
+image: boxshots/icu1.png
+date: release 2025-07-22
+description: Follow Dr. Molly Gebrian's Interleaved Clicking Up method without getting lost along the way.
+Let the app remind you what segment and tempo comes next.
+
+url: ../icu/iclick.html
+title: ICU (Interleaved Clicking Up)
+classification: WIP
+new: true
+image: boxshots/icu1.png
+date: release 2025-07-22
 description: Dr. Molly Gebrian’s Interleaved Clicking Up method can feel like navigating a maze. This app helps you stay on track. It tells you exactly what segment to play and sets the metronome for you, so you can focus on your musical goals.
 
 url: ../pp/app_practice_priority.html
 title: Red-Yellow-Green Practice Priority
 classification: oc
-date: released: 2025-07-22
+date: release 2025-07-22
 description: Prioritize your practice sessions to focus on parts of your music that need the most work.
 
 url: ../fund/app_fundamentals.html
 title: Fundamentals Checklist
 classification: oc
-image: boxshots/fundamentals1.png
-date: released: 2025-07-22
 description: A tool for reflecting on whether we are
 keeping up with those things we are supposed to practice every day.
 

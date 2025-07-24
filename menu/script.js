@@ -1,14 +1,6 @@
 let showPrivate = false;
 
-/*
-async function loadLinks() {
-	console.log("loadLinks");
-  const res = await fetch('links.txt');
-  const text = await res.text();
-  const links = parseFlatFile(text);
-  renderLinks(links);
-}
-*/
+
 
 async function loadLinks() {
   console.log("loadLinks");
@@ -64,10 +56,9 @@ function getNewBadge(flag) {
 }
 
 
-
 function renderLinks(links) {
-	console.log("renderLinks", links);
-	
+  console.log("renderLinks", links);
+  
   const container = document.getElementById('linkContainer');
   container.innerHTML = '';
 
@@ -75,22 +66,38 @@ function renderLinks(links) {
     const isPrivate = link.classification?.toLowerCase() === 'private';
     if (isPrivate && !showPrivate) return;
 
+	const boxshotUrl = link.image || 'boxshots/blank_boxshot_80x120.png';
+	const imgTag = `<div class="boxshot"><img src="${boxshotUrl}" alt="${link.title} box shot"></div>`;
+
+
+    const dateText = link.date 
+      ? `<div class="release-date">${link.date}</div>` 
+      : '';
+
     const btn = document.createElement('button');
     btn.className = 'link-button';
-	btn.innerHTML = `
-	  <div class="badge-line">
-		<span class="badge">${getClassificationBadge(link.classification)}</span>
-		${getNewBadge(link.new)}
-	  </div>
-	  <strong>${link.title || 'Untitled'}</strong><br/>
-	  <span class="desc">${(link.description || '').replace(/\n/g, '<br>')}</span>
-	`;
+btn.innerHTML = `
+  <div class="link-content">
+    ${imgTag}
+    <div class="text-content">
+      <div class="badge-line">
+        <span class="badge">${getClassificationBadge(link.classification)}</span>
+        ${getNewBadge(link.new)}
+      </div>
+      <strong>${link.title || 'Untitled'}</strong><br/>
+      <span class="desc">${(link.description || '').replace(/\n/g, '<br>')}</span>
+      ${dateText}
+    </div>
+  </div>
+`;
+
     btn.onclick = () => {
       if (link.url) window.open(link.url, '_blank');
     };
     container.appendChild(btn);
   });
 }
+
 
 // Toggle private links with Ctrl + Alt + P
 document.addEventListener('keydown', (e) => {
