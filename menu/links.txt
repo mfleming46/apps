@@ -1,20 +1,22 @@
 
 url: ../ileave/app_interleave.html
-title: Simple Interleaved/Blocked Practice
+title: Random Practice
 classification: oc
 new: true
-description: blah blah blah
+description: Stay on track in your random practice routine. Automatically record metronome settings and successful reps to track progress without breaking focus.
 
 url: ../icu/iclick.html
-title: ICU (Interleaved Clickup)
+title: ICU (Interleaved Clicking Up)
 classification: WIP
 new: true
-description: blah blah blah
+description: A roadmap for practicing with Dr. Molly Gebrian's <i>Interleaved Clicking Up</i> (ICU) method without
+getting lost along the way. Step-by-step guide to what comes next, including automatic metronome
+settings.
 
 url: ../pp/app_practice_priority.html
-title: Practice Priority
+title: Red-Yellow-Green Practice Priority
 classification: oc
-description: blah blah blah
+description: Prioritize your practice sessions to focus on parts of your music that need the most work.
 
 url: ../fund/app_fundamentals.html
 title: Fundamentals Checklist
