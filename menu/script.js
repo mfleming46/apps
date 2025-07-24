@@ -1,27 +1,31 @@
 let showPrivate = false;
 
-
-
 async function loadLinks() {
   console.log("loadLinks");
 
-  // Add a timestamp to prevent caching
   const res = await fetch('links.txt?v=' + Date.now());
-
   const text = await res.text();
   const links = parseFlatFile(text);
   renderLinks(links);
 }
 
-
 function parseFlatFile(text) {
+  // Remove block comments: /* ... */
+  text = text.replace(/\/\*[\s\S]*?\*\//g, '');
+
   const entries = text
-    .split(/\r?\n\s*\r?\n/)         // split blocks by blank lines
-    .map(e => e.trim())             // clean each block
-    .filter(e => e.length > 0);     // ignore empty blocks
+    .split(/\r?\n\s*\r?\n/)
+    .map(e => e.trim())
+    .filter(e => e.length > 0 && !e.startsWith('#') && !e.startsWith('//'));
 
   return entries.map(entry => {
-    const lines = entry.split(/\r?\n/); // split each field line
+    const lines = entry
+      .split(/\r?\n/)
+      .filter(line =>
+        !line.trim().startsWith('#') &&
+        !line.trim().startsWith('//')
+      );
+
     const link = {};
     let currentField = '';
     lines.forEach(line => {
@@ -55,10 +59,7 @@ function getNewBadge(flag) {
   return '';
 }
 
-
 function renderLinks(links) {
-  console.log("renderLinks", links);
-  
   const container = document.getElementById('linkContainer');
   container.innerHTML = '';
 
@@ -66,57 +67,82 @@ function renderLinks(links) {
     const isPrivate = link.classification?.toLowerCase() === 'private';
     if (isPrivate && !showPrivate) return;
 
-	const boxshotUrl = link.image || 'boxshots/blank_boxshot_80x120.png';
-	const imgTag = `<div class="boxshot"><img src="${boxshotUrl}" alt="${link.title} box shot"></div>`;
-
-
-    const dateText = link.date 
-      ? `<div class="release-date">${link.date}</div>` 
-      : '';
-
-    const btn = document.createElement('button');
-    btn.className = 'link-button';
-btn.innerHTML = `
-  <div class="link-content">
-    ${imgTag}
-    <div class="text-content">
-      <div class="badge-line">
-        <span class="badge">${getClassificationBadge(link.classification)}</span>
-        ${getNewBadge(link.new)}
+    const boxshotUrl = link.image || 'boxshots/blank_boxshot_80x120.png';
+    const imgTag = `
+      <div class="boxshot">
+        <img src="${boxshotUrl}" alt="${link.title} box shot">
       </div>
-      <strong>${link.title || 'Untitled'}</strong><br/>
-      <span class="desc">${(link.description || '').replace(/\n/g, '<br>')}</span>
-      ${dateText}
-    </div>
-  </div>
-`;
+    `;
 
-    btn.onclick = () => {
+    const fullDesc = (link.description || '').trim();
+    const shortDesc = fullDesc.slice(0, 150);
+    const isLong = fullDesc.length > 150;
+
+    const descHTML = isLong
+      ? `
+        <div class="desc short-desc">${shortDesc}...</div>
+        <div class="desc full-desc hidden">${fullDesc}</div>
+        <button class="toggle-desc-button">More</button>
+      `
+      : `<div class="desc">${fullDesc}</div>`;
+
+    const card = document.createElement('div');
+    card.className = 'link-button';
+    card.tabIndex = 0;
+
+    card.innerHTML = `
+      <div class="link-content">
+        ${imgTag}
+        <div class="text-content">
+          <div class="badge-line">
+            <span class="badge">${getClassificationBadge(link.classification)}</span>
+            ${getNewBadge(link.new)}
+          </div>
+          <strong>${link.title || 'Untitled'}</strong><br/>
+          ${descHTML}
+        </div>
+      </div>
+    `;
+
+    card.addEventListener('click', (e) => {
+      const isToggle = e.target.closest('.toggle-desc-button');
+      if (isToggle) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const short = card.querySelector('.short-desc');
+        const full = card.querySelector('.full-desc');
+
+        short.classList.toggle('hidden');
+        full.classList.toggle('hidden');
+
+        const showingFull = !full.classList.contains('hidden');
+        isToggle.textContent = showingFull ? 'Less' : 'More';
+        return;
+      }
+
       if (link.url) window.open(link.url, '_blank');
-    };
-    container.appendChild(btn);
+    });
+
+    container.appendChild(card);
   });
 }
 
-
-// Toggle private links with Ctrl + Alt + P
+// Toggle private links (keyboard shortcut)
 document.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'p') {
     showPrivate = !showPrivate;
     loadLinks();
-    //alert(showPrivate ? 'Private links shown' : 'Private links hidden');
   }
 });
 
-
-// ----------------------------------------------------
+// Tap/click 3 times on title to unlock "Show Private Links" button
 let tapCount = 0;
 let tapTimer = null;
 
 const title = document.getElementById('title');
-
 title.addEventListener('touchend', handleTitleTap);
-title.addEventListener('click', handleTitleTap); // for desktop
+title.addEventListener('click', handleTitleTap);
 
 function handleTitleTap() {
   tapCount++;
@@ -130,40 +156,22 @@ function handleTitleTap() {
   }, 400);
 }
 
-// -------------------------------------
+// Show/hide private toggle button handler
+window.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('togglePrivate');
+  if (!btn) return;
 
-  // Attach handler after DOM is ready
-  window.addEventListener('DOMContentLoaded', () => {
-	  console.log("hello wowrld");
-    const btn = document.getElementById('togglePrivate');
-    if (!btn) {
-      console.warn("togglePrivate button not found");
-      return;
-    }
+  btn.addEventListener('click', togglePrivateView);
+});
 
-    btn.addEventListener('click', togglePrivateView);
-  });
+function togglePrivateView() {
+  showPrivate = !showPrivate;
+  loadLinks();
 
-  function togglePrivateView() {
-    console.log("togglePrivate clicked. Current value:", showPrivate);
-
-    showPrivate = !showPrivate;
-
-    console.log("New value of showPrivate:", showPrivate);
-
-    loadLinks();
-
-    document.getElementById('togglePrivate').textContent = showPrivate
-      ? 'Hide Private Links'
-      : 'Show Private Links';
-  }
-
-
-
-
-
+  document.getElementById('togglePrivate').textContent = showPrivate
+    ? 'Hide Private Links'
+    : 'Show Private Links';
+}
 
 // Initial load
 loadLinks();
-
-console.log("script.js loaded");

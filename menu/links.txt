@@ -16,6 +16,16 @@ image: boxshots/icu2.png
 date: released: 2025-07-22
 description: Dr. Molly Gebrian’s Interleaved Clicking Up method can feel like navigating a maze. This app helps you stay on track. It tells you exactly what segment to play and sets the metronome for you, so you can focus on your musical goals.
 
+url: ../icu/iclick.html
+title: ICU (Interleaved Clicking Up)
+classification: WIP
+new: true
+image: boxshots/icu2.png
+date: released: 2025-07-22
+description: Dr. Molly Gebrian’s Interleaved Clicking Up method can feel like navigating a maze. 
+This app helps you stay on track. It tells you 
+
+
 url: ../pp/app_practice_priority.html
 title: Red-Yellow-Green Practice Priority
 classification: oc
