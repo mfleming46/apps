@@ -35,9 +35,19 @@
   
     <!-- SETTTINGS-PANEL POPUP  -->
 <div class="settings-panel" id="settings-panel" style="display: none; ">
-	<label>Start BPM: &nbsp; <input id="startBpm" type="number" value="60"></label><br>
-	<label>Target BPM: &nbsp; <input id="targetBpm" type="number" value="120"></label><br>
-	<label>BPM Step: &nbsp; <input id="bpmDelta" type="number" value="5"></label><br>
+<div class="settings-row">
+  <label for="startBpm">Start BPM:</label>
+  <input id="startBpm" type="number" value="60">
+</div>
+<div class="settings-row">
+  <label for="targetBpm">Target BPM:</label>
+  <input id="targetBpm" type="number" value="120">
+</div>
+<div class="settings-row">
+  <label for="bpmDelta">BPM Step:</label>
+  <input id="bpmDelta" type="number" value="5">
+</div>
+
 	<div class="apply-buttons">
 		<button id="btnReset">Apply</button>
 		<button id="btnDefaults">Defaults</button>
@@ -92,11 +102,11 @@
 		<div class="segment-buttons">
 		   <button id="btnDecBpm">Prior BPM</button>
 		</div>
-		<div class="segment-buttons"">
+		<div class="segment-buttons">
 		  <button id="btnDecSeg">Prior Seg</button>
 		  <button id="btnIncSeg">Next Seg</button>
 		</div>
-		<div class="segment-buttons"">
+		<div class="segment-buttons">
 		  <button id="btnIncBpm">Next BPM</button>
 		</div>
 	</div> <!-- end bpm-segment-controls -->
