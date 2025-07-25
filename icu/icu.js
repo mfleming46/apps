@@ -59,7 +59,10 @@ let theBpm="zzz";
     }
     stashCurrentRow = index;
 	const bpm = rows[index].cells[0].textContent.trim();  // ✅ Get column 0 value
+	const seg = rows[index].cells[1].textContent.trim();  
 	theBpm = bpm;
+	document.getElementById('current-bpm').innerHTML = bpm;
+	document.getElementById('current-seg').innerHTML = seg;
 	if (isMetronomePlaying()) {
 		handleStart();
 	}
@@ -115,6 +118,8 @@ let theBpm="zzz";
   startInput.value = 60;
   targetInput.value = 120;
   deltaInput.value = 5;
+  const settingsText = `Start: 60 &nbsp; Target: 120 &nbsp; Step: 5`;
+  document.getElementById('settings-text').innerHTML = settingsText;
   doReset();
   closeSettingsPanel();
  }	 
@@ -139,7 +144,10 @@ function validateInput() {
 	deltaInput.value = stashDelta
     return false;
   }
-
+  
+  // span id="settings-text">Start: 60 &nbsp; Target: 120 &nbsp; Step: 5</span>
+  const settingsText = `Start: ${start} &nbsp; Target: ${target} &nbsp; Step: ${delta}`;
+  document.getElementById('settings-text').innerHTML = settingsText;
   return true;
 }
 

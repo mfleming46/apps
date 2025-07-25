@@ -1,18 +1,5 @@
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 .button-container {
 	height: var(--container-height);
 	width: var(--container-width);
@@ -26,10 +13,6 @@
 }
 
 
-
-
-
-
 .data-table {
   margin-top: 1.25rem;
   /* TEMPORARY DEBUG STYLE */
@@ -38,8 +21,6 @@
 .data-table li, ul, p, tr, td, text, input, placeholder {
 	line-height: 1.8;
 }
-
-
 
 input[name^="txtStrk"] {
   width: 8rem;

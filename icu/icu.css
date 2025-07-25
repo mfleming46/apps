@@ -13,13 +13,13 @@
 
 .left-panel {
 	/* padding: 20px; */
-	padding-right: 20px;
+	padding-right: 1.25rem; /*20px; */
 }
 
 .right-panel {
 	/* padding-left: 20px; */
 	/* background-color: #eeeeee; */
-	padding-top: 10rem;
+	padding-top: 1.5rem;
 
 }
 
@@ -34,25 +34,41 @@
   */
 }
 
+
 .bpm-table table {
-      border-collapse: collapse;
-      width:  200px; 
-	  /* width:  150px; */
-    }
+      width:  12.5rem; 
+ }
+	
 .bpm-table tr, th, td {
-      border: 1px solid #ccc;
-      padding: 5px 10px;
       text-align: left;
-    }
+	  /* padding: 0.3125rem 0.5rem; */
+	  padding: 0.2rem 0.5rem;
+    }	
+
+.bpm-table, th, td {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+}
+
+.bpm-table, th  {
+   border-top: none;
+   border-left: none;
+   border-right: none;
+}
+
+	
 .bpm-table tr.highlight td {
       background-color: #FFFF00;
       font-weight: bold;
     }
-	
+
 
 .bpm-table li, ul, p, tr, td, text, input, placeholder {
-	line-height: 1.2;
+	line-height: 1;
+	font-size: var(--font-sm);
 }
+
+
 .bpm-col {
 	/* width: 80px; */
 	width: 5rem;  /* 80px; */
@@ -73,7 +89,6 @@
 	padding: 0.3125rem; /* 5px; */
 	display: flex;
     justify-content: center; 
-	
 }
 
 #btnDecBpm, #btnIncBpm, #btnIncSeg, #btnDecSeg{
@@ -86,11 +101,10 @@
 
 /* settings panel ------------------------------------- */
 
-.settings-summary {
+settings-summary {
   display: flex;
   align-items: center;
   gap: 0.75rem; 
-  /* font-size: var(--font-md); */
   margin-bottom: 0.5rem;
 }
 
@@ -163,3 +177,52 @@
   font-size: var(--font-sm);
 }
 
+/* current status -------------------------------- */
+
+
+#current-status-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto; /* centers the box horizontally */
+  margin-bottom: 2.5rem;
+  background-color: yellow;
+  padding: 1rem;
+  border: 1px solid black;  /* fix: remove space after '1' */
+  width: 10rem;
+  box-sizing: border-box;
+}
+
+/* colors alternative */
+#current-status-container {
+  background-color: #FFF8B3; /* softer yellow */
+  border: 1px solid #444; /* defined border */
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem; /* optional polish */
+}
+
+
+#current-bpm {
+	font-style: sans-serif;
+	font-size: 3rem;
+	font-weight: bold;
+}
+#current-seg {
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin: 0 auto;
+}
+	
+/* font tweaks */
+#current-bpm {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+#current-seg {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
