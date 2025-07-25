@@ -32,7 +32,15 @@
   background-color: lime;
   border: solid red;
   */
+
+
+/* scrollbar */
+  max-height: 60vh;     /* or try 50vh if space is tight */
+  overflow-y: auto;
+  /* font-size: 0.75rem; */   /* optional: make text smaller */
+  border: 1px solid #ccc;  /* optional for clarity */
 }
+
 
 
 .bpm-table table {

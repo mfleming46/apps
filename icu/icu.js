@@ -63,6 +63,22 @@ let theBpm="zzz";
 	theBpm = bpm;
 	document.getElementById('current-bpm').innerHTML = bpm;
 	document.getElementById('current-seg').innerHTML = seg;
+	
+	// Deal with scrolling
+	const container = document.querySelector('.bpm-table-container');
+	const highlightedRow = document.querySelector('.bpm-table tr.highlight');
+
+	if (highlightedRow && container) {
+	  // Use container's coordinate system to scroll the row into view
+	  const rowTop = highlightedRow.offsetTop;
+	  const rowHeight = highlightedRow.offsetHeight;
+	  const containerHeight = container.clientHeight;
+
+	  // Scroll to center the highlighted row
+	  container.scrollTop = rowTop - (containerHeight / 2) + (rowHeight / 2);
+	}
+	
+	// now update the metronome
 	if (isMetronomePlaying()) {
 		handleStart();
 	}
