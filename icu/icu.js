@@ -43,7 +43,7 @@ let theBpm="zzz";
       bpm += stashDelta;
       const pattern = pats[i % npat];
       const row = document.createElement('tr');
-      row.innerHTML = `<td>${bpm}</td><td>${pattern}</td>`;
+      row.innerHTML = `<td class="bpm-col">${bpm}</td><td class="seg-col">${pattern}</td>`;
       tableBody.appendChild(row);
     }
 
@@ -59,17 +59,26 @@ let theBpm="zzz";
     }
     stashCurrentRow = index;
 	const bpm = rows[index].cells[0].textContent.trim();  // ✅ Get column 0 value
-    console.log("bpm =", bpm);
-	//theBpm = bpm;
-	//handleStart();
+	theBpm = bpm;
+	if (isMetronomePlaying()) {
+		handleStart();
+	}
   }
 
   function doReset() {
 	if (validateInput()) { 
+	    closeSettingsPanel();
 		stashNSegs = 1;
 		drawTable();
 	}
   }
+  
+ 
+  function closeSettingsPanel() {
+	const panel = document.getElementById('settings-panel');
+    panel.style.display = 'none';
+  }
+ 
 
   function doIncSegment() {
     stashNSegs++;
@@ -106,7 +115,8 @@ let theBpm="zzz";
   startInput.value = 60;
   targetInput.value = 120;
   deltaInput.value = 5;
-  doReset()
+  doReset();
+  closeSettingsPanel();
  }	 
   
 function validateInput() {
@@ -159,13 +169,11 @@ function saveStateToStorage() {
 
 // --------------------------------- metronome --------------------------
 function handleStart() {
-/*
    const bpm = parseInt(theBpm, 10);
    if (isNaN(bpm)) {
 	  return;
    }
- */
-   const bpm=60;
+
    const subdiv = document.getElementById("subdiv").value;
    setBPM(bpm);
    setSubdivision(subdiv);
@@ -233,6 +241,13 @@ document.getElementById('btnDemo').addEventListener('click', btnDemo_click);
 
 document.getElementById('btnMetronome').addEventListener('click', btnMetronome_click);
 document.getElementById('subdiv').addEventListener('change', subdiv_change);
+
+document.getElementById('btnToggleSettings').addEventListener('click', () => {
+  const panel = document.getElementById('settings-panel');
+  const isVisible = panel.style.display === 'block';
+  panel.style.display = isVisible ? 'none' : 'block';
+});
+
 
 
 document.addEventListener('keydown', function(e) {

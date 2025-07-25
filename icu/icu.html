@@ -6,7 +6,7 @@
 			-->
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=600, user-scalable=yes">
-	<title>Interleaved Clickine Up</title>
+	<title>Interleaved Clicking Up</title>
 	<link rel="stylesheet" href="../core.css?v=2025-07-24_15:02:04"> 
 	<link rel="stylesheet" href="icu.css?v=2025-07-24_15:02:04">
 	<script src="../metronome/howler.min.js?v=2025-07-24_15:02:04"></script>
@@ -19,37 +19,55 @@
 	<!-- APP-DESCRIPTION -->
 	<div class="app-description">
 	<p>
-Dr. Molly Gebrian’s Interleaved Clicking Up method can feel like navigating a maze. 
-This app helps you stay on track. It tells you exactly what segment to play and sets the metronome 
-for you, so you can focus on your musical goals.
+		Dr. Molly Gebrian’s Interleaved Clicking Up method can feel like navigating a maze. 
+		This app helps you stay on track. It tells you exactly what segment to play and sets the metronome 
+		for you, so you can focus on your musical goals.
 	</p>
 	</div>
-
-<div class="container">
-
-  <div class="left">
-  <table id="bpmTable">
-    <thead>
-      <tr><th>BPM</th><th>Segments</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-  <p></p>
-  </div>
-
-  <div class="controls">
-    <label>Start BPM: &nbsp; <input id="startBpm" type="number" value="60"></label>
-    <label>Target BPM: &nbsp; <input id="targetBpm" type="number" value="120"></label>
-    <label>BPM Step: &nbsp; <input id="bpmDelta" type="number" value="5"></label>
-
-	<div class="apply-buttons">
-    <button id="btnReset">Apply</button>
-	<button id="btnDefaults">Factory Default</button>
-	</div>
-    <p>&nbsp;</p>
 	
+
+	
+
+<!-- MAIN-CONTENT (2 cols) -->
+<div class="main-content">
+
+  <div class="left-panel">
+  
+    <!-- SETTINGS-DISPLAY -->
+  <div class="settings-display">
+	  <div class="settings-summary">
+		<span id="settings-text">Start: 60 &nbsp; Target: 120 &nbsp; Step: 5</span>
+		<button id="btnToggleSettings" title="Adjust Settings">⚙️</button>
+	  </div>
+  </div>
+  <!-- SETTTINGS-PANEL -->
+<div class="settings-panel" id="settings-panel" style="display: none; ">
+	<label>Start BPM: &nbsp; <input id="startBpm" type="number" value="60"></label><br>
+	<label>Target BPM: &nbsp; <input id="targetBpm" type="number" value="120"></label><br>
+	<label>BPM Step: &nbsp; <input id="bpmDelta" type="number" value="5"></label><br>
+	<div class="apply-buttons">
+		<button id="btnReset">Apply</button>
+		<button id="btnDefaults">Defaults</button>
+	</div>
+</div>
+  
+  
+	  <table id="bpmTable" class="bpm-table">
+		<thead>
+		  <tr><th>BPM</th><th>Segments</th></tr>
+		</thead>
+		<tbody></tbody>
+	  </table>
+	  <p></p>
+  </div>
+  
+  <div class="right-panel">
+  
+
+  
+
 	<!-- METRONOME CONTROLS -->
-	<div style="margin-left: 50px">
+	<div class="metronome-controls" style="margin-left: 40px">
 	<button type="button" id="btnMetronome" class="bland" tabIndex=-1 style="width:50px;"> 
 		<img src="../metronome/icons8-metronome-48.png" alt="Metronome" style="width: 20px; height: 20px;">
 	</button>
@@ -62,22 +80,24 @@ for you, so you can focus on your musical goals.
 	</select>
 	</div>
 	
-	<p>&nbsp;</p>
+	<br><br>
 
-    <div class="segment-buttons" style="margin-left: 50px">
-       <button id="btnDecBpm">Prior BPM</button>
-    </div>
+	<!-- BPM-SEGMENT-CONTROLS -->
+	<div class="bpm-segment-controls">
+		<div class="segment-buttons" style="margin-left: 50px; padding:5px;">
+		   <button id="btnDecBpm">Prior BPM</button>
+		</div>
+		<div class="segment-buttons" style="padding:5px;">
+		  <button id="btnDecSeg">Prior Seg</button>
+		  <button id="btnIncSeg">Next Seg</button>
+		</div>
+		<div class="segment-buttons" style="margin-left: 50px; padding:5px;">
+		  <button id="btnIncBpm">Next BPM</button>
+		</div>
+	</div> <!-- end bpm-segment-controls -->
 
-    <div class="segment-buttons">
-      <button id="btnDecSeg">Prior Seg</button>
-      <button id="btnIncSeg">Next Seg</button>
-    </div>
-
-    <div class="segment-buttons" style="margin-left: 50px">
-      <button id="btnIncBpm">Next BPM</button>
-    </div>
-  </div>
-</div>
+  </div>  <!-- end right panel div -->
+</div> <!-- end main content panel -->
 
 
 		<!-- COOKIE NOTICE -->

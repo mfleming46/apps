@@ -44,7 +44,7 @@ function setBPM(value) {
   if (bpm < tempoMin || bpm > tempoMax) return;
   tempo = bpm;
   if (isPlaying) resetTick();
-  console.log("bpm:", bpm);
+  console.log("metro set bpm:", bpm);
   return tempo;
 }
 
@@ -54,7 +54,7 @@ function setSubdivision(value) {
   if (![1, 2, 3, 4, 6].includes(subdiv)) return;
   clicksPerBeat = subdiv;
   if (isPlaying) resetTick();
-  console.log("zubdiv:", subdiv);
+  console.log("metro set zubdiv:", subdiv);
   return clicksPerBeat;
 }
 

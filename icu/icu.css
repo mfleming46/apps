@@ -1,59 +1,113 @@
 
 
-
-
-
-
-
-/*
-body {
-    font-family: sans-serif;
-    font-size: 16px;
+.main-content {
+	  display: flex;
+	//background-color: #eeeeee;
+	margin-top: 0;
+	padding-top: 0;
 }
-*/
 
-    .container {
-      display: flex;
-      padding: 20px;
-    }
+.left-panel {
+	//padding: 20px;
+	padding-right: 20px;
+}
 
-    .controls {
-      display: flex;
-      flex-direction: column;
-      margin-left: 20px;
-    }
+.right-panel {
+	padding-left: 20px;
 
-    .controls input {
-      margin-bottom: 10px;
-      width: 80px;
-    }
-
-    .controls button {
-      margin-bottom: 5px;
-      width: 100px;
-    }
-
-    .segment-buttons {
-      display: flex;
-      gap: 5px;
-      margin-bottom: 5px;
-    }
+}
 
 
-    table {
+.bpm-table    table {
       border-collapse: collapse;
-      width: 200px;
-	  
+      width: 200px; 
     }
 
-    th, td {
+.bpm-table tr,    th, td {
       border: 1px solid #ccc;
       padding: 5px 10px;
       text-align: left;
     }
 
-    tr.highlight td {
-      background-color: lightblue;
+.bpm-table    tr.highlight td {
+      background-color: #FFFF00;
       font-weight: bold;
     }
 
+
+.bpm-table {
+  margin-top: 1.25rem;
+  /* TEMPORARY DEBUG STYLE */
+  //background-color: yellow;
+}
+.bpm-table li, ul, p, tr, td, text, input, placeholder {
+	line-height: 1.4;
+}
+
+.bpm-col {
+	width: 80px;
+}
+.seg-col {
+	width: 200px;
+}
+
+
+.settings-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--font-sm);
+  margin-bottom: 0.5rem;
+}
+
+#btnToggleSettings {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2rem;
+}
+
+#btnToggleSettings:hover {
+  background-color: #e0e0e0;
+  border-radius: var(--border-radius);
+}
+
+
+/*
+// settings panel
+.settings-panel {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  max-width: 500px;
+  font-size: var(--font-base);
+}
+
+.settings-panel label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: var(--font-sm);
+  color: #333;
+}
+
+.settings-panel input[type="number"] {
+  width: 4.5rem;
+  padding: 0.25rem;
+  font-size: var(--font-sm);
+  border: 1px solid #999;
+  border-radius: var(--border-radius);
+  background-color: #fff;
+  margin-left: 0.5rem;
+}
+
+.apply-buttons {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+*/
