@@ -1,49 +1,55 @@
 
 
 .main-content {
-	  display: flex;
-	//background-color: #eeeeee;
+	display: flex;
 	margin-top: 0;
 	padding-top: 0;
+	
+	/* debug
+	background-color: #eeeeee;
+	border: solid red;
+	*/
 }
 
 .left-panel {
-	//padding: 20px;
+	/* padding: 20px; */
 	padding-right: 20px;
 }
 
 .right-panel {
-	padding-left: 20px;
+	/* padding-left: 20px; */
+	background-color: #eeeeee;
 
 }
 
+/* bpm-table  -------------------------------- */
 
-.bpm-table    table {
+.bpm-table-container {
+  /* TEMPORARY DEBUG STYLE */
+  
+  /*
+  background-color: lime;
+  border: solid red;
+  */
+}
+
+.bpm-table table {
       border-collapse: collapse;
       width: 200px; 
     }
-
-.bpm-table tr,    th, td {
+.bpm-table tr, th, td {
       border: 1px solid #ccc;
       padding: 5px 10px;
       text-align: left;
     }
-
-.bpm-table    tr.highlight td {
+.bpm-table tr.highlight td {
       background-color: #FFFF00;
       font-weight: bold;
     }
 
-
-.bpm-table {
-  margin-top: 1.25rem;
-  /* TEMPORARY DEBUG STYLE */
-  //background-color: yellow;
-}
 .bpm-table li, ul, p, tr, td, text, input, placeholder {
-	line-height: 1.4;
+	line-height: 1.2;
 }
-
 .bpm-col {
 	width: 80px;
 }
@@ -51,12 +57,28 @@
 	width: 200px;
 }
 
+/* bpm-segment-controls ------------------------------ */
+
+.bpm-segment-controls {
+	background-color: yellow;
+	margin-top: 2rem;
+}
+
+.segment-buttons {
+	padding: 5px;
+	/* width: 100px; */
+}
+
+
+
+
+/* settings panel ------------------------------------- */
 
 .settings-summary {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-size: var(--font-sm);
+  gap: 0.75rem; 
+  /* font-size: var(--font-md); */
   margin-bottom: 0.5rem;
 }
 
@@ -75,8 +97,7 @@
 }
 
 
-/*
-// settings panel
+
 .settings-panel {
   margin-top: 1rem;
   margin-bottom: 2rem;
@@ -110,4 +131,4 @@
   display: flex;
   gap: 0.5rem;
 }
-*/
+

@@ -33,7 +33,7 @@
 .data-table {
   margin-top: 1.25rem;
   /* TEMPORARY DEBUG STYLE */
-  //background-color: yellow;
+  /* background-color: yellow; */
 }
 .data-table li, ul, p, tr, td, text, input, placeholder {
 	line-height: 1.8;

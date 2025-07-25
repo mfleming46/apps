@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-			<!--
+	<!--
 			?v=2025-07-24_15:02:04
-			-->
+	-->
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=600, user-scalable=yes">
 	<title>Interleaved Clicking Up</title>
@@ -33,14 +33,7 @@
 
   <div class="left-panel">
   
-    <!-- SETTINGS-DISPLAY -->
-  <div class="settings-display">
-	  <div class="settings-summary">
-		<span id="settings-text">Start: 60 &nbsp; Target: 120 &nbsp; Step: 5</span>
-		<button id="btnToggleSettings" title="Adjust Settings">⚙️</button>
-	  </div>
-  </div>
-  <!-- SETTTINGS-PANEL -->
+    <!-- SETTTINGS-PANEL POPUP  -->
 <div class="settings-panel" id="settings-panel" style="display: none; ">
 	<label>Start BPM: &nbsp; <input id="startBpm" type="number" value="60"></label><br>
 	<label>Target BPM: &nbsp; <input id="targetBpm" type="number" value="120"></label><br>
@@ -51,47 +44,59 @@
 	</div>
 </div>
   
-  
-	  <table id="bpmTable" class="bpm-table">
-		<thead>
-		  <tr><th>BPM</th><th>Segments</th></tr>
-		</thead>
-		<tbody></tbody>
-	  </table>
-	  <p></p>
+    <!-- SETTINGS-DISPLAY -->
+  <div class="settings-display">
+	  <div class="settings-summary">
+		<span id="settings-text">Start: 60 &nbsp; Target: 120 &nbsp; Step: 5</span>
+		<button id="btnToggleSettings" title="Adjust Settings">⚙️</button>
+	  </div>
   </div>
+
+  
+    <div class="bpm-table-container">
+		<table id="bpmTable" class="bpm-table">
+			<thead>
+			  <tr><th>BPM</th><th>Segments</th></tr>
+			</thead>
+			<tbody></tbody>
+		  </table>
+		  <p></p>
+	 </div>  <!-- end bpm-table-container -->
+	  
+	  
+  </div>  <!-- end left panel -->
+  
   
   <div class="right-panel">
   
 
-  
 
 	<!-- METRONOME CONTROLS -->
 	<div class="metronome-controls" style="margin-left: 40px">
-	<button type="button" id="btnMetronome" class="bland" tabIndex=-1 style="width:50px;"> 
-		<img src="../metronome/icons8-metronome-48.png" alt="Metronome" style="width: 20px; height: 20px;">
-	</button>
-	<select id="subdiv">
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option value="3">3</option>
-		<option value="4">4</option>
-		<option value="6">6</option>
-	</select>
+		<button type="button" id="btnMetronome" class="bland" tabIndex=-1 style="width:50px;"> 
+			<img src="../metronome/icons8-metronome-48.png" alt="Metronome" style="width: 20px; height: 20px;">
+		</button>
+		<select id="subdiv">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="6">6</option>
+		</select>
 	</div>
 	
-	<br><br>
+	
 
 	<!-- BPM-SEGMENT-CONTROLS -->
 	<div class="bpm-segment-controls">
-		<div class="segment-buttons" style="margin-left: 50px; padding:5px;">
+		<div class="segment-buttons">
 		   <button id="btnDecBpm">Prior BPM</button>
 		</div>
-		<div class="segment-buttons" style="padding:5px;">
+		<div class="segment-buttons"">
 		  <button id="btnDecSeg">Prior Seg</button>
 		  <button id="btnIncSeg">Next Seg</button>
 		</div>
-		<div class="segment-buttons" style="margin-left: 50px; padding:5px;">
+		<div class="segment-buttons"">
 		  <button id="btnIncBpm">Next BPM</button>
 		</div>
 	</div> <!-- end bpm-segment-controls -->
