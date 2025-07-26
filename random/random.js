@@ -140,9 +140,12 @@ function delta(increment) {
 	objBpm(i).value = String(newBpm);
 	objStrk(i).value = "";
 	objStrkH(i).value = 0;
+	btnSkip_click();
+	/*
 	if (isMetronomePlaying()) {
 		handleStart();
 	}
+	*/
 }
 
 
@@ -263,7 +266,10 @@ function setCurrent(i) {
 	objStrk(i).style=styleHilite;
 	objBpm(i).style=styleHilite;
 	currentID = i;
-	
+	//////////////////////
+		if (isMetronomePlaying()) {
+		handleStart();
+	}
 }
 
 function doFail(i) {

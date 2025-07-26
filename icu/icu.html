@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
 	<!--
-			?v=2025-07-24_15:02:04
+			?v=2025-07-26_00:20:25
 	-->
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=600, user-scalable=yes">
 	<title>Interleaved Clicking Up</title>
-	<link rel="stylesheet" href="../core.css?v=2025-07-24_15:02:04"> 
-	<link rel="stylesheet" href="icu.css?v=2025-07-24_15:02:04">
-	<script src="../metronome/howler.min.js?v=2025-07-24_15:02:04"></script>
-	<script src="../metronome/metronome-core.js?v=2025-07-24_15:02:04"></script>
+	<link rel="stylesheet" href="../core.css?v=2025-07-26_00:20:25"> 
+	<link rel="stylesheet" href="icu.css?v=2025-07-26_00:20:25">
+	<script src="../metronome/howler.min.js?v=2025-07-26_00:20:25"></script>
+	<script src="../metronome/metronome-core.js?v=2025-07-26_00:20:25"></script>
 </head>
 <body>
 <div class="layout-600">
@@ -147,13 +147,14 @@
 		<button type="button" id="btnHelp" > Read Instructions </button>
 		<button type="button" id="btnDemo" > Short Video Demo </button>
 		<div class="help-block" style="display: none;" id="divHelp">
-			<p><b>Play</b> the highlighted item, then tap <b>Pass</b>, <b>Fail</b>, or <b>Skip</b>.</p>
-			<p><b>Faster</b>/<b>Slower</b> adjusts tempo and resets streak.</p>
-			<p><b>Blocked Mode</b>: Stay on an item until you pass 5 times in a row.</p>
-			<p><b>Interleaved Mode</b>: Move to the next after each try.</p>
-			<p><b>Streak</b> = number of consecutive passes.</p>
-			<p>You can <b>edit item names</b> and optional <b>BPMs</b>.</p>
-			<p><b>Metronome Icon</b> toggles audible metronome; Number dropdown selects metronome subdivision.</p>
+<p>This app assumes you're already familiar with the ICU practice method. it's purpose
+is to tell you what tempo and segments to play next.
+</p>
+<p><strong>Segment Your Passage:</strong> Break your piece into short, manageable segments.</p>
+<p><strong>Set Your Practice Parameters:</strong> In the settings, choose your starting tempo, target tempo, and tempo increment.</p>
+<p><strong>Practice Progression:</strong> Click <strong>Next BPM</strong> to get the current segment and tempo to practice. Repeat as needed.</p>
+<p><strong>Automatic Tempo Adjustment:</strong> If using the built-in method, the app will automatically update the tempo for you.</p>
+
 		</div>
 			
 
@@ -161,7 +162,7 @@
 		<div class="copyright-notice">
 		<p><br>(c) Marilyn Fleming, 
 			 <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
-			 <br>release 2025-07-22
+			 <br>release 2025-07-26
 		</p>		
 		</div>
 	
@@ -172,12 +173,36 @@
 	<button type="button" id="btnDebug3" class="bland" tabIndex=-1>not impl</button>
 	</div>
 
+<div class="giscus-block">
+  <hr />
+  <h2>Discussion</h2>
+  <p>
+  <i>
+  To post a comment you’ll need to sign in with a free GitHub account. It’s quick and safe — GitHub helps us keep the conversation spam-free.</P></i>
+  <div id="giscus_thread"></div>
+  </div>
+
+<script src="https://giscus.app/client.js"
+        data-repo="mfleming46/returning-clarinetist"
+        data-repo-id="R_kgDOPS7xgQ"
+        data-category-id="DIC_kwDOPS7xgc4CtbHG"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="0"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>
 
 
 
 <!-- jQuery and custom script -->
-<script src="../safe_storage.js?v=2025-07-24_15:02:04"></script>
-<script src="icu.js?v=2025-07-24_15:02:04"></script>
+<script src="../safe_storage.js?v=2025-07-26_00:20:25"></script>
+<script src="icu.js?v=2025-07-26_00:20:25"></script>
 
 </div>
 </body>
