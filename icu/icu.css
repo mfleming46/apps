@@ -66,7 +66,8 @@
 
 	
 .bpm-table tr.highlight td {
-      background-color: #FFFF00;
+      /* background-color: #FFFF00; */
+	  background-color: #FFF8B3;
       font-weight: bold;
     }
 
@@ -104,6 +105,16 @@
 	width: 6rem;
 }
 
+#btnIncBpm {
+    background-color: #d1ffbd; /* green */
+    color: black;
+}
+
+
+#btnIncBpm:hover {
+  background-color: #a1e29e;  /* slightly darker on hover */
+}
+
 
 
 
@@ -113,7 +124,6 @@ settings-summary {
   display: flex;
   align-items: center;
   gap: 0.75rem; 
-  margin-bottom: 0.5rem;
 }
 
 #btnToggleSettings {
@@ -130,7 +140,37 @@ settings-summary {
   border-radius: var(--border-radius);
 }
 
+.settings-summary {
+  background-color: #fcfcfc;
+  /*
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  */
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0.5rem;
+}
 
+
+#btnToggleSettings {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 2px 6px;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  cursor: pointer;
+}
+
+
+#btnToggleSettings:hover {
+  box-shadow: 0 0 6px rgba(100, 100, 100, 0.3);
+  background-color: #e0e0e0;
+}
+
+
+/* settings popup panel ------------------------------ */
 
 .settings-panel {
   margin-top: 1rem;
@@ -209,6 +249,11 @@ settings-summary {
   border: 1px solid #444; /* defined border */
   padding: 1rem 1.5rem;
   border-radius: 0.5rem; /* optional polish */
+}
+
+#current-status-container {
+  cursor: default;
+  user-select: none;
 }
 
 
