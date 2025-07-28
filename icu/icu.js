@@ -240,7 +240,8 @@ function btnHelp_click() {
 }
 
 function btnDemo_click() {
-	alert("Coming Soon")
+	//alert("Coming Soon")
+	window.open(" https://www.youtube.com/watch?v=jTN5OWnOpbc", "_blank");
 }
 
 
