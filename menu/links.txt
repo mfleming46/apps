@@ -1,7 +1,7 @@
 
 url: ../random/random.html
 title: Random Practice
-classification: oc
+classification: private
 new: true
 image: boxshots/random_practice3.png
 date: released: 
@@ -10,7 +10,7 @@ uccessful reps to track progress without breaking focus.
 
 url: ../icu/icu.html
 title: ICU (Interleaved Clicking Up)
-classification: WIP
+classification: oc
 new: true
 image: boxshots/icu2.png
 date: released: 
