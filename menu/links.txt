@@ -1,23 +1,23 @@
 
+
+url: ../icu/icu.html
+title: ICU (Interleaved Clicking Up)
+classification: live
+new: true
+image: boxshots/icu2.png
+date: released: 
+description: Dr. Molly Gebrian’s Interleaved Clicking Up method is a powerful
+practice tool, but it can feel like navigating a maze. 
+This app provides turn-by-turn guidance to keep you on the right path.
+
 url: ../random/random.html
 title: Random Practice
-classification: private
-new: true
+classification: beta
+new:
 image: boxshots/random_practice3.png
 date: released: 
 description: Stay on track in your random practice routine. Automatically record metronome settings and s
 uccessful reps to track progress without breaking focus.
-
-url: ../icu/icu.html
-title: ICU (Interleaved Clicking Up)
-classification: oc
-new: true
-image: boxshots/icu2.png
-date: released: 
-description: Dr. Molly Gebrian’s Interleaved Clicking Up method can feel like navigating a maze. 
-This app helps you stay on track. It tells you exactly what segment to play and sets the metronome 
-for you, so you can focus on your musical goals.
-
 
 url: ../pp/app_practice_priority.html
 title: Red-Yellow-Green Practice Priority

@@ -44,9 +44,9 @@ function parseFlatFile(text) {
 function getClassificationBadge(classification = '') {
   const code = classification.toLowerCase();
   const map = {
-    ib: '🧭 ib',
-    oc: '📘 oc',
-    wip: '🚧 wip',
+    alpha: '🧭 alpha',
+    live: '📘 live',
+    beta: '🚧 beta',
     private: '🔒 private'
   };
   return map[code] || `❓ ${classification}`;
@@ -75,8 +75,8 @@ function renderLinks(links) {
     `;
 
     const fullDesc = (link.description || '').trim();
-    const shortDesc = fullDesc.slice(0, 150);
-    const isLong = fullDesc.length > 150;
+    const shortDesc = fullDesc.slice(0, 250);
+    const isLong = fullDesc.length > 250;
 
     const descHTML = isLong
       ? `
