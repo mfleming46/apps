@@ -9,7 +9,7 @@
 
   <script>
     function logClick() {
-      fetch('/apps/log.php?page=test', { method: 'GET' })
+      fetch('../log.php?page=test', { method: 'GET' })
         .then(() => alert('Logged!'))
         .catch(err => alert('Failed to log: ' + err));
     }

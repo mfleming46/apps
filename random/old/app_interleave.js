@@ -165,6 +165,6 @@ logClick()
 	return v;
 }
     function logClick() {
-      fetch('/apps/log.php?page=interleave', { method: 'GET' })
+      fetch('../log.php?page=interleave', { method: 'GET' })
     }
 

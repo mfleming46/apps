@@ -512,7 +512,7 @@ function clearStorage() {
 }
 
 function logClick() {
-  fetch('/apps/log.php?page=interleave', { method: 'GET' });
+  fetch('../log.php?page=interleave', { method: 'GET' });
 }
 
 function btnHelp_click() {

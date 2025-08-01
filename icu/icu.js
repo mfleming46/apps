@@ -247,7 +247,7 @@ function btnDemo_click() {
 
 
 function logClick() {
-  fetch('/apps/log.php?page=icu', { method: 'GET' })
+  fetch('../log.php?page=icu', { method: 'GET' })
   console.log("click logged");
 }
 

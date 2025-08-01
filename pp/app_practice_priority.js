@@ -432,5 +432,5 @@ $('#clearLocalStorage').on('click', function() {
 
 
 function logClick() {
-  fetch('/apps/log.php?page=practice_priority', { method: 'GET' })
+  fetch('../log.php?page=practice_priority', { method: 'GET' })
 }
