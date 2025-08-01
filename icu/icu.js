@@ -90,6 +90,7 @@ let theBpm="zzz";
 		stashNSegs = 1;
 		drawTable();
 	}
+	logClick();
   }
   
  
@@ -246,7 +247,8 @@ function btnDemo_click() {
 
 
 function logClick() {
-  fetch('/apps/log.php?page=iclick', { method: 'GET' })
+  fetch('/apps/log.php?page=icu', { method: 'GET' })
+  console.log("click logged");
 }
 
 // ---------------------------------------------------------------------
