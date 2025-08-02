@@ -1,0 +1,10 @@
+base: https://returningclarinetist.com/apps/
+title: ICU (Interleaved Clicking Up)
+url: ../icu/icu.html
+image: boxshots/icu2.png
+description:
+Dr. Molly Gebrian’s Interleaved Clicking Up method is a powerful
+practice tool, but it can sometimes feel like navigating a maze.
+This app provides turn-by-turn guidance to keep you on the right path.
+   
+  
