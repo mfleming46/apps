@@ -1,0 +1,7 @@
+
+base: https://returningclarinetist.com/apps/
+title: Red-Yellow-Green Practice Priority
+url: ../pp/app_practice_priority.html
+image: boxshots/icu2.png
+description: Prioritize your practice sessions to focus on parts of your music that need the most work.  
+    
