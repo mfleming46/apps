@@ -83,10 +83,10 @@
         report += `\nTotal hits: ${validHits}`;
         report += `\nUnique IPs (excluding yours): ${visitors.size}`;
 
-        report += `\n\nTop 5 IPs by hit count (excluding yours):\n`;
+        report += `\n\nTop 25 IPs by hit count (excluding yours):\n`;
         const topIps = Object.entries(ipCounts)
           .sort((a, b) => b[1] - a[1])
-          .slice(0, 5);
+          .slice(0, 25);
 
         topIps.forEach(([ip, count], i) => {
           report += `  ${i + 1}. ${ip}: ${count} hits\n`;
