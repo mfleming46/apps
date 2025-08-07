@@ -37,7 +37,7 @@
     .catch(() => {
       document.getElementById('env-note').textContent =
         "(Could not determine IP — showing all data)";
-      loadSummary(); // Proceed anyway if fetch fails
+      loadSummary();
     });
 
   function loadSummary() {
@@ -50,7 +50,7 @@
         const lines = text.trim().split('\n').filter(line => line.trim() !== "");
         const pages = {};
         const visitors = new Set();
-        const ipCounts = {};
+        const ipData = {};
         const dates = [];
         let validHits = 0;
 
@@ -66,7 +66,11 @@
 
           pages[cleanPage] = (pages[cleanPage] || 0) + 1;
           visitors.add(ip);
-          ipCounts[ip] = (ipCounts[ip] || 0) + 1;
+          if (!ipData[ip]) {
+            ipData[ip] = { count: 0, dates: [] };
+          }
+          ipData[ip].count++;
+          ipData[ip].dates.push(date);
           dates.push(date);
         }
 
@@ -84,13 +88,34 @@
         report += `\nUnique IPs (excluding yours): ${visitors.size}`;
 
         report += `\n\nTop 25 IPs by hit count (excluding yours):\n`;
-        const topIps = Object.entries(ipCounts)
-          .sort((a, b) => b[1] - a[1])
+        const topIps = Object.entries(ipData)
+          .sort((a, b) => b[1].count - a[1].count)
           .slice(0, 25);
 
-        topIps.forEach(([ip, count], i) => {
-          report += `  ${i + 1}. ${ip}: ${count} hits\n`;
+        topIps.forEach(([ip, data], i) => {
+          const sortedDates = data.dates.sort();
+          const minDate = sortedDates[0];
+          const maxDate = sortedDates[sortedDates.length - 1];
+          report += `  ${i + 1}. ${ip} ${data.count} hits (from ${minDate} to ${maxDate})\n`;
         });
+		
+		/// -----------------
+		// Count hits per date (IP already filtered above)
+        const dateCounts = {};
+        dates.forEach(date => {
+          dateCounts[date] = (dateCounts[date] || 0) + 1;
+        });
+
+        // Generate date-based hit table
+        report += `\n\nHits per day (excluding your IP):\n`;
+        const maxHits = Math.max(...Object.values(dateCounts));
+        const scaleFactor = maxHits > 0 ? 40 / maxHits : 1; // scale bars to max 40 chars
+
+        Object.entries(dateCounts).sort().forEach(([date, count]) => {
+          const bar = 'x'.repeat(Math.round(count * scaleFactor));
+          report += `${date}  ${String(count).padStart(5)}  ${bar}\n`;
+        });
+		/// -------------
 
         document.getElementById('summary').textContent = report;
       })
@@ -107,7 +132,7 @@
       .then(response => response.text())
       .then(msg => {
         alert(msg);
-        loadSummary();  // Refresh view
+        loadSummary();
       })
       .catch(err => {
         alert("Error clearing log.");
