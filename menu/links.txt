@@ -19,6 +19,15 @@ date: released:
 description: Stay on track in your random practice routine. Automatically record metronome settings and s
 uccessful reps to track progress without breaking focus.
 
+url: ../flashcards/flash.html
+title: Name that Note
+classification: beta
+new:
+image: 
+date: released: 
+description: Stay on track in your random practice routine. Automatically record metronome settings and s
+uccessful reps to track progress without breaking focus.
+
 url: ../pp/app_practice_priority.html
 title: Red-Yellow-Green Practice Priority
 classification: private

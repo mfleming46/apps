@@ -29,41 +29,29 @@
     </div>
   </section>
 
-  <!-- QUIZ SCREEN -->
-  <section id="quiz" class="card hidden">
-    <!-- Prominent question text -->
-    <div class="qtext" id="qText"></div>
+  <!-- QUIZ/REVEAL WRAPPER (keeps widths identical for all panels) -->
+  <div id="shell" style="max-width:780px;">
+    <!-- 1) CARD PANEL (same DOM for front/back; only color toggles) -->
+    <section id="cardBox" class="card hidden">
+      <div id="cardInner" class="reveal">
+        <div class="reveal-body">
+          <div class="qtext" id="qText"></div>
+          <div class="imgwrap"><img id="noteImg" alt=""></div>
+        </div>
+      </div>
+    </section>
 
-    <!-- Image -->
-    <div class="imgwrap"><img id="noteImg" alt=""></div>
+    <!-- 2) BUTTON PANEL (front: answer buttons; back: results row) -->
+    <div id="panel" class="row hidden" style="gap:12px; align-items:center;"></div>
 
-    <!-- A–G answers -->
-    <div class="answers" id="answers"></div>
-
-    <!-- Small footer: counter + quit link (kept out of the card body to reduce layout shift) -->
-    <div class="row meta" style="justify-content: space-between; margin-top:8px;">
+    <!-- 3) CARD-NUMBER PANEL (identical front/back) -->
+    <div id="foot" class="row meta hidden" style="justify-content: space-between; margin-top:8px;">
       <div class="counter" id="counter"></div>
       <button id="btnQuit" class="link">Quit</button>
     </div>
-  </section>
+  </div>
 
-  <!-- SINGLE-CARD REVEAL (per-question) -->
-  <section id="reveal" class="reveal hidden">
-    <div class="reveal-body">
-      <div class="qtext" id="rQText"></div>
-      <div class="imgwrap big"><img id="rImg" alt=""></div>
-      <div class="meta" id="rCounter"></div>
-    </div>
-    <div class="reveal-footer">
-      <div id="rYour"></div>
-      <div id="rCorrect"></div>
-      <div id="rTime"></div>
-      <div class="spacer"></div>
-      <button id="rContinue">Continue</button>
-    </div>
-  </section>
-
-  <!-- END SUMMARY (used for BOTH modes now) -->
+  <!-- END SUMMARY (used for BOTH modes) -->
   <section id="summaryList" class="hidden">
     <div class="summary-head card">
       <h2 id="sumTitle">Quiz complete</h2>

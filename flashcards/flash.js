@@ -2,26 +2,29 @@
   const LETTERS = ["A","B","C","D","E","F","G"];
 
   // ---------- State ----------
-  let cards = [];                   // from flash.txt
+  let cards = [];                   // parsed from flash.txt
   let order = [];                   // shuffled indices
-  let idx = 0;                      // current index within order during quiz
+  let idx = 0;                      // current index in order
   let started = false;
   let answers = [];                 // {id, question, image, correct, picked, timeMs}
   let mode = "perQuestion";         // 'perQuestion' | 'end'
   let startTime = 0;
 
   // ---------- Elements ----------
-  const elStart    = document.getElementById("start");
-  const elQuiz     = document.getElementById("quiz");
-  const elReveal   = document.getElementById("reveal");
-  const elSummary  = document.getElementById("summaryList");
+  const elStart     = document.getElementById("start");
+  const elSummary   = document.getElementById("summaryList");
 
-  const elStatus   = document.getElementById("status");
-  const elLoader   = document.getElementById("loader");
-  const elFile     = document.getElementById("file");
-  const elBtnStart = document.getElementById("btnStart");
+  // unified panels
+  const elCardBox   = document.getElementById("cardBox");
+  const elCardInner = document.getElementById("cardInner");
+  const elPanel     = document.getElementById("panel");
+  const elFoot      = document.getElementById("foot");
 
-  // start screen controls
+  // start controls
+  const elStatus    = document.getElementById("status");
+  const elLoader    = document.getElementById("loader");
+  const elFile      = document.getElementById("file");
+  const elBtnStart  = document.getElementById("btnStart");
   document.querySelectorAll('input[name="mode"]').forEach(r => {
     r.addEventListener("change", () => {
       mode = document.querySelector('input[name="mode"]:checked').value;
@@ -29,42 +32,23 @@
   });
   elBtnStart.addEventListener("click", onStart);
 
-  // quiz screen
+  // card content
   const elQText   = document.getElementById("qText");
   const elCounter = document.getElementById("counter");
   const elImg     = document.getElementById("noteImg");
-  const elAnswers = document.getElementById("answers");
-  document.getElementById("btnQuit").addEventListener("click", goStart); // link-like, no confirm
+  document.getElementById("btnQuit").addEventListener("click", goStart);
 
-  // reveal (per-question only)
-  const elRImg       = document.getElementById("rImg");
-  const elRQText     = document.getElementById("rQText");
-  const elRCounter   = document.getElementById("rCounter");
-  const elRYour      = document.getElementById("rYour");
-  const elRCorrect   = document.getElementById("rCorrect");
-  const elRTime      = document.getElementById("rTime");
-  const elRContinue  = document.getElementById("rContinue");
-  elRContinue.addEventListener("click", continueAfterReveal);
-
-  // summary (for BOTH modes)
+  // summary content
   const elSumTitle   = document.getElementById("sumTitle");
   const elSumStats   = document.getElementById("sumStats");
   const elSumFlow    = document.getElementById("sumFlow");
   const elSumRestart = document.getElementById("sumRestart");
-  elSumRestart.addEventListener("click", goStart); // restart returns to start/mode selection
+  elSumRestart.addEventListener("click", goStart);
 
-  // Build A–G buttons
-  LETTERS.forEach(L => {
-    const b = document.createElement("button");
-    b.textContent = L;
-    b.addEventListener("click", () => onPick(L));
-    elAnswers.appendChild(b);
-  });
-
-  // Keyboard shortcuts (active only on quiz screen)
+  // keyboard answers (active only when front is shown)
   window.addEventListener("keydown", (e) => {
     const k = (e.key || "").toUpperCase();
-    if (!started || !isShowing(elQuiz)) return;
+    if (!started || elPanel.dataset.mode !== "front") return;
     if (LETTERS.includes(k)) {
       e.preventDefault();
       onPick(k);
@@ -72,7 +56,7 @@
   });
 
   // ---------- Deck loading ----------
-  tryFetchDeck(); // auto-load when served over http://
+  tryFetchDeck();
 
   async function tryFetchDeck() {
     try {
@@ -134,7 +118,6 @@
   // ---------- Flow ----------
   function onStart(){
     if (!cards.length) {
-      // If deck not yet loaded, trigger the file chooser directly
       elLoader.classList.remove("hidden");
       elFile.click();
       return;
@@ -145,71 +128,94 @@
   function begin(){
     order = shuffle(cards.map((_,i)=>i));
     idx = 0; answers = []; started = true;
-    show(elQuiz); hide(elStart); hide(elReveal); hide(elSummary);
-    renderCard();
+
+    show(elCardBox); show(elPanel); show(elFoot);
+    hide(elStart); hide(elSummary);
+
+    renderFront();
   }
 
   function goStart(){
     started = false;
-    hide(elQuiz); hide(elReveal); hide(elSummary); show(elStart);
+    hide(elCardBox); hide(elPanel); hide(elFoot);
+    hide(elSummary); show(elStart);
   }
 
-  function renderCard(){
+  function renderFront(){
     const c = cards[ order[idx] ];
-    elQText.textContent = c.question;               // prominent question text
-    elCounter.textContent = `Card ${idx+1} / ${order.length}`;
+    // card panel (no color class)
+    elCardInner.classList.remove("ok","bad");
+    elQText.textContent = c.question;
     elImg.src = c.image;
     elImg.onerror = () => showFatal("Missing image during quiz: " + escapeHtml(c.image));
-    // enable buttons
-    [...elAnswers.children].forEach(btn => { btn.classList.remove("ok","bad"); btn.disabled=false; });
-    startTime = performance.now();
+
+    // button panel for front
+    elPanel.dataset.mode = "front";
+    elPanel.innerHTML = ""; // clear
+    LETTERS.forEach(L => {
+      const b = document.createElement("button");
+      b.textContent = L;
+      b.addEventListener("click", () => onPick(L));
+      elPanel.appendChild(b);
+    });
+
+    // foot panel (identical)
+    elCounter.textContent = `Card ${idx+1} / ${order.length}`;
+  }
+
+  function renderBack(aIndex){
+    const a = answers[aIndex];
+    // card panel with pass/fail color
+    elCardInner.classList.toggle("ok",  a.picked === a.correct);
+    elCardInner.classList.toggle("bad", a.picked !== a.correct);
+    elQText.textContent = a.question;
+    elImg.src = a.image;
+
+    // button panel for back (results row)
+    elPanel.dataset.mode = "back";
+    elPanel.innerHTML = "";
+    const rYour    = document.createElement("div");
+    const rCorrect = document.createElement("div");
+    const rTime    = document.createElement("div");
+    rYour.textContent    = `Your answer: ${a.picked}`;
+    rCorrect.textContent = `Correct: ${a.correct}`;
+    rTime.textContent    = `Time: ${(a.timeMs/1000).toFixed(2)}s`;
+    const spacer = document.createElement("div"); spacer.className = "spacer";
+    const btn    = document.createElement("button"); btn.textContent = "Continue";
+    btn.addEventListener("click", nextCardOrSummary);
+    elPanel.append(rYour, rCorrect, rTime, spacer, btn);
+
+    // foot panel (identical)
+    elCounter.textContent = `Card ${aIndex+1} / ${answers.length}`;
   }
 
   function onPick(letter){
     const c = cards[ order[idx] ];
     const timeMs = performance.now() - startTime;
-    answers.push({ id:c.id, question:c.question, image:c.image, correct:c.correct, picked:letter, timeMs });
+    const rec = { id:c.id, question:c.question, image:c.image, correct:c.correct, picked:letter, timeMs };
+    answers.push(rec);
 
     if (mode === "perQuestion") {
-      showSingleReveal(answers.length - 1);
+      renderBack(answers.length - 1);
     } else {
       nextCardOrSummary();
     }
   }
 
-  function continueAfterReveal(){
-    nextCardOrSummary();
-  }
-
   function nextCardOrSummary(){
     idx++;
     if (idx >= order.length) {
-      // BOTH modes end on the same congrats + continuous review page
-      showSummaryFlow();
+      showSummaryFlow(); // both modes
     } else {
-      hide(elReveal); show(elQuiz);
-      renderCard();
+      renderFront();
+      startTime = performance.now();
     }
   }
 
-  function showSingleReveal(index){
-    hide(elQuiz); hide(elStart); hide(elSummary); show(elReveal);
-
-    const a = answers[index];
-    elReveal.classList.toggle("ok",  a.picked === a.correct);
-    elReveal.classList.toggle("bad", a.picked !== a.correct);
-
-    elRQText.textContent = a.question;
-    elRImg.src = a.image;
-    elRCounter.textContent = `Card ${index+1} / ${answers.length}`;
-    elRYour.textContent = `Your answer: ${a.picked}`;
-    elRCorrect.textContent = `Correct: ${a.correct}`;
-    elRTime.textContent = `Time: ${(a.timeMs/1000).toFixed(2)}s`;
-  }
-
-  // Continuous summary flow (now used for BOTH modes)
+  // Continuous summary flow (used for BOTH modes)
   function showSummaryFlow(){
-    hide(elQuiz); hide(elReveal); hide(elStart); show(elSummary);
+    hide(elCardBox); hide(elPanel); hide(elFoot);
+    hide(elStart); show(elSummary);
 
     const correct = answers.filter(a => a.picked === a.correct).length;
     const pct = answers.length ? Math.round(100*correct/answers.length) : 0;
@@ -241,11 +247,27 @@
   function shuffle(a){ const x=a.slice(); for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x; }
   function show(el){ el.classList.remove("hidden"); }
   function hide(el){ el.classList.add("hidden"); }
-  function isShowing(el){ return !el.classList.contains("hidden"); }
+  function escapeHtml(s){ return String(s).replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt'}[c])); }
 
   function showFatal(html){
-    show(elStart); hide(elQuiz); hide(elReveal); hide(elSummary);
+    show(elStart);
     elStatus.innerHTML = html;
     elStatus.style.color = "#b2271a";
   }
+
+  // start initial render time when we show first question
+  // (set in renderFront)
+  const observeFirst = new MutationObserver(() => {
+    if (!started || elPanel.dataset.mode !== "front") return;
+    startTime = performance.now();
+    observeFirst.disconnect();
+  });
+
+  // reconnect observer each time we get back to a front panel render
+  const origRenderFront = renderFront;
+  renderFront = function(){
+    origRenderFront.apply(this, arguments);
+    observeFirst.disconnect();
+    observeFirst.observe(elPanel, { childList:true });
+  };
 })();
