@@ -12,7 +12,7 @@
     <h1>Flash Cards</h1>
     <p class="blurb">
       Identify the musical note shown. Choose when answers are revealed, then press Start.
-      (Images and card data load from <code>flash.txt</code>.)
+      (Cards and images load from <code>flash.txt</code>.)
     </p>
 
     <div class="row">
@@ -31,21 +31,23 @@
 
   <!-- QUIZ SCREEN -->
   <section id="quiz" class="card hidden">
-    <div class="topbar">
-      <div class="qtext" id="qText"></div>
-      <div class="counter" id="counter"></div>
-    </div>
+    <!-- Prominent question text -->
+    <div class="qtext" id="qText"></div>
 
+    <!-- Image -->
     <div class="imgwrap"><img id="noteImg" alt=""></div>
 
+    <!-- A–G answers -->
     <div class="answers" id="answers"></div>
 
-    <div class="row space">
-      <button id="btnQuit" class="ghost">Quit</button>
+    <!-- Small footer: counter + quit link (kept out of the card body to reduce layout shift) -->
+    <div class="row meta" style="justify-content: space-between; margin-top:8px;">
+      <div class="counter" id="counter"></div>
+      <button id="btnQuit" class="link">Quit</button>
     </div>
   </section>
 
-  <!-- REVEAL / REVIEW SCREEN (used both after each card and at the end) -->
+  <!-- SINGLE-CARD REVEAL (per-question) -->
   <section id="reveal" class="reveal hidden">
     <div class="reveal-body">
       <div class="qtext" id="rQText"></div>
@@ -57,10 +59,20 @@
       <div id="rCorrect"></div>
       <div id="rTime"></div>
       <div class="spacer"></div>
-      <button id="rPrev" class="ghost">Prev</button>
-      <button id="rNext">Next</button>
-      <button id="rDone" class="ghost">Done</button>
+      <button id="rContinue">Continue</button>
     </div>
+  </section>
+
+  <!-- END SUMMARY (used for BOTH modes now) -->
+  <section id="summaryList" class="hidden">
+    <div class="summary-head card">
+      <h2 id="sumTitle">Quiz complete</h2>
+      <div class="stats" id="sumStats"></div>
+      <div style="margin-top:8px;">
+        <button id="sumRestart">Restart</button>
+      </div>
+    </div>
+    <div id="sumFlow" class="flow"></div>
   </section>
 
   <script src="flash.js"></script>
