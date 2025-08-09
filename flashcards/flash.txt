@@ -1,0 +1,22 @@
+# Example deck file — edit the paths to your images
+# One card per block, leave a blank line between blocks
+
+id: E3
+question: What note is this?
+image: images/E3-7ch-1774764.png
+correct: E
+
+id: F3
+question: What note is this?
+image: images/F3-6dv-1774763.png
+correct: F
+
+id: G3
+question: What note is this?
+image: images/G3-z6t-1774761.png
+correct: G
+
+id: A3
+question: What note is this?
+image: images/A3-8d8-1774767.png
+correct: A

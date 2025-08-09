@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flash Cards – Note ID</title>
+  <link rel="stylesheet" href="flash.css" />
+</head>
+<body>
+  <!-- START SCREEN -->
+  <section id="start" class="card">
+    <h1>Flash Cards</h1>
+    <p class="blurb">
+      Identify the musical note shown. Choose when answers are revealed, then press Start.
+      (Images and card data load from <code>flash.txt</code>.)
+    </p>
+
+    <div class="row">
+      <label><input type="radio" name="mode" value="perQuestion" checked> Show answer after each question</label>
+      <label><input type="radio" name="mode" value="end"> Show answers at the end</label>
+    </div>
+
+    <div class="row" style="margin-top:10px;">
+      <button id="btnStart">Start</button>
+      <span id="status" class="meta"></span>
+      <label id="loader" class="hidden">Load flash.txt
+        <input id="file" type="file" accept=".txt,.deck" />
+      </label>
+    </div>
+  </section>
+
+  <!-- QUIZ SCREEN -->
+  <section id="quiz" class="card hidden">
+    <div class="topbar">
+      <div class="qtext" id="qText"></div>
+      <div class="counter" id="counter"></div>
+    </div>
+
+    <div class="imgwrap"><img id="noteImg" alt=""></div>
+
+    <div class="answers" id="answers"></div>
+
+    <div class="row space">
+      <button id="btnQuit" class="ghost">Quit</button>
+    </div>
+  </section>
+
+  <!-- REVEAL / REVIEW SCREEN (used both after each card and at the end) -->
+  <section id="reveal" class="reveal hidden">
+    <div class="reveal-body">
+      <div class="qtext" id="rQText"></div>
+      <div class="imgwrap big"><img id="rImg" alt=""></div>
+      <div class="meta" id="rCounter"></div>
+    </div>
+    <div class="reveal-footer">
+      <div id="rYour"></div>
+      <div id="rCorrect"></div>
+      <div id="rTime"></div>
+      <div class="spacer"></div>
+      <button id="rPrev" class="ghost">Prev</button>
+      <button id="rNext">Next</button>
+      <button id="rDone" class="ghost">Done</button>
+    </div>
+  </section>
+
+  <script src="flash.js"></script>
+</body>
+</html>
