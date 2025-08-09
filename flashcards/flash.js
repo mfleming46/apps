@@ -132,13 +132,6 @@
 	elQText.textContent = c.question;             // unchanged
 	elImg.src = c.image;
 
-	/*  
-    const c = cards[ order[idx] ];
-    elCardInner.classList.remove("ok","bad");
-    elQText.textContent = c.question;
-    elImg.src = c.image;
-	*/
-
     elPanel.dataset.mode = "front";
     elPanel.innerHTML = "";
     ["A","B","C","D","E","F","G"].forEach(L => {
@@ -163,14 +156,6 @@
 	elQText.classList.add("result");                        // ← optional styling hook
 
 	elImg.src = a.image;  
-	 
-	/*
-    const a = answers[aIndex];
-    elCardInner.classList.toggle("ok",  a.picked === a.correct);
-    elCardInner.classList.toggle("bad", a.picked !== a.correct);
-    elQText.textContent = a.question;
-    elImg.src = a.image;
-	*/
 
     elPanel.dataset.mode = "back";
     elPanel.innerHTML = "";
@@ -222,16 +207,19 @@
     answers.forEach((a) => {
       const block = document.createElement("div");
       block.className = "cardblock " + (a.picked === a.correct ? "ok" : "bad");
-      block.innerHTML = `
-        <div class="body">
-          <div class="qtext">${escapeHtml(a.question)}</div>
-          <div class="imgwrap big"><img src="${escapeHtml(a.image)}" alt=""></div>
-        </div>
-        <div class="footer">
-          <div>Your answer: ${a.picked}</div>
-          <div>Correct: ${a.correct}</div>
-          <div>Time: ${(a.timeMs/1000).toFixed(2)}s</div>
-        </div>`;
+      
+	  const ok = (a.picked === a.correct);
+	  block.innerHTML = `
+		  <div class="body">
+			<div class="qtext result">${ok ? "✅ Correct!" : "❌ Oops."}</div>
+			<div class="imgwrap big"><img src="${escapeHtml(a.image)}" alt=""></div>
+		  </div>
+		  <div class="footer">
+			<div>Your answer: ${a.picked}</div>
+			<div>Correct: ${a.correct}</div>
+			<div>Time: ${(a.timeMs/1000).toFixed(2)}s</div>
+		  </div>`;
+
       elSumFlow.appendChild(block);
     });
   }

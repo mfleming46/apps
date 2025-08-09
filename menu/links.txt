@@ -21,7 +21,7 @@ uccessful reps to track progress without breaking focus.
 
 url: ../flashcards/flash.html
 title: Name that Note
-classification: beta
+classification: private
 new:
 image: 
 date: released: 
