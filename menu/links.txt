@@ -25,8 +25,9 @@ classification: beta
 new:
 image: 
 date: released: 
-description: Stay on track in your random practice routine. Automatically record metronome settings and s
-uccessful reps to track progress without breaking focus.
+description: Sharpen your note recognition skills.  
+This quiz trains you to quickly identify clarinet notes across 
+an extended range — from low E below the staff up to super-high C.
 
 url: ../pp/app_practice_priority.html
 title: Red-Yellow-Green Practice Priority

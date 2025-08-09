@@ -214,3 +214,46 @@ label#loader input {
   background: #fff;
   font-weight: 600;
 }
+
+/* Normalize buttons just for this app */
+.layout-600 #panel button,
+.layout-600 #start button,
+.layout-600 #summaryList button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;              /* undo the tall core line-height */
+  padding: 0 var(--control-padding-x);
+}
+
+.layout-600 button.link {
+  display: inline;             /* keep Quit looking like a link */
+  line-height: 1.2;
+  padding: 0;
+}
+
+/* Start-screen mode buttons (slightly fancier, no global impact) */
+.modebtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  min-height: 42px;
+  border-radius: 10px;
+  background: #111;
+  color: #fff;
+  border: 1px solid #000;
+}
+.modebtn + .modebtn { margin-left: 10px; }
+
+/* Intro spacing block */
+.extra-explainer 
+{ 
+  margin: 12px 0 8px; 
+  line-height: 1.2;
+}
+.extra-explainer p
+{ 
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}

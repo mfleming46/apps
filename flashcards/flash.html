@@ -1,68 +1,147 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Flash Cards – Note ID</title>
-  <link rel="stylesheet" href="flash.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=600, user-scalable=yes" />
+  <link rel="icon" href="/apps/menu/logo.png" />
+  <title>Name that Note</title>
+
+  <!-- Common/site CSS then app-specific CSS -->
+  <link rel="stylesheet" href="../core.css">
+  <link rel="stylesheet" href="flash.css">
 </head>
 <body>
-  <!-- START SCREEN -->
-  <section id="start" class="card">
-    <h1>Flash Cards</h1>
-    <p class="blurb">
-      Identify the musical note shown. Choose when answers are revealed, then press Start.
-      (Cards and images load from <code>flash.txt</code>.)
-    </p>
+  <div class="layout-600">
+    <h1>Name that Note</h1>
 
-    <div class="row">
-      <label><input type="radio" name="mode" value="perQuestion" checked> Show answer after each question</label>
-      <label><input type="radio" name="mode" value="end"> Show answers at the end</label>
+    <!-- INTRO (shown only on the start screen) -->
+    <div id="intro">
+      <div class="app-description">
+        <p>
+          Sharpen your note recognition skills. This quiz trains you to quickly identify
+          clarinet notes across an extended range — from low E below the staff up to
+          super‑high C.
+        </p>
+      </div>
+
+      <div class="extra-explainer">
+        <p>
+          The quiz focuses on the 17 notes above and below the staff. Each card shows you a note
+          and asks you to name it. There are two versions: the <b>Easy</b> method gives you
+          immediate feedback after every card. The <b>Advanced</b> approach shows your score only
+          after you have completed the quiz. 
+        </p>
+		<p>
+		Select your preferred mode to start the quiz.
+		</p>
+      </div>
     </div>
 
-    <div class="row" style="margin-top:10px;">
-      <button id="btnStart">Start</button>
-      <span id="status" class="meta"></span>
-      <label id="loader" class="hidden">Load flash.txt
-        <input id="file" type="file" accept=".txt,.deck" />
-      </label>
-    </div>
-  </section>
-
-  <!-- QUIZ/REVEAL WRAPPER (keeps widths identical for all panels) -->
-  <div id="shell" style="max-width:780px;">
-    <!-- 1) CARD PANEL (same DOM for front/back; only color toggles) -->
-    <section id="cardBox" class="card hidden">
-      <div id="cardInner" class="reveal">
-        <div class="reveal-body">
-          <div class="qtext" id="qText"></div>
-          <div class="imgwrap"><img id="noteImg" alt=""></div>
-        </div>
+    <!-- START (no box around the buttons) -->
+    <section id="start">
+      <div class="row" style="margin-top:10px;">
+        <button id="btnEasy" class="modebtn">‘Easy’ is for me</button>
+        <button id="btnAdvanced" class="modebtn">I’m feeling ‘Advanced’</button>
+        <span id="status" class="meta"></span>
       </div>
     </section>
 
-    <!-- 2) BUTTON PANEL (front: answer buttons; back: results row) -->
-    <div id="panel" class="row hidden" style="gap:12px; align-items:center;"></div>
+    <!-- QUIZ UI (Card / Button panel / Card-number panel) -->
+    <div id="shell">
+      <!-- 1) CARD PANEL (same DOM for front/back; only background color toggles) -->
+      <section id="cardBox" class="card hidden">
+        <div id="cardInner" class="reveal">
+          <div class="reveal-body">
+            <div class="qtext" id="qText"></div>
+            <div class="imgwrap"><img id="noteImg" alt=""></div>
+          </div>
+        </div>
+      </section>
 
-    <!-- 3) CARD-NUMBER PANEL (identical front/back) -->
-    <div id="foot" class="row meta hidden" style="justify-content: space-between; margin-top:8px;">
-      <div class="counter" id="counter"></div>
-      <button id="btnQuit" class="link">Quit</button>
-    </div>
-  </div>
+      <!-- 2) BUTTON PANEL (front: A–G buttons; back: results row) -->
+      <div id="panel" class="row hidden" style="gap:12px; align-items:center;"></div>
 
-  <!-- END SUMMARY (used for BOTH modes) -->
-  <section id="summaryList" class="hidden">
-    <div class="summary-head card">
-      <h2 id="sumTitle">Quiz complete</h2>
-      <div class="stats" id="sumStats"></div>
-      <div style="margin-top:8px;">
-        <button id="sumRestart">Restart</button>
+      <!-- 3) CARD-NUMBER PANEL (identical front/back) -->
+      <div id="foot" class="row meta hidden" style="justify-content: space-between; margin-top:8px;">
+        <div class="counter" id="counter"></div>
+        <button id="btnQuit" class="link">Quit</button>
       </div>
     </div>
-    <div id="sumFlow" class="flow"></div>
-  </section>
 
-  <script src="flash.js"></script>
+    <!-- END SUMMARY (used for BOTH modes) -->
+    <section id="summaryList" class="hidden">
+      <div class="summary-head card">
+        <h2 id="sumTitle">Quiz complete</h2>
+        <div class="stats" id="sumStats"></div>
+        <div style="margin-top:8px;">
+          <button id="sumRestart">Restart</button>
+        </div>
+      </div>
+      <div id="sumFlow" class="flow"></div>
+    </section>
+
+    <br><br>
+
+    <!-- Optional global blocks (visibility handled elsewhere) -->
+    <div class="cookie-notice" style="display:none;">
+      <p>This app uses cookies to remember your inputs between sessions — just on your device,
+      nothing is tracked or shared.</p>
+    </div>
+
+    <div class="references" style="display:none;">
+      <p><b>Reference:</b> Gebrian, Molly, <i>Learn Faster, Perform Better: A Musician's Guide
+      to the Neuroscience of Practicing</i>, Oxford University Press, 2024</p>
+    </div>
+
+    <div class="help-panel" style="display:none;">
+      <br>
+      <button type="button" id="btnHelp">Read Instructions</button>
+      <button type="button" id="btnDemo">Short Video Demo</button>
+      <div class="help-block" style="display:none;" id="divHelp">
+        <p>Click the correct note name (A–G). Choose to see answers after each card
+        (Easy) or all at once at the end (Advanced).</p>
+      </div>
+    </div>
+
+    <div class="copyright-notice" style="display:none">
+      <p><br>(c) Marilyn Fleming,
+        <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
+        <br>release 2025-08-09
+      </p>
+    </div>
+
+    <div class="button-container" style="display:none;" id="debugMenu">
+      <button type="button" id="btnDebug" class="bland" tabIndex="-1">not impl</button>
+      <button type="button" id="btnDebug2" class="bland" tabIndex="-1">not impl</button>
+      <button type="button" id="btnDebug3" class="bland" tabIndex="-1">not impl</button>
+    </div>
+
+    <div class="giscus-block" style="display:none;">
+      <hr />
+      <h2>Discussion</h2>
+      <p><i>To post a comment you’ll need to sign in with a free GitHub account. It’s quick and safe —
+      GitHub helps us keep the conversation spam‑free.</i></p>
+      <div id="giscus_thread"></div>
+
+      <script src="https://giscus.app/client.js"
+              data-repo="mfleming46/returning-clarinetist"
+              data-repo-id="R_kgDOPS7xgQ"
+              data-category-id="DIC_kwDOPS7xgc4CtbHG"
+              data-mapping="pathname"
+              data-strict="0"
+              data-reactions-enabled="0"
+              data-emit-metadata="0"
+              data-input-position="top"
+              data-theme="preferred_color_scheme"
+              data-lang="en"
+              data-loading="lazy"
+              crossorigin="anonymous"
+              async>
+      </script>
+    </div>
+
+    <script src="../safe_storage.js"></script>
+    <script src="flash.js"></script>
+  </div>
 </body>
 </html>
