@@ -1,163 +1,161 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=600, user-scalable=yes" />
-  <link rel="icon" href="/apps/menu/logo.png" />
-  <title>Name that Note</title>
+:root {
+  --fg: #111;
+  --muted: #666;
+  --ok: #0a7a23;
+  --bad: #b2271a;
+  --okbg: #e9f7ee;
+  --badbg: #fdeae8;
+}
 
-  <!-- Common/site CSS then app-specific CSS -->
-  <link rel="stylesheet" href="../core.css">
-  <link rel="stylesheet" href="flash.css">
-</head>
-<body>
-  <div class="layout-600">
-    <h1>Name that Note</h1>
+* { box-sizing: border-box; }
 
-    <!-- INTRO (shown only on the start screen) -->
-    <div id="intro">
-      <div class="app-description">
-        <p>
-          Sharpen your note recognition skills. This quiz trains you to quickly identify
-          clarinet notes across an extended range — from low E below the staff up to
-          super‑high C.
-        </p>
-      </div>
+/* ===== Duplicates of core.css — commented out on purpose ===== */
+/*
+body {
+  font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--fg);
+  margin: 1rem;   <-- use core layout padding instead
+}
+h1 { font-size: 1.375rem; margin: 0 0 .5rem; }
+button {
+  padding: .5rem .75rem;
+  border: 1px solid #bbb;
+  background: #fff;
+  border-radius: .5rem;
+  cursor: pointer;
+}
+*/
+button:disabled { opacity: .6; cursor: default; }
 
-      <div class="extra-explainer">
-        <p>
-          The quiz focuses on the 17 notes above and below the staff. Each card shows you a note
-          and asks you to name it. There are two versions: the <b>Easy</b> method gives you
-          immediate feedback after every card. The <b>Advanced</b> approach shows your score only
-          after you have completed the quiz. 
-        </p>
-		<p>
-		Select your preferred mode to start the quiz.
-		</p>
-      </div>
-    </div>
+/* ===== App-specific layout (uses rem + container width) ===== */
 
-    <!-- START (no box around the buttons) -->
-    <section id="start">
-      <div class="row" style="margin-top:10px;">
-        <button id="btnEasy" class="modebtn">‘Easy’ is for me</button>
-        <button id="btnAdvanced" class="modebtn">I’m feeling ‘Advanced’</button>
-        <span id="status" class="meta"></span>
-      </div>
-    </section>
+.card {
+  border: 1px solid #ddd;
+  padding: .875rem;            /* 14px */
+  border-radius: .5rem;        /* 8px */
+  width: 100%;                 /* match .layout-600 width */
+  max-width: var(--container-width);
+}
 
-    <!-- QUIZ UI (Card / Button panel / Card-number panel) -->
-    <div id="shell">
-      <!-- 1) CARD PANEL (same DOM for front/back; only background color toggles) -->
-      <section id="cardBox" class="card hidden">
-        <div id="cardInner" class="reveal">
-          <div class="reveal-body">
-            <div class="qtext" id="qText"></div>
-            <div class="imgwrap"><img id="noteImg" alt=""></div>
-          </div>
-        </div>
-      </section>
+.meta { color: var(--muted); font-size: .75rem; } /* 12px */
 
-      <!-- 2) BUTTON PANEL (front: A–G buttons; back: results row) -->
-      <div id="panel" class="row hidden" style="gap:12px; align-items:center;"></div>
+.blurb { margin: .375rem 0 .625rem; }           /* 6px 0 10px */
 
-      <!-- 3) CARD-NUMBER PANEL (identical front/back) -->
-      <div id="foot" class="row meta hidden" style="justify-content: space-between; margin-top:8px;">
-        <div class="counter" id="counter"></div>
-        <button id="btnQuit" class="link">Quit</button>
-      </div>
-    </div>
+.row {
+  display: flex;
+  gap: .75rem;                 /* 12px */
+  align-items: center;
+  flex-wrap: wrap;
+}
 
-    <!-- END SUMMARY (used for BOTH modes) -->
-    <section id="summaryList" class="hidden">
-      <div class="summary-head card">
-        <h2 id="sumTitle">Quiz complete</h2>
-        <div class="stats" id="sumStats"></div>
-        <div style="margin-top:8px;">
-          <button id="sumRestart">Restart</button>
-        </div>
-      </div>
-      <div id="sumFlow" class="flow"></div>
-    </section>
+.answers {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(3rem, 1fr)); /* 48px */
+  gap: .5rem;                  /* 8px */
+  margin-top: .625rem;         /* 10px */
+}
 
-    <br><br>
+/* Quit-as-link look (kept) */
+button.link {
+  border: none;
+  background: none;
+  padding: 0;
+  color: #0657d4;
+  text-decoration: underline;
+  cursor: pointer;
+}
 
-    <!-- Optional global blocks (visibility handled elsewhere) -->
-    <div class="cookie-notice" style="display:none;">
-      <p>This app uses cookies to remember your inputs between sessions — just on your device,
-      nothing is tracked or shared.</p>
-    </div>
+.hidden { display: none; }
 
-    <div class="references" style="display:none;">
-      <p><b>Reference:</b> Gebrian, Molly, <i>Learn Faster, Perform Better: A Musician's Guide
-      to the Neuroscience of Practicing</i>, Oxford University Press, 2024</p>
-    </div>
+.topbar { display: flex; align-items: baseline; gap: .625rem; } /* 10px */
 
-    <div class="help-panel" style="display:none;">
-      <br>
-      <button type="button" id="btnHelp">Read Instructions</button>
-      <button type="button" id="btnDemo">Short Video Demo</button>
-      <div class="help-block" style="display:none;" id="divHelp">
-        <p>Click the correct note name (A–G). Choose to see answers after each card
-        (Easy) or all at once at the end (Advanced).</p>
-      </div>
-    </div>
+.qtext { font-size: 1.125rem; font-weight: 600; flex: 1; } /* 18px */
 
-    <div class="copyright-notice" style="display:none">
-      <p><br>(c) Marilyn Fleming,
-        <a href="https://ReturningClarinetist.com" target="_blank">https://ReturningClarinetist.com</a>
-        <br>release 2025-08-09
-      </p>
-    </div>
+.counter { font-size: .75rem; color: var(--muted); margin-right: .5rem; } /* 8px */
 
-    <div class="button-container" style="display:none;" id="debugMenu">
-      <button type="button" id="btnDebug" class="bland" tabIndex="-1">not impl</button>
-      <button type="button" id="btnDebug2" class="bland" tabIndex="-1">not impl</button>
-      <button type="button" id="btnDebug3" class="bland" tabIndex="-1">not impl</button>
-    </div>
+.imgwrap {
+  display: grid;
+  place-items: center;
+  min-height: 13.75rem;        /* 220px */
+  margin-top: .5rem;           /* 8px */
+}
+.imgwrap img {
+  max-width: 100%;
+  max-height: 17.5rem;         /* 280px */
+  object-fit: contain;
+}
+.imgwrap.big   { min-height: 16.25rem; }        /* 260px */
+.imgwrap.big img { max-height: 21.25rem; }      /* 340px */
 
-    <div class="giscus-block" style="display:none;">
-      <hr />
-      <h2>Discussion</h2>
-      <p><i>To post a comment you’ll need to sign in with a free GitHub account. It’s quick and safe —
-      GitHub helps us keep the conversation spam‑free.</i></p>
-      <div id="giscus_thread"></div>
+.reveal {
+  border: 1px solid #ddd;
+  border-radius: .5rem;
+  overflow: hidden;
+  width: 100%;
+  max-width: var(--container-width);
+}
+.reveal.ok  { background: var(--okbg); }
+.reveal.bad { background: var(--badbg); }
+.reveal-body { padding: .875rem; }              /* 14px */
 
-      <script src="https://giscus.app/client.js"
-              data-repo="mfleming46/returning-clarinetist"
-              data-repo-id="R_kgDOPS7xgQ"
-              data-category-id="DIC_kwDOPS7xgc4CtbHG"
-              data-mapping="pathname"
-              data-strict="0"
-              data-reactions-enabled="0"
-              data-emit-metadata="0"
-              data-input-position="top"
-              data-theme="preferred_color_scheme"
-              data-lang="en"
-              data-loading="lazy"
-              crossorigin="anonymous"
-              async>
-      </script>
-    </div>
-	
-<script src="../blocks.js"></script>
-<script>
-  Blocks.init({
-    description: true,
-    cookies:     false,
-    references:  false,
-    help:        false,
-    copyright:   true,
-    discussion:  true
-  });
-</script>
+.reveal-footer {
+  display: flex;
+  align-items: center;
+  gap: .75rem;                 /* 12px */
+  padding: .625rem .875rem;    /* 10px 14px */
+  border-top: 1px solid #ddd;
+  background: #fff;
+}
+.reveal-footer #rYour,
+.reveal-footer #rCorrect,
+.reveal-footer #rTime { font-weight: 600; }
+.reveal-footer .spacer { flex: 1; }
 
-<script src="../safe_storage.js"></script>
-<script src="flash.js"></script>
+/* Summary flow */
+#summaryList { width: 100%; max-width: var(--container-width); }
+#summaryList .summary-head h2 { margin: 0 0 .25rem; font-size: 1.25rem; } /* 20px */
+#summaryList .stats { font-size: .875rem; color: #333; } /* 14px */
+.flow { display: grid; gap: .75rem; margin-top: .75rem; } /* 12px */
+.flow .cardblock { border: 1px solid #ddd; border-radius: .5rem; overflow: hidden; }
+.flow .cardblock.ok  { background: var(--okbg); }
+.flow .cardblock.bad { background: var(--badbg); }
+.flow .cardblock .body   { padding: .75rem; }            /* 12px */
+.flow .cardblock .footer {
+  display: flex; gap: .75rem; align-items: center;
+  padding: .5rem .75rem; border-top: 1px solid #ddd; background: #fff; font-weight: 600;
+}
 
+/* Normalize buttons only inside this app (keeps core’s sizes) */
+.layout-600 #panel button,
+.layout-600 #start button,
+.layout-600 #summaryList button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;                          /* override tall core line-height */
+  padding: 0 var(--control-padding-x);
+}
 
-    <script src="../safe_storage.js"></script>
-    <script src="flash.js"></script>
-  </div>
-</body>
-</html>
+/* Keep Quit looking like a link */
+.layout-600 button.link { display: inline; line-height: 1.2; padding: 0; }
+
+/* Start-screen mode buttons (slightly fancier, still using core sizing) */
+.modebtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;                         /* 16px */
+  min-height: 2.625rem;                    /* ~42px */
+  border-radius: .625rem;                  /* 10px */
+  background: #111;
+  color: #fff;
+  border: 1px solid #000;
+}
+.modebtn + .modebtn { margin-left: .625rem; } /* 10px */
+
+/* Intro spacing */
+.extra-explainer { margin: .75rem 0 .5rem; line-height: 1.2; } /* 12px/8px */
+.extra-explainer p { line-height: 1.2; margin-bottom: 1rem; }
+
+/* Result headline weight (used on backs & recap) */
+.qtext.result { font-weight: 700; }

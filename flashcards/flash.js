@@ -29,7 +29,19 @@
   const elQText   = document.getElementById("qText");
   const elCounter = document.getElementById("counter");
   const elImg     = document.getElementById("noteImg");
-  document.getElementById("btnQuit").addEventListener("click", goStart);
+  // document.getElementById("btnQuit").addEventListener("click", goStart);
+  document.getElementById("btnQuit").addEventListener("click", onQuit);
+
+  function onQuit() {
+
+	  // If user has answered any cards, show a partial summary.
+	  if (started && answers.length > 0) {
+		if (elIntro) elIntro.style.display = "none"; // optional
+		showSummaryFlow(true);   // <-- early = true
+	  } else {
+		goStart("quit");
+	  }
+	}
 
   const elSumTitle   = document.getElementById("sumTitle");
   const elSumStats   = document.getElementById("sumStats");
@@ -99,6 +111,7 @@
   }
 
   function begin(){
+	logClick();
     // hide intro beyond the start page
     if (elIntro) elIntro.style.display = "none";
 
@@ -192,40 +205,61 @@
     else { renderFront(); }
   }
 
-  function showSummaryFlow(){
-    hide(elCardBox); hide(elPanel); hide(elFoot);
-    hide(elStart); show(elSummary);
+  function showSummaryFlow(early = false){
+	  
+  if (elIntro) elIntro.style.display = "none";   // ← add this
 
-    const correct = answers.filter(a => a.picked === a.correct).length;
-    const pct = answers.length ? Math.round(100*correct/answers.length) : 0;
-    const avg = answers.length ? (answers.reduce((s,a)=>s+a.timeMs,0)/answers.length/1000).toFixed(2) : "0.00";
+  hide(elCardBox); hide(elPanel); hide(elFoot);
+  hide(elStart); show(elSummary);
 
+  const attempted = answers.length;           // answered so far
+  const totalDeck = order.length;
+  const correct = answers.filter(a => a.picked === a.correct).length;
+  const pct = attempted ? Math.round(100*correct/attempted) : 0;
+  const avg = attempted ? (answers.reduce((s,a)=>s+a.timeMs,0)/attempted/1000).toFixed(2) : "0.00";
+
+  if (early) {
+    elSumTitle.textContent = "Session summary";
+    elSumStats.textContent =
+      `You attempted ${attempted} of ${totalDeck} cards. ` +
+      `Correct: ${correct} (${pct}%). Average time: ${avg}s.`;
+  } else {
     elSumTitle.textContent = "Nice work — quiz complete!";
-    elSumStats.textContent = `You answered ${correct} of ${answers.length} correctly (${pct}%). Average time: ${avg}s.`;
-
-    elSumFlow.innerHTML = "";
-    answers.forEach((a) => {
-      const block = document.createElement("div");
-      block.className = "cardblock " + (a.picked === a.correct ? "ok" : "bad");
-      
-	  const ok = (a.picked === a.correct);
-	  block.innerHTML = `
-		  <div class="body">
-			<div class="qtext result">${ok ? "✅ Correct!" : "❌ Oops."}</div>
-			<div class="imgwrap big"><img src="${escapeHtml(a.image)}" alt=""></div>
-		  </div>
-		  <div class="footer">
-			<div>Your answer: ${a.picked}</div>
-			<div>Correct: ${a.correct}</div>
-			<div>Time: ${(a.timeMs/1000).toFixed(2)}s</div>
-		  </div>`;
-
-      elSumFlow.appendChild(block);
-    });
+    elSumStats.textContent =
+      `You answered ${correct} of ${attempted} correctly (${pct}%). ` +
+      `Average time: ${avg}s.`;
   }
 
+  elSumFlow.innerHTML = "";
+  answers.forEach((a) => {
+    const block = document.createElement("div");
+    const ok = (a.picked === a.correct);
+    block.className = "cardblock " + (ok ? "ok" : "bad");
+    block.innerHTML = `
+      <div class="body">
+        <div class="qtext result">${ok ? "✅ Correct!" : "❌ Oops."}</div>
+        <div class="imgwrap big"><img src="${escapeHtml(a.image)}" alt=""></div>
+      </div>
+      <div class="footer">
+        <div>Your answer: ${a.picked}</div>
+        <div>Correct answer: ${a.correct}</div>
+        <div>Time: ${(a.timeMs/1000).toFixed(2)}s</div>
+      </div>`;
+    elSumFlow.appendChild(block);
+  });
+}
+
+
+  function logClick() {
+  fetch('../log.php?page=flash', { method: 'GET' })
+  console.log("click logged");
+}
+
+
   // utils
-  function shuffle(a){ const x=a.slice(); for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x; }
+  
+  function shuffle(a){ const x=a.slice(); for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x; } 
+  // function shuffle(a) { return a; }
   function show(el){ el.classList.remove("hidden"); }
   function hide(el){ el.classList.add("hidden"); }
   function escapeHtml(s){ return String(s).replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }

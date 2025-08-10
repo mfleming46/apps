@@ -23,7 +23,7 @@ url: ../flashcards/flash.html
 title: Name that Note
 classification: private
 new:
-image: 
+image: boxshots/flash.png
 date: released: 
 description: Sharpen your note recognition skills.  
 This quiz trains you to quickly identify clarinet notes across 
@@ -53,15 +53,7 @@ title: Interleave - old version
 classification: private
 description: 
 
-url: ../chk/log_test.html
-title: Logger Test Page
-classification: private
-description: 
 
-url: ../hello_world.php
-title: hello_world.php
-classification: private
-description:
 
 
 

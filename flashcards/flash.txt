@@ -3,20 +3,87 @@
 
 id: E3
 question: What note is this?
-image: images/E3-7ch-1774764.png
+image: images/E3.png
 correct: E
 
 id: F3
 question: What note is this?
-image: images/F3-6dv-1774763.png
+image: images/F3.png
 correct: F
 
 id: G3
 question: What note is this?
-image: images/G3-z6t-1774761.png
+image: images/G3.png
 correct: G
 
 id: A3
 question: What note is this?
-image: images/A3-8d8-1774767.png
+image: images/A3.png
 correct: A
+
+id: B3
+question: What note is this?
+image: images/B3.png
+correct: B
+
+id: C4
+question: What note is this?
+image: images/C4.png
+correct: C
+
+id: G5
+question: What note is this?
+image: images/G5.png
+correct: G
+
+id: A5
+question: What note is this?
+image: images/A5.png
+correct: A
+
+id: B5
+question: What note is this?
+image: images/B5.png
+correct: B
+
+id: C6
+question: What note is this?
+image: images/C6.png
+correct: C
+
+id: D6
+question: What note is this?
+image: images/D6.png
+correct: D
+
+id: E6
+question: What note is this?
+image: images/E6.png
+correct: E
+
+id: F6
+question: What note is this?
+image: images/F6.png
+correct: F
+
+id: G6
+question: What note is this?
+image: images/G6.png
+correct: G
+
+id: A6
+question: What note is this?
+image: images/A6.png
+correct: A
+
+id: B6
+question: What note is this?
+image: images/B6.png
+correct: B
+
+id: C7
+question: What note is this?
+image: images/C7.png
+correct: C
+
+
