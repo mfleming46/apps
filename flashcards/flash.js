@@ -46,11 +46,13 @@
 	  }
 	}
 
+  /* which of these lines can be removed? */
   const elSumTitle   = document.getElementById("sumTitle");
   const elSumStats   = document.getElementById("sumStats");
   const elSumFlow    = document.getElementById("sumFlow");
   const elSumRestart = document.getElementById("sumRestart");
   elSumRestart.addEventListener("click", goStart);
+	
 
   window.addEventListener("keydown", (e) => {
     const k = (e.key || "").toUpperCase();
@@ -209,8 +211,7 @@
   }
 
 
-function showSummaryFlow(early = false){
-	console.log("boo");
+function XshowSummaryFlow(early = false){
   if (elIntro) elIntro.style.display = "none";
 
   hide(elCardBox); hide(elPanel); hide(elFoot);
@@ -251,6 +252,8 @@ function showSummaryFlow(early = false){
     : `You attempted ${attempted} of ${totalDeck} cards. Correct: ${correct} (${pct}%).`;
 
   const line2 = `Your average time to respond was ${avgSec.toFixed(2)}s.`;
+
+
 
   // Build hero per mockup
   const hero = document.createElement("div");
@@ -302,6 +305,61 @@ function showSummaryFlow(early = false){
   lastAttempt = { pct, total: attempted, avgTimeSec: Number(avgSec.toFixed(2)) };
 }
 
+// === REPLACE your whole showSummaryFlow(early = false) with this ===
+function showSummaryFlow(early = false){
+  if (elIntro) elIntro.style.display = "none";
+
+  hide(elCardBox); hide(elPanel); hide(elFoot);
+  hide(elStart); show(elSummary);
+
+  // ---- compute stats (same math you had) ----
+  const attempted = answers.length;
+  const totalDeck = order.length;
+  const correct   = answers.filter(a => a.picked === a.correct).length;
+  const pct       = attempted ? Math.round(100 * correct / attempted) : 0;
+  const avgSec    = attempted ? (answers.reduce((s,a)=>s+a.timeMs,0) / attempted / 1000) : 0;
+
+  // ---- mount the hero header ----
+  const head = elSummary.querySelector(".summary-head");
+  head.innerHTML = '<div id="heroMount"></div>';
+
+  HeroCard.render(document.getElementById("heroMount"), {
+    attempted,
+    total: totalDeck,
+    correct,
+    avgSec: Number(avgSec.toFixed(2)),
+    lastPct: lastAttempt ? lastAttempt.pct : undefined,  // your session-only memory
+    early
+  }, {
+    // If your medals live in /apps/flash/images/, uncomment and adjust:
+    images: { gold: 'images/gold.svg', silver: 'images/silver.svg', teal: 'images/teal.svg' }
+  });
+
+  // “Repeat the quiz” button from the hero
+  head.addEventListener("hero:restart", () => goStart("restart"));
+
+  // ---- your existing per-card summary flow ----
+  elSumFlow.innerHTML = "";
+  answers.forEach((a) => {
+    const ok = (a.picked === a.correct);
+    const block = document.createElement("div");
+    block.className = "cardblock " + (ok ? "ok" : "bad");
+    block.innerHTML = `
+      <div class="body">
+        <div class="qtext result">${ok ? "✅ Correct!" : "❌ Oops."}</div>
+        <div class="imgwrap big"><img src="${escapeHtml(a.image)}" alt=""></div>
+      </div>
+      <div class="footer">
+        <div>Your answer: ${a.picked}</div>
+        <div>Correct answer: ${a.correct}</div>
+        <div>Time: ${(a.timeMs/1000).toFixed(2)}s</div>
+      </div>`;
+    elSumFlow.appendChild(block);
+  });
+
+  // ---- remember this attempt (session-only) ----
+  lastAttempt = { pct, total: attempted, avgTimeSec: Number(avgSec.toFixed(2)) };
+}
 
 
 
