@@ -9,6 +9,9 @@
   let mode = "perQuestion";
   let startTime = 0;
   let pendingMode = null;
+  
+  // add near the other state vars at the top of flash.js:
+  let lastAttempt = null; // session-only memory of last summary {pct, total, avgTimeSec}
 
   const elIntro    = document.getElementById("intro");   // NEW: intro container
   const elStart    = document.getElementById("start");
@@ -205,6 +208,7 @@
     else { renderFront(); }
   }
 
+/* ***********************************************
   function showSummaryFlow(early = false){
 	  
   if (elIntro) elIntro.style.display = "none";   // ← add this
@@ -248,6 +252,109 @@
     elSumFlow.appendChild(block);
   });
 }
+***************************************** */
+
+
+// replace your whole showSummaryFlow with this:
+function showSummaryFlow(early = false){
+  if (elIntro) elIntro.style.display = "none";
+
+  hide(elCardBox); hide(elPanel); hide(elFoot);
+  hide(elStart); show(elSummary);
+
+  const attempted = answers.length;            // answered so far
+  const totalDeck = order.length;              // deck size
+  const correct   = answers.filter(a => a.picked === a.correct).length;
+  const pct       = attempted ? Math.round(100 * correct / attempted) : 0;
+  const avgSec    = attempted ? (answers.reduce((s,a)=>s+a.timeMs,0) / attempted / 1000) : 0;
+
+  // ----- choose badge type
+  let badgeClass = "badge--teal";
+  let badgeLabel = early ? "session" : "badge";
+  if (!early && attempted === totalDeck) {
+    if (pct >= 90)      { badgeClass = "badge--gold";   badgeLabel = "gold"; }
+    else if (pct >= 80) { badgeClass = "badge--silver"; badgeLabel = "silver"; }
+    else                { badgeClass = "badge--teal";   badgeLabel = "complete"; }
+  } else {
+    badgeClass = "badge--teal"; // partial session
+    badgeLabel = "session";
+  }
+
+  // ----- improvement vs last attempt (session-only)
+  let deltaLine = "";
+  if (lastAttempt && lastAttempt.total > 0) {
+    const delta = pct - lastAttempt.pct;
+    if (delta > 0)      deltaLine = `Up from ${lastAttempt.pct}% last time`;
+    else if (delta < 0) deltaLine = `Down from ${lastAttempt.pct}% last time`;
+    else                deltaLine = `Same as last time (${lastAttempt.pct}%)`;
+  }
+
+  // ----- build hero UI
+  const title = (!early && attempted === totalDeck)
+    ? "Nice work — Quiz complete!"
+    : "Session summary";
+
+  const line1 = (!early && attempted === totalDeck)
+    ? `You answered ${correct} of ${attempted} correctly (${pct}%).`
+    : `You attempted ${attempted} of ${totalDeck} cards. Correct: ${correct} (${pct}%).`;
+
+  const line2 = `Your average time to respond was ${avgSec.toFixed(2)}s.`;
+
+  // header area becomes a compact hero card
+  const hero = document.createElement("div");
+  hero.className = "summary-hero";
+  hero.innerHTML = `
+    <h2>${title}</h2>
+    <div class="hero-row">
+      <div class="badge ${badgeClass}">
+        <div class="label">${badgeLabel}</div>
+        <div class="pct">${pct}%</div>
+      </div>
+      <div class="hero-stats">
+        ${deltaLine ? `<p><b>${deltaLine}</b></p>` : ""}
+        <p>${line1}</p>
+        <p>${line2}</p>
+        <div class="hero-actions">
+          <button id="sumRestart">Repeat the quiz</button>
+        </div>
+      </div>
+    </div>
+    <p style="margin:.5rem 0 0; font-size:.875rem; color:#333;">
+      There’s a summary of your answers below
+    </p>
+  `;
+
+  // replace the old head + restart
+  elSumTitle.textContent = ""; // not used anymore
+  elSumStats.textContent = ""; // not used anymore
+  const head = elSummary.querySelector(".summary-head");
+  head.innerHTML = ""; head.appendChild(hero);
+  // re‑wire restart
+  head.querySelector("#sumRestart").addEventListener("click", () => goStart("restart"));
+
+  // ----- answers flow (unchanged except the headline text)
+  elSumFlow.innerHTML = "";
+  answers.forEach((a) => {
+    const block = document.createElement("div");
+    const ok = (a.picked === a.correct);
+    block.className = "cardblock " + (ok ? "ok" : "bad");
+    block.innerHTML = `
+      <div class="body">
+        <div class="qtext result">${ok ? "✅ Correct!" : "❌ Oops."}</div>
+        <div class="imgwrap big"><img src="${escapeHtml(a.image)}" alt=""></div>
+      </div>
+      <div class="footer">
+        <div>Your answer: ${a.picked}</div>
+        <div>Correct answer: ${a.correct}</div>
+        <div>Time: ${(a.timeMs/1000).toFixed(2)}s</div>
+      </div>`;
+    elSumFlow.appendChild(block);
+  });
+
+  // ----- update in‑session lastAttempt
+  lastAttempt = { pct, total: attempted, avgTimeSec: Number(avgSec.toFixed(2)) };
+}
+
 
 
   function logClick() {

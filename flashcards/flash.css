@@ -257,3 +257,58 @@ label#loader input {
   line-height: 1.2;
   margin-bottom: 1rem;
 }
+
+
+/* ************** */
+/* ===== Summary hero ===== */
+.summary-hero {
+  width: 100%;
+  max-width: var(--container-width);
+  border: 1px solid #ddd;
+  border-radius: .5rem;
+  padding: 1rem;
+  margin-bottom: .75rem;
+  background: #fff;
+}
+
+.summary-hero h2 {
+  margin: 0 0 .5rem;
+  font-size: 1.125rem;
+}
+
+.hero-row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.badge {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #000;
+  font-weight: 700;
+  line-height: 1;
+}
+.badge--gold   { background: #ffd76a; }
+.badge--silver { background: #dfe6ee; }
+.badge--teal   { background: #8ae0f2; }  /* completion */
+
+.badge .pct {
+  font-size: 1.25rem;
+}
+.badge .label {
+  font-size: .625rem;
+  opacity: .7;
+}
+
+.hero-stats p {
+  margin: 0 0 .25rem;
+  line-height: 1.2;
+}
+
+.hero-actions { margin-top: .5rem; }
+.hero-actions button { font-weight: 600; }
