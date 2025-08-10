@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Summary Hero — external component demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Reusable component CSS -->
+  <link rel="stylesheet" href="hero-card.css" />
+	
+	
+  <style>
+    /* Demo-only styles (layout + control panel), not part of the reusable component */
+    .demo-layout{ max-width:37.5rem; margin:1rem auto; padding:0 1rem;
+      font:1rem/1.4 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:#000; }
+    h1{ margin:0 0 .75rem; font-size:1.25rem; }
+    .demo-controls{ display:grid; grid-template-columns:repeat(6,minmax(7rem,1fr)); gap:.5rem; margin:0 0 .9rem; }
+    .demo-controls label{ font-size:.9rem; color:#222; display:grid; gap:.25rem; }
+    .demo-controls input,.demo-controls select{ width:100%; padding:.4rem .5rem; border:1px solid #ccc; border-radius:.375rem; background:#fff; }
+    .demo-controls .demo-tip{ grid-column:1/-1; font-size:.825rem; color:#555; }
+    @media (max-width:40rem){ .demo-controls{ grid-template-columns:1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="demo-layout">
+    <h1>Summary Hero — demo</h1>
+
+    <!-- Controls (demo only) -->
+    <form class="demo-controls" id="controls" onsubmit="return false;">
+      <label>Attempted <input type="number" id="fAttempted" min="0" value="17"></label>
+      <label>Total     <input type="number" id="fTotal"     min="0" value="17"></label>
+      <label>Correct   <input type="number" id="fCorrect"   min="0" value="16"></label>
+      <label>Avg sec   <input type="number" id="fAvg" step="0.01" value="3.58"></label>
+      <label>Last %    <input type="number" id="fLast" min="0" max="100" value="80"></label>
+      <label>Mode
+        <select id="fEarly">
+          <option value="0">Completed quiz</option>
+          <option value="1">Session/partial</option>
+        </select>
+      </label>
+
+      <div class="demo-tip">Place <code>gold.svg</code>, <code>silver.svg</code>, and <code>teal.svg</code> in the same folder.</div>
+    </form>
+
+    <!-- Mount point -->
+    <div id="mount"></div>
+  </div>
+
+  <!-- Reusable component JS -->
+  <script src="hero-card.js"></script>
+
+  <!-- Demo-only glue -->
+  <script>
+    const mount = document.getElementById('mount');
+    const controls = {
+      attempted: document.getElementById('fAttempted'),
+      total:     document.getElementById('fTotal'),
+      correct:   document.getElementById('fCorrect'),
+      avgSec:    document.getElementById('fAvg'),
+      lastPct:   document.getElementById('fLast'),
+      early:     document.getElementById('fEarly'),
+      
+    };
+
+    function readForm(){
+      return {
+        attempted: Number(controls.attempted.value || 0),
+        total:     Number(controls.total.value || 0),
+        correct:   Number(controls.correct.value || 0),
+        avgSec:    Number(controls.avgSec.value || 0),
+        lastPct:   controls.lastPct.value === "" ? undefined : Number(controls.lastPct.value),
+        early:     controls.early.value === "1",
+        
+      };
+    }
+
+function renderFromForm(){
+  const s = readForm();
+  HeroCard.render(mount, {
+    attempted: s.attempted,
+    total:     s.total,
+    correct:   s.correct,
+    avgSec:    s.avgSec,
+    lastPct:   s.lastPct,
+    early:     s.early
+  });
+}
+
+    document.getElementById('controls').addEventListener('input', renderFromForm);
+    document.getElementById('controls').addEventListener('change', renderFromForm);
+    mount.addEventListener('hero:restart', () => alert('Demo: restart clicked'));
+
+    // First render
+    renderFromForm();
+  </script>
+</body>
+</html>

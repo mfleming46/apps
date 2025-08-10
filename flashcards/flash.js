@@ -208,79 +208,32 @@
     else { renderFront(); }
   }
 
-/* ***********************************************
-  function showSummaryFlow(early = false){
-	  
-  if (elIntro) elIntro.style.display = "none";   // ← add this
 
-  hide(elCardBox); hide(elPanel); hide(elFoot);
-  hide(elStart); show(elSummary);
-
-  const attempted = answers.length;           // answered so far
-  const totalDeck = order.length;
-  const correct = answers.filter(a => a.picked === a.correct).length;
-  const pct = attempted ? Math.round(100*correct/attempted) : 0;
-  const avg = attempted ? (answers.reduce((s,a)=>s+a.timeMs,0)/attempted/1000).toFixed(2) : "0.00";
-
-  if (early) {
-    elSumTitle.textContent = "Session summary";
-    elSumStats.textContent =
-      `You attempted ${attempted} of ${totalDeck} cards. ` +
-      `Correct: ${correct} (${pct}%). Average time: ${avg}s.`;
-  } else {
-    elSumTitle.textContent = "Nice work — quiz complete!";
-    elSumStats.textContent =
-      `You answered ${correct} of ${attempted} correctly (${pct}%). ` +
-      `Average time: ${avg}s.`;
-  }
-
-  elSumFlow.innerHTML = "";
-  answers.forEach((a) => {
-    const block = document.createElement("div");
-    const ok = (a.picked === a.correct);
-    block.className = "cardblock " + (ok ? "ok" : "bad");
-    block.innerHTML = `
-      <div class="body">
-        <div class="qtext result">${ok ? "✅ Correct!" : "❌ Oops."}</div>
-        <div class="imgwrap big"><img src="${escapeHtml(a.image)}" alt=""></div>
-      </div>
-      <div class="footer">
-        <div>Your answer: ${a.picked}</div>
-        <div>Correct answer: ${a.correct}</div>
-        <div>Time: ${(a.timeMs/1000).toFixed(2)}s</div>
-      </div>`;
-    elSumFlow.appendChild(block);
-  });
-}
-***************************************** */
-
-
-// replace your whole showSummaryFlow with this:
 function showSummaryFlow(early = false){
+	console.log("boo");
   if (elIntro) elIntro.style.display = "none";
 
   hide(elCardBox); hide(elPanel); hide(elFoot);
   hide(elStart); show(elSummary);
 
-  const attempted = answers.length;            // answered so far
-  const totalDeck = order.length;              // deck size
+  const attempted = answers.length;
+  const totalDeck = order.length;
   const correct   = answers.filter(a => a.picked === a.correct).length;
   const pct       = attempted ? Math.round(100 * correct / attempted) : 0;
   const avgSec    = attempted ? (answers.reduce((s,a)=>s+a.timeMs,0) / attempted / 1000) : 0;
 
-  // ----- choose badge type
+  // badge selection
   let badgeClass = "badge--teal";
-  let badgeLabel = early ? "session" : "badge";
+  let badgeLabel = "badge";
   if (!early && attempted === totalDeck) {
     if (pct >= 90)      { badgeClass = "badge--gold";   badgeLabel = "gold"; }
     else if (pct >= 80) { badgeClass = "badge--silver"; badgeLabel = "silver"; }
     else                { badgeClass = "badge--teal";   badgeLabel = "complete"; }
   } else {
-    badgeClass = "badge--teal"; // partial session
     badgeLabel = "session";
   }
 
-  // ----- improvement vs last attempt (session-only)
+  // improvement vs last attempt (session only)
   let deltaLine = "";
   if (lastAttempt && lastAttempt.total > 0) {
     const delta = pct - lastAttempt.pct;
@@ -289,9 +242,8 @@ function showSummaryFlow(early = false){
     else                deltaLine = `Same as last time (${lastAttempt.pct}%)`;
   }
 
-  // ----- build hero UI
   const title = (!early && attempted === totalDeck)
-    ? "Nice work — Quiz complete!"
+    ? "Nice Work – Quiz complete!"
     : "Session summary";
 
   const line1 = (!early && attempted === totalDeck)
@@ -300,7 +252,7 @@ function showSummaryFlow(early = false){
 
   const line2 = `Your average time to respond was ${avgSec.toFixed(2)}s.`;
 
-  // header area becomes a compact hero card
+  // Build hero per mockup
   const hero = document.createElement("div");
   hero.className = "summary-hero";
   hero.innerHTML = `
@@ -317,26 +269,21 @@ function showSummaryFlow(early = false){
         <div class="hero-actions">
           <button id="sumRestart">Repeat the quiz</button>
         </div>
+        <p class="answers-note">There’s a summary of your answers below</p>
       </div>
     </div>
-    <p style="margin:.5rem 0 0; font-size:.875rem; color:#333;">
-      There’s a summary of your answers below
-    </p>
   `;
 
-  // replace the old head + restart
-  elSumTitle.textContent = ""; // not used anymore
-  elSumStats.textContent = ""; // not used anymore
+  // swap the head with hero
   const head = elSummary.querySelector(".summary-head");
   head.innerHTML = ""; head.appendChild(hero);
-  // re‑wire restart
   head.querySelector("#sumRestart").addEventListener("click", () => goStart("restart"));
 
-  // ----- answers flow (unchanged except the headline text)
+  // answers flow
   elSumFlow.innerHTML = "";
   answers.forEach((a) => {
-    const block = document.createElement("div");
     const ok = (a.picked === a.correct);
+    const block = document.createElement("div");
     block.className = "cardblock " + (ok ? "ok" : "bad");
     block.innerHTML = `
       <div class="body">
@@ -351,9 +298,10 @@ function showSummaryFlow(early = false){
     elSumFlow.appendChild(block);
   });
 
-  // ----- update in‑session lastAttempt
+  // remember last attempt for this session
   lastAttempt = { pct, total: attempted, avgTimeSec: Number(avgSec.toFixed(2)) };
 }
+
 
 
 

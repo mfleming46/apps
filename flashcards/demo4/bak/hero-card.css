@@ -1,0 +1,63 @@
+/* ===== hero-card.css — standalone summary hero (uses external medal SVGs) ===== */
+/* All classes prefixed hc- */
+
+:root{
+  --hc-ink:#000;
+  --hc-muted:#444;
+  --hc-border:#ddd;
+  --hc-bg:#fff;
+
+  --hc-badge:5.75rem;     /* medal width; height auto (portrait SVGs OK) */
+  --hc-gap:1rem;
+  --hc-pad:1rem;
+  --hc-overlay-y:-8%;     /* nudge overlay text vertically inside the coin */
+}
+
+.hc-hero{
+  width:100%;
+  border:1px solid var(--hc-border);
+  border-radius:.75rem;
+  background:var(--hc-bg);
+  padding:var(--hc-pad) calc(var(--hc-pad) + .125rem);
+  margin-bottom:.875rem;
+  color:var(--hc-ink);
+  font:1rem/1.4 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+.hc-hero h2{ margin:0 0 .6rem; font-size:1.35rem; line-height:1.1; }
+
+.hc-hero__row{
+  display:grid;
+  grid-template-columns: var(--hc-badge) 1fr; /* badge | stats */
+  gap:var(--hc-gap);
+  align-items:center;
+}
+
+/* Badge image (supports portrait SVGs with ribbons) */
+.hc-badge{ position:relative; width:var(--hc-badge); height:auto; }
+.hc-badge img{ width:100%; height:auto; display:block; }
+.hc-badge .hc-overlay{
+  position:absolute; inset:0; display:grid; place-items:center;
+  transform: translateY(var(--hc-overlay-y));
+  text-align:center; pointer-events:none; color:#000;
+}
+.hc-badge .hc-label{ font-size:.625rem; font-weight:700; opacity:.85; margin-bottom:.15rem; }
+.hc-badge .hc-pct  { font-size:1.55rem; font-weight:800; letter-spacing:-.02em; line-height:.9; }
+
+/* Stats + actions */
+.hc-hero__stats p{ margin:0 0 .35rem; line-height:1.25; }
+.hc-hero__actions{ margin-top:.75rem; }
+.hc-button{
+  padding:.5rem .75rem; background:#fff; border:1px solid #222; border-radius:.5rem;
+  font-weight:700; line-height:1; box-shadow:0 0 0 .0625rem #222 inset; cursor:pointer;
+}
+.hc-answers-note{ margin-top:.55rem; font-size:.82rem; color:var(--hc-muted); }
+
+/* Size modes (optional) */
+.hc-hero--spacious{ --hc-badge:6.25rem; --hc-gap:1.25rem; --hc-pad:1.25rem; }
+.hc-hero--compact { --hc-badge:5.2rem;  --hc-gap:.875rem; --hc-pad:.875rem; }
+
+/* Narrow screens stack */
+@media (max-width: 40rem){
+  .hc-hero__row{ grid-template-columns:1fr; align-items:start; }
+  .hc-hero      { --hc-badge:4.9rem; }
+}
