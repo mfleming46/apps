@@ -35,7 +35,7 @@
   // document.getElementById("btnQuit").addEventListener("click", goStart);
   document.getElementById("btnQuit").addEventListener("click", onQuit);
 
-  function onQuit() {
+  function XonQuit() {
 
 	  // If user has answered any cards, show a partial summary.
 	  if (started && answers.length > 0) {
@@ -45,6 +45,17 @@
 		goStart("quit");
 	  }
 	}
+	
+	function onQuit() {
+  if (started && answers.length > 0) {
+    lastAttempt = null;                // ← wipe prior score on an incomplete run
+    if (elIntro) elIntro.style.display = "none";
+    showSummaryFlow(true);             // early summary, no “Up from …” line
+  } else {
+    goStart("quit");
+  }
+}
+
 
   /* which of these lines can be removed? */
   const elSumTitle   = document.getElementById("sumTitle");
@@ -245,7 +256,7 @@ function XshowSummaryFlow(early = false){
 
   const title = (!early && attempted === totalDeck)
     ? "Nice Work – Quiz complete!"
-    : "Session summary";
+    : "Incomplete session";
 
   const line1 = (!early && attempted === totalDeck)
     ? `You answered ${correct} of ${attempted} correctly (${pct}%).`
@@ -358,7 +369,13 @@ function showSummaryFlow(early = false){
   });
 
   // ---- remember this attempt (session-only) ----
-  lastAttempt = { pct, total: attempted, avgTimeSec: Number(avgSec.toFixed(2)) };
+  //lastAttempt = { pct, total: attempted, avgTimeSec: Number(avgSec.toFixed(2)) };
+	
+	// remember last attempt only for full completions
+  if (!early && answers.length === order.length) {
+		lastAttempt = { pct, total: answers.length, avgTimeSec: Number(avgSec.toFixed(2)) };
+	}
+	
 }
 
 

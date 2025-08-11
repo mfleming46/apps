@@ -7,61 +7,61 @@
   --badbg: #fdeae8;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
+/*
 body {
-  font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font: 1rem/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--fg);
-  margin: 16px;
+  margin: 1rem;
 }
+*/
 
+/* keep h1 styling in core.css
 h1 {
   font-size: 22px;
   margin: 0 0 8px;
 }
+*/
 
 .card {
   border: 1px solid #ddd;
-  padding: 14px;
-  border-radius: 8px;
-  max-width: 780px;
+  padding: .875rem;            /* 14px */
+  border-radius: .5rem;        /* 8px */
+  max-width: 100%;             /* let the wrapper cap width */
 }
 
 .meta {
   color: var(--muted);
-  font-size: 12px;
+  font-size: .75rem;           /* 12px */
 }
 
-.blurb {
-  margin: 6px 0 10px;
-}
+.blurb { margin: .375rem 0 .625rem; } /* 6px 0 10px */
 
 .row {
   display: flex;
-  gap: 12px;
+  gap: .75rem;                 /* 12px */
   align-items: center;
   flex-wrap: wrap;
 }
 
 .answers {
   display: grid;
-  grid-template-columns: repeat(7, minmax(48px, 1fr));
-  gap: 8px;
-  margin-top: 10px;
+  grid-template-columns: repeat(7, minmax(3rem, 1fr));  /* 48px */
+  gap: .5rem;                                           /* 8px */
+  margin-top: .625rem;                                  /* 10px */
 }
 
 button {
-  padding: 8px 12px;
+  padding: .5rem .75rem;       /* 8px 12px */
   border: 1px solid #bbb;
   background: #fff;
-  border-radius: 8px;
+  border-radius: .5rem;        /* 8px */
   cursor: pointer;
 }
 
 button:disabled {
-  opacity: 0.6;
+  opacity: .6;
   cursor: default;
 }
 
@@ -75,154 +75,126 @@ button.link {
   cursor: pointer;
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
 .topbar {
   display: flex;
   align-items: baseline;
-  gap: 10px;
+  gap: .625rem;                /* 10px */
 }
 
 .qtext {
-  font-size: 18px;
+  font-size: 1.125rem;         /* 18px */
   font-weight: 600;
   flex: 1;
 }
 
 .counter {
-  font-size: 12px;
+  font-size: .75rem;           /* 12px */
   color: var(--muted);
-  margin-right: 8px;
+  margin-right: .5rem;         /* 8px */
 }
 
 .imgwrap {
   display: grid;
   place-items: center;
-  min-height: 220px;
-  margin-top: 8px;
+  min-height: 13.75rem;        /* 220px */
+  margin-top: .5rem;           /* 8px */
 }
 
 .imgwrap img {
   max-width: 100%;
-  max-height: 280px;
+  max-height: 17.5rem;         /* 280px */
   object-fit: contain;
 }
 
-.imgwrap.big {
-  min-height: 260px;
-}
-
-.imgwrap.big img {
-  max-height: 340px;
-}
+.imgwrap.big { min-height: 16.25rem; }    /* 260px */
+.imgwrap.big img { max-height: 21.25rem; }/* 340px */
 
 .reveal {
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: .5rem;        /* 8px */
   overflow: hidden;
-  max-width: 780px;
+  max-width: 100%;             /* was 780px */
 }
 
-.reveal.ok {
-  background: var(--okbg);
-}
+.reveal.ok  { background: var(--okbg); }
+.reveal.bad { background: var(--badbg); }
 
-.reveal.bad {
-  background: var(--badbg);
-}
-
-.reveal-body {
-  padding: 14px;
-}
+.reveal-body { padding: .875rem; }         /* 14px */
 
 .reveal-footer {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
+  gap: .75rem;                  /* 12px */
+  padding: .625rem .875rem;     /* 10px 14px */
   border-top: 1px solid #ddd;
   background: #fff;
 }
 
 .reveal-footer #rYour,
 .reveal-footer #rCorrect,
-.reveal-footer #rTime {
-  font-weight: 600;
-}
+.reveal-footer #rTime { font-weight: 600; }
 
-.reveal-footer .spacer {
-  flex: 1;
-}
+.reveal-footer .spacer { flex: 1; }
 
 label#loader {
   border: 1px dashed #bbb;
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: .375rem .625rem;     /* 6px 10px */
+  border-radius: .375rem;       /* 6px */
 }
 
-label#loader input {
-  display: none;
-}
+label#loader input { display: none; }
 
 /* Summary flow */
-#summaryList {
-  max-width: 780px;
-}
+#summaryList { max-width: 100%; }          /* was 780px */
 
 #summaryList .summary-head h2 {
-  margin: 0 0 4px;
-  font-size: 20px;
+  margin: 0 0 .25rem;           /* 4px */
+  font-size: 1.25rem;           /* 20px */
 }
 
 #summaryList .stats {
-  font-size: 14px;
+  font-size: .875rem;           /* 14px */
   color: #333;
 }
 
 .flow {
   display: grid;
-  gap: 12px;
-  margin-top: 12px;
+  gap: .75rem;                  /* 12px */
+  margin-top: .75rem;           /* 12px */
 }
 
 .flow .cardblock {
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: .5rem;         /* 8px */
   overflow: hidden;
 }
 
-.flow .cardblock.ok {
-  background: var(--okbg);
-}
+.flow .cardblock.ok  { background: var(--okbg); }
+.flow .cardblock.bad { background: var(--badbg); }
 
-.flow .cardblock.bad {
-  background: var(--badbg);
-}
-
-.flow .cardblock .body {
-  padding: 12px;
-}
-
+.flow .cardblock .body   { padding: .75rem; }           /* 12px */
 .flow .cardblock .footer {
   display: flex;
-  gap: 12px;
+  gap: .75rem;                  /* 12px */
   align-items: center;
-  padding: 8px 12px;
+  padding: .5rem .75rem;        /* 8px 12px */
   border-top: 1px solid #ddd;
   background: #fff;
   font-weight: 600;
 }
 
+
+
 /* Normalize buttons just for this app */
 .layout-600 #panel button,
 .layout-600 #start button,
-.layout-600 #summaryList button {
+.layout-600 #summaryList button:not(.hc-button) {   /* don't clobber the hero button */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;              /* undo the tall core line-height */
+  line-height: 1;                                   /* undo tall core line-height */
   padding: 0 var(--control-padding-x);
 }
 
@@ -237,25 +209,47 @@ label#loader input {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 16px;
-  min-height: 42px;
-  border-radius: 10px;
+  padding: 0 1rem;             /* 16px */
+  min-height: 2.625rem;        /* 42px */
+  border-radius: .625rem;      /* 10px */
   background: #111;
   color: #fff;
   border: 1px solid #000;
 }
-.modebtn + .modebtn { margin-left: 10px; }
+.modebtn + .modebtn { margin-left: .625rem; }  /* 10px */
 
 /* Intro spacing block */
-.extra-explainer 
-{ 
-  margin: 12px 0 8px; 
-  line-height: 1.2;
+.extra-explainer { 
+	margin: .75rem 0 .5rem; line-height: 1.25; 
+} 
+/*
+.extra-explainer p { 
+	line-height: 1.2; margin-bottom: 1rem; 
 }
-.extra-explainer p
-{ 
-  line-height: 1.2;
-  margin-bottom: 1rem;
+*/
+.extra-explainer p {
+  font-size: var(--font-base);      
+  margin-bottom: 1rem; /* Adjust this value to taste */
+  margin-top: 1rem; /* Adjust this value to taste */
+  line-height: 1.25;
 }
 
+/* Kill the outer frame just for the live card */
+#cardBox.card {
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+}
 
+/* (optional) keep a little breathing room below the card */
+#cardBox { margin-bottom: .75rem; }
+
+/* Kill the extra wrapper frame around the hero */
+#summaryList .summary-head.card {
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* optional: a bit of breathing room below the hero block */
+#summaryList .summary-head { margin-bottom: .75rem; }
