@@ -10,6 +10,16 @@ description: Dr. Molly Gebrian’s Interleaved Clicking Up method is a powerful
 practice tool, but it can sometimes feel like navigating a maze. 
 This app provides turn-by-turn guidance to keep you on the right path.
 
+url: ../flashcards/flash.html
+title: Name that Note
+classification: beta
+new: true
+image: boxshots/flash.png
+date: released: 
+description: Sharpen your note recognition skills.  
+This quiz trains you to quickly identify clarinet notes across 
+an extended range — from low E below the staff up to super-high C.
+
 url: ../random/random.html
 title: Random Practice
 classification: beta
@@ -18,16 +28,6 @@ image: boxshots/random_practice3.png
 date: released: 
 description: Stay on track in your random practice routine. Automatically record metronome settings and s
 uccessful reps to track progress without breaking focus.
-
-url: ../flashcards/flash.html
-title: Name that Note
-classification: private
-new:
-image: boxshots/flash.png
-date: released: 
-description: Sharpen your note recognition skills.  
-This quiz trains you to quickly identify clarinet notes across 
-an extended range — from low E below the staff up to super-high C.
 
 url: ../pp/app_practice_priority.html
 title: Red-Yellow-Green Practice Priority
