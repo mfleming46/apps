@@ -27,6 +27,9 @@
   const elStatus   = document.getElementById("status");
   const elBtnEasy  = document.getElementById("btnEasy");
   const elBtnAdv   = document.getElementById("btnAdvanced");
+	
+	// Define a specific key for your app
+  const storageKey = '_rc_name_note'; // Customize the key here
 
   elBtnEasy.addEventListener("click", () => selectModeAndStart("perQuestion"));
   elBtnAdv.addEventListener("click",  () => selectModeAndStart("end"));
@@ -73,6 +76,7 @@
     if (["A","B","C","D","E","F","G"].includes(k)) { e.preventDefault(); onPick(k); }
   });
 
+  loadStateFromStorage();
   tryFetchDeck();
 
   async function tryFetchDeck() {
@@ -409,13 +413,29 @@ function showSummaryFlow(early = false){
 	// remember last attempt only for full completions
   if (!early && answers.length === order.length) {
 		lastAttempt = { pct, total: answers.length, avgTimeSec: Number(avgSec.toFixed(2)) };
+		saveStateToStorage();
 	}
 	
 }
 
 
+function loadStateFromStorage() {
+  const state = SafeStorage.getItem(storageKey);
+  lastAttempt = (state && typeof state === 'object' && state.lastAttempt) ? state.lastAttempt : null;
+}
 
-  function logClick() {
+function saveStateToStorage() {
+  SafeStorage.setItem(storageKey, { lastAttempt });
+}
+
+function clearStateInStorage() {
+  lastAttempt = null;
+  SafeStorage.removeItem(storageKey);
+}
+
+
+
+function logClick() {
   fetch('../log.php?page=flash', { method: 'GET' })
   console.log("click logged");
 }
