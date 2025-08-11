@@ -259,3 +259,23 @@ label#loader input { display: none; }
 /* flash.css — keep recap card image height same as quiz cards */
 .flow .imgwrap.big { min-height: 13.75rem; }     /* was 16.25rem */
 .flow .imgwrap.big img { max-height: 17.5rem; }  /* match .imgwrap img */
+
+
+
+/* EQUAL WIDTH BUTTONS */
+/* Keep the original black style; make them equal width + accessible */
+#start .row { align-items: stretch; }
+
+.modebtn{
+  flex: 1 1 12rem;        /* equal widths, grow evenly */
+  min-width: 0;
+  justify-content: center;
+  background: #111;
+  color: #fff;
+  border: 1px solid #000;
+  border-radius: .625rem;
+  font-weight: 600;
+}
+.modebtn:hover{ background: #0e0e0e; }
+.modebtn:focus-visible{ outline: 3px solid #9ec5ff; outline-offset: 2px; }
+@media (max-width: 420px){ .modebtn{ flex: 1 1 100%; } }
