@@ -37,7 +37,7 @@
       else            deltaLine = `Same as last time (${lastPct}%)`;
     }
 
-    const title = (!early && attempted === total) ? "Nice Work – Quiz complete!" : "Session summary";
+    const title = (!early && attempted === total) ? "Nice Work – Quiz complete!" : "Incomplete session";
     const line1 = (!early && attempted === total)
       ? `You answered ${correct} of ${attempted} correctly (${pct}%).`
       : `You attempted ${attempted} of ${total} cards. Correct: ${correct} (${pct}%).`;

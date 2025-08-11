@@ -13,6 +13,8 @@
   // add near the other state vars at the top of flash.js:
   let lastAttempt = null; // session-only memory of last summary {pct, total, avgTimeSec}
 
+	const IS_EDGE = /\bEdg\//.test(navigator.userAgent);
+
   const elIntro    = document.getElementById("intro");   // NEW: intro container
   const elStart    = document.getElementById("start");
   const elSummary  = document.getElementById("summaryList");
@@ -111,7 +113,7 @@
     return { cards: out, errors: [] };
   }
 
-  function checkImages(urls) {
+  function XcheckImages(urls) {
     return Promise.all(urls.map(u => new Promise(res => {
       const img = new Image();
       img.onload = () => res(null);
@@ -119,6 +121,39 @@
       img.src = u;
     }))).then(xs => xs.filter(Boolean));
   }
+	
+	// replace old checkImages with a resilient version (retry + cache-buster)
+function checkImages(urls) {
+  const toAbs = (u) => {
+    try { return new URL(u, location.href).href; }
+    catch { return u; }
+  };
+  const withBust = (u) => u + (u.includes('?') ? '&' : '?') + 'v=' + Date.now();
+
+  const tryLoad = (u, attempt = 1) => new Promise((res) => {
+    const img = new Image();
+    let settled = false;
+
+    const done = (value) => { if (!settled) { settled = true; res(value); } };
+
+    img.onload  = () => done(null);
+    img.onerror = () => {
+      if (attempt === 1) {
+        // retry once with cache-busting query param
+        const u2 = withBust(u);
+        tryLoad(u2, 2).then(done);
+      } else {
+        done(u); // report bad url
+      }
+    };
+
+    // fire the request
+    img.src = toAbs(u);
+  });
+
+  return Promise.all(urls.map((u) => tryLoad(u))).then((xs) => xs.filter(Boolean));
+}
+
 
   function selectModeAndStart(chosen) {
     pendingMode = chosen;

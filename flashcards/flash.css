@@ -163,6 +163,7 @@ label#loader input { display: none; }
   display: grid;
   gap: .75rem;                  /* 12px */
   margin-top: .75rem;           /* 12px */
+	row-gap: 1.5rem;
 }
 
 .flow .cardblock {
@@ -253,3 +254,8 @@ label#loader input { display: none; }
 
 /* optional: a bit of breathing room below the hero block */
 #summaryList .summary-head { margin-bottom: .75rem; }
+
+
+/* flash.css — keep recap card image height same as quiz cards */
+.flow .imgwrap.big { min-height: 13.75rem; }     /* was 16.25rem */
+.flow .imgwrap.big img { max-height: 17.5rem; }  /* match .imgwrap img */

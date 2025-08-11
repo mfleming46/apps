@@ -64,8 +64,13 @@
 p.hc-answers-note{ margin-top: var(--hc-answers-gap); color:var(--hc-muted); }
 
 /* Stack on narrow screens (no centering) */
-@media (max-width: 40rem){
+@media (max-width: 32rem){
   .hc-hero__row{ grid-template-columns:1fr; align-items:start; }
   .hc-hero      { --hc-badge:4.9rem; }
   /* note: no margin auto here; badge will stay left-aligned */
 }
+
+/* Give the text a bit more room */
+/*
+.hc-hero { --hc-gap: 1rem; }            /* was 1.5rem */
+*/
