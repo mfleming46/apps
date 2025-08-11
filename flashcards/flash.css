@@ -279,3 +279,12 @@ label#loader input { display: none; }
 .modebtn:hover{ background: #0e0e0e; }
 .modebtn:focus-visible{ outline: 3px solid #9ec5ff; outline-offset: 2px; }
 @media (max-width: 420px){ .modebtn{ flex: 1 1 100%; } }
+
+
+/* Bottom restart button on the summary page */
+.summary-bottom {
+  display: flex;
+  justify-content: center;
+	padding: 0;
+}
+
