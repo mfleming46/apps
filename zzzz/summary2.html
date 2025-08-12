@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Log Summary by Page (with Location Aggregation)</title>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.4; }
+  #env-note { color: #555; font-style: italic; margin-top: -10px; margin-bottom: 20px; }
+  .row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .controls { display: flex; gap: 8px; align-items: center; }
+  .muted { color: #666; font-size: 0.9em; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 24px; }
+  th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+  th { background: #f6f6f6; user-select: none; cursor: pointer; position: sticky; top: 0; }
+  tbody tr:nth-child(even) { background: #fafafa; }
+  .badge { display: inline-block; padding: 2px 6px; font-size: 12px; border-radius: 999px; background: #eef; border: 1px solid #dde; }
+  .loading { opacity: 0.7; }
+  .alert { padding: 10px 12px; background: #fffbeb; border: 1px solid #fde68a; color: #7c5a00; border-radius: 8px; }
+  .ok { padding: 10px 12px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; border-radius: 8px; }
+  .stack { display: grid; gap: 6px; }
+  .nowrap { white-space: nowrap; }
+  .bar { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+</style>
+</head>
+<body>
+  <h1>Log Summary by App/Page</h1>
+  <div id="env-note"></div>
+
+  <div class="row">
+    <button onclick="clearLog()">Clear Log</button>
+    <div class="controls">
+      <label class="muted">Geo source:</label>
+      <select id="geo-source">
+        <option value="ipapi">ipapi.co (no token)</option>
+        <option value="ipinfo">ipinfo.io (needs token)</option>
+      </select>
+      <input id="ipinfo-token" placeholder="ipinfo token (optional)" size="24" />
+      <span class="muted">Cache: <span id="cache-count">0</span> IPs</span>
+      <button id="clear-cache">Clear geo cache</button>
+    </div>
+  </div>
+
+  <pre id="summary">Loading...</pre>
+
+  <div id="location-section" class="stack">
+    <h2>Aggregated by Location</h2>
+    <div class="muted">IPv6 can map many addresses to the same user/device; this table aggregates by Country and State/Province using a geo-IP lookup with client-side caching.</div>
+    <div id="geo-status" class="alert">Looking up locations…</div>
+
+    <h3>Hits by Country</h3>
+    <div id="country-wrap"></div>
+
+    <h3>Hits by Country + Region</h3>
+    <div id="region-wrap"></div>
+  </div>
+
+<script>
+  // ====== Config ======
+  const GEO_CACHE_KEY = 'ipGeoCache.v1';
+  const GEO_CACHE_TTL_DAYS = 7; // refresh IP geo weekly
+  const localIps = new Set(['127.0.0.1', '::1']);
+
+  let myIp = null;
+
+  // Utilities
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+  const fmt = (n) => n.toLocaleString();
+
+  function loadGeoCache() {
+    try {
+      const raw = localStorage.getItem(GEO_CACHE_KEY);
+      if (!raw) return {};
+      const obj = JSON.parse(raw);
+      // purge expired
+      const now = Date.now();
+      const ttl = GEO_CACHE_TTL_DAYS * 86400_000;
+      const pruned = {};
+      let kept = 0;
+      for (const [ip, entry] of Object.entries(obj)) {
+        if (entry && entry.t && (now - entry.t) < ttl) { pruned[ip] = entry; kept++; }
+      }
+      if (kept !== Object.keys(obj).length) {
+        localStorage.setItem(GEO_CACHE_KEY, JSON.stringify(pruned));
+      }
+      return pruned;
+    } catch { return {}; }
+  }
+
+  function saveGeoCache(cache) {
+    try { localStorage.setItem(GEO_CACHE_KEY, JSON.stringify(cache)); }
+    catch {}
+    updateCacheCount(cache);
+  }
+
+  function updateCacheCount(cache) {
+    document.getElementById('cache-count').textContent = Object.keys(cache).length;
+  }
+
+  document.getElementById('clear-cache').addEventListener('click', () => {
+    localStorage.removeItem(GEO_CACHE_KEY);
+    updateCacheCount({});
+  });
+
+  function pickGeoSource() {
+    const src = document.getElementById('geo-source').value;
+    const token = document.getElementById('ipinfo-token').value.trim();
+    return { src, token };
+  }
+
+  async function geoLookup(ip, src, token) {
+    // return { country: 'United States', countryCode: 'US', region: 'California', city: 'San Francisco' }
+    try {
+      let url = '';
+      if (src === 'ipinfo') {
+        url = `https://ipinfo.io/${ip}/json${token ? `?token=${encodeURIComponent(token)}` : ''}`;
+      } else {
+        // ipapi
+        url = `https://ipapi.co/${ip}/json/`;
+      }
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('geo http ' + res.status);
+      const j = await res.json();
+
+      if (src === 'ipinfo') {
+        return {
+          country: j.country || '',
+          countryCode: j.country || '',
+          region: j.region || j.state || '',
+          city: j.city || ''
+        };
+      } else {
+        return {
+          country: j.country_name || j.country || '',
+          countryCode: j.country_code || j.country || '',
+          region: j.region || j.region_code || j.province || '',
+          city: j.city || ''
+        };
+      }
+    } catch (e) {
+      return { country: '', countryCode: '', region: '', city: '' };
+    }
+  }
+
+  // Simple concurrency limiter
+  async function mapLimit(items, limit, iter) {
+    const ret = [];
+    const executing = [];
+    for (const item of items) {
+      const p = Promise.resolve().then(() => iter(item));
+      ret.push(p);
+      if (limit <= items.length) {
+        const e = p.then(() => executing.splice(executing.indexOf(e), 1));
+        executing.push(e);
+        if (executing.length >= limit) await Promise.race(executing);
+      }
+    }
+    return Promise.all(ret);
+  }
+
+  // Fetch user's IP first
+  fetch('https://api.ipify.org?format=json')
+    .then(r => r.json())
+    .then(({ ip }) => {
+      myIp = ip;
+      if (location.hostname === 'localhost' || localIps.has(location.hostname)) {
+        document.getElementById('env-note').textContent = '(Running locally — IP filtering includes localhost)';
+      }
+      loadSummary();
+    })
+    .catch(() => {
+      document.getElementById('env-note').textContent = '(Could not determine IP — showing all data)';
+      loadSummary();
+    });
+
+  async function loadSummary() {
+    try {
+      const response = await fetch('/apps/log_summary.php');
+      if (!response.ok) throw new Error('Failed to load log');
+      const text = await response.text();
+
+      const lines = text.trim().split('\n').filter(line => line.trim() !== '');
+      const pages = {};
+      const visitors = new Set();
+      const ipData = {}; // ip -> { count, dates[] }
+      const dates = [];
+      let validHits = 0;
+
+      for (let raw of lines) {
+        const [timestamp, ip, page] = raw.split(',');
+        if (!timestamp || !ip || !page) continue;
+        if (ip === myIp || ip === '::1' || ip === '127.0.0.1') continue; // filter self/local
+
+        validHits++;
+        const date = timestamp.slice(0, 10);
+        const cleanPage = page.trim();
+
+        pages[cleanPage] = (pages[cleanPage] || 0) + 1;
+        visitors.add(ip);
+        if (!ipData[ip]) ipData[ip] = { count: 0, dates: [] };
+        ipData[ip].count++;
+        ipData[ip].dates.push(date);
+        dates.push(date);
+      }
+
+      dates.sort();
+      const startDate = dates[0] || 'N/A';
+      const endDate = dates[dates.length - 1] || 'N/A';
+
+      // build textual report (unchanged core)
+      let report = `Date range: ${startDate} to ${endDate}\n\n`;
+      report += 'Hits per app/page:\n';
+      for (let page in pages) {
+        report += `  ${page}: ${pages[page]}\n`;
+      }
+      report += `\nTotal hits: ${validHits}`;
+      report += `\nUnique IPs (excluding yours): ${visitors.size}`;
+
+      // Hits per day (bar chart)
+      const dateCounts = {};
+      dates.forEach(d => dateCounts[d] = (dateCounts[d] || 0) + 1);
+      report += `\n\nHits per day (excluding your IP):\n`;
+      const maxHits = Math.max(0, ...Object.values(dateCounts));
+      const scaleFactor = maxHits > 0 ? 40 / maxHits : 1;
+      Object.entries(dateCounts).sort().forEach(([d, c]) => {
+        const bar = 'x'.repeat(Math.round(c * scaleFactor));
+        report += `${d}  ${String(c).padStart(5)}  ${bar}\n`;
+      });
+
+      document.getElementById('summary').textContent = report;
+
+      // ===== Location aggregation =====
+      const ips = Object.keys(ipData);
+      await aggregateByLocation(ips, ipData);
+
+    } catch (err) {
+      console.error(err);
+      document.getElementById('summary').textContent = 'Error loading log.';
+    }
+  }
+
+  async function aggregateByLocation(ips, ipData) {
+    const { src, token } = pickGeoSource();
+    const cache = loadGeoCache();
+    updateCacheCount(cache);
+
+    const geoStatus = document.getElementById('geo-status');
+    geoStatus.textContent = 'Looking up locations…';
+
+    const dedup = ips.filter(ip => !(ip in cache));
+
+    // perform lookups with concurrency limit (be gentle to free APIs)
+    await mapLimit(dedup, 5, async (ip) => {
+      const info = await geoLookup(ip, src, token);
+      cache[ip] = { t: Date.now(), info };
+      // Tiny delay to avoid hammering
+      await sleep(100);
+    });
+
+    saveGeoCache(cache);
+
+    // Aggregate
+    const countryAgg = {}; // { country: { hits, ipCount } }
+    const regionAgg = {};  // { country|region: { country, region, hits, ipCount } }
+
+    for (const ip of ips) {
+      const count = ipData[ip]?.count || 0;
+      const entry = cache[ip]?.info || {};
+      const country = entry.country || 'Unknown';
+      const region = entry.region || '';
+
+      // country
+      if (!countryAgg[country]) countryAgg[country] = { hits: 0, ipCount: 0 };
+      countryAgg[country].hits += count;
+      countryAgg[country].ipCount += 1;
+
+      // region (country + region)
+      const key = `${country}||${region || '—'}`;
+      if (!regionAgg[key]) regionAgg[key] = { country, region: region || '—', hits: 0, ipCount: 0 };
+      regionAgg[key].hits += count;
+      regionAgg[key].ipCount += 1;
+    }
+
+    // Render tables
+    const countryRows = Object.entries(countryAgg)
+      .map(([country, v]) => ({ Country: country, Hits: v.hits, "Unique IPs": v.ipCount }))
+      .sort((a, b) => b.Hits - a.Hits);
+
+    const regionRows = Object.values(regionAgg)
+      .map(v => ({ Country: v.country, Region: v.region, Hits: v.hits, "Unique IPs": v.ipCount }))
+      .sort((a, b) => b.Hits - a.Hits);
+
+    renderTable('country-wrap', countryRows, ['Country', 'Hits', 'Unique IPs']);
+    renderTable('region-wrap', regionRows, ['Country', 'Region', 'Hits', 'Unique IPs']);
+
+    const lookedUp = ips.length - dedup.length;
+    const newLookups = dedup.length;
+    geoStatus.className = 'ok';
+    geoStatus.textContent = `Location aggregation ready. Used ${fmt(lookedUp)} cached, fetched ${fmt(newLookups)} new.`;
+  }
+
+  function renderTable(mountId, rows, headers) {
+    const mount = document.getElementById(mountId);
+    if (!rows.length) { mount.innerHTML = '<div class="muted">No data.</div>'; return; }
+
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+
+    // header
+    const tr = document.createElement('tr');
+    headers.forEach((h, idx) => {
+      const th = document.createElement('th');
+      th.textContent = h;
+      th.classList.add('nowrap');
+      th.addEventListener('click', () => sortTable(table, idx));
+      tr.appendChild(th);
+    });
+    thead.appendChild(tr);
+
+    // rows
+    for (const row of rows) {
+      const tr = document.createElement('tr');
+      headers.forEach(h => {
+        const td = document.createElement('td');
+        const val = row[h];
+        td.textContent = typeof val === 'number' ? fmt(val) : (val ?? '');
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    }
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    mount.innerHTML = '';
+    mount.appendChild(table);
+  }
+
+  function sortTable(table, colIdx) {
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    const isNumeric = (v) => /^-?\d[\d,]*$/.test(v.replace(/\s/g, ''));
+
+    // toggle direction by storing on table dataset
+    const key = `sort${colIdx}`;
+    const dir = (table.dataset[key] === 'asc') ? 'desc' : 'asc';
+    table.dataset[key] = dir;
+
+    rows.sort((a, b) => {
+      const av = a.cells[colIdx].textContent.trim();
+      const bv = b.cells[colIdx].textContent.trim();
+      if (isNumeric(av) && isNumeric(bv)) {
+        const an = parseInt(av.replace(/,/g, ''), 10);
+        const bn = parseInt(bv.replace(/,/g, ''), 10);
+        return dir === 'asc' ? an - bn : bn - an;
+      }
+      return dir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+    });
+
+    // re-attach
+    rows.forEach(r => tbody.appendChild(r));
+  }
+
+  function clearLog() {
+    if (!confirm('Are you sure you want to clear the log?')) return;
+    fetch('/apps/clear_log.php', { method: 'POST' })
+      .then(r => r.text())
+      .then(msg => { alert(msg); loadSummary(); })
+      .catch(err => { alert('Error clearing log.'); console.error(err); });
+  }
+</script>
+</body>
+</html>
