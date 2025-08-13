@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Log Summary — Modular (Manual IP Stash)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.4; margin: 20px; }
+    h1 { margin: 0 0 8px; }
+    .muted { color:#666; font-size:.9em; margin: 6px 0 14px; }
+    pre { background:#f7f7f7; padding:10px; border-radius:6px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    button, input[type="file"] { padding:6px 10px; }
+    input[type="text"] { padding:6px 8px; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin: 8px 0; }
+    .pill { display:inline-block; padding:4px 8px; border:1px solid #ddd; border-radius:999px; background:#fafafa; cursor:pointer; margin:4px 6px 0 0; }
+    .pill:hover { background:#f0f0f0; }
+    .divider { height:1px; background:#eee; margin:14px 0; }
+    .section { margin: 18px 0; }
+  </style>
+</head>
+<body>
+  <h1>Log Summary</h1>
+  <div class="muted" id="env-note"></div>
+
+  <!-- ======= REPORT: SUMMARY HEADER ======= -->
+  <div class="section">
+    <pre id="summary">Loading…</pre>
+  </div>
+
+  <!-- ======= REPORT: HITS BY DAY (TABLE) ======= -->
+  <!--
+  <div class="section">
+    <h2>Hits by Day — plain text</h2>
+    <pre id="day-table">Building…</pre>
+  </div>
+  -->
+
+  <!-- ======= REPORT: HITS BY DAY (BAR GRAPH) ======= -->
+  <div class="section">
+    <h2>Hits by Day — bar graph</h2>
+    <pre id="day-bars">Building…</pre>
+  </div>
+
+  <!-- ======= REPORT: HITS BY IP (PREFIX) ======= -->
+  <div class="section">
+    <h2>Hits by IP (prefix) — plain text</h2>
+    <div class="muted">Identity = IP prefix. IPv6 grouped by first 4 hextets; IPv4 by exact address (toggleable).</div>
+    <pre id="ip-table">Building…</pre>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======= MANUAL STASH UI ======= -->
+  <div class="section">
+    <h2>Manual IP → Location stash</h2>
+    <div class="muted">
+      Add exactly the <em>ip (prefix)</em> shown in the table, e.g. <code>2a02:c7c:7c84:c700</code> or <code>70.119.124.187</code>.
+      Location can be a timezone or “Country/Region” string.
+    </div>
+
+    <div class="row">
+      <label>IP/prefix</label>
+      <input id="ip-input" type="text" size="26" placeholder="e.g. 2a02:c7c:7c84:c700" />
+      <label>Location</label>
+      <input id="loc-input" type="text" size="24" placeholder="e.g. Europe/London" />
+      <button id="add-update">Add / Update</button>
+      <button id="delete-entry">Delete</button>
+    </div>
+
+    <div class="row">
+      <button id="export-stash">Export JSON</button>
+      <input id="import-file" type="file" accept="application/json" />
+      <button id="clear-stash">Clear all</button>
+      <label class="muted" title="When on, IPv4 entries are grouped by /24: 70.119.124.*">(IPv4 /24 grouping:)
+        <input id="group24" type="checkbox" />
+      </label>
+    </div>
+
+    <div class="muted">Unknown prefixes (click to prefill):</div>
+    <div id="unknown-list"></div>
+  </div>
+	
+	<div class="divider"></div>
+	<div class="section">
+    <h2>Archive the Log</h2>
+		<div class="section">
+			<button id="archive-log">Archive & start new log</button>
+			<div class="muted">Moves ../log.txt → log-YYYY-MM-DD[-N].txt, then creates a fresh empty log.txt.</div>
+		</div>
+	</div>
+
+
+  <!-- ======= SCRIPTS ======= -->
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

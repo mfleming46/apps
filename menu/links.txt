@@ -43,6 +43,12 @@ date: released:
 description: A tool for reflecting on whether we are
 keeping up with those things we are supposed to practice every day.
 
+url: ../log-report/index.html
+title: Usage Summary
+classification: private
+new: true
+description: Hit count report for apps
+
 url: ../summary.html
 title: Usage Summary
 classification: private

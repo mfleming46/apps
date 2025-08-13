@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Log Summary — Manual IP Stash + By-Day + Bar Graph</title>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.4; margin: 20px; }
+  h1 { margin: 0 0 8px; }
+  .muted { color:#666; font-size:.9em; margin: 6px 0 14px; }
+  pre { background:#f7f7f7; padding:10px; border-radius:6px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  button, input[type="file"] { padding:6px 10px; }
+  input[type="text"] { padding:6px 8px; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin: 8px 0; }
+  .pill { display:inline-block; padding:4px 8px; border:1px solid #ddd; border-radius:999px; background:#fafafa; cursor:pointer; margin:4px 6px 0 0; }
+  .pill:hover { background:#f0f0f0; }
+  .divider { height:1px; background:#eee; margin:14px 0; }
+</style>
+</head>
+<body>
+  <h1>Log Summary</h1>
+  <div class="muted" id="env-note"></div>
+
+  <pre id="summary">Loading…</pre>
+
+  <h2>Hits by Day — plain text</h2>
+  <pre id="day-table">Building…</pre>
+
+  <h2>Hits by Day — bar graph</h2>
+  <pre id="day-bars">Building…</pre>
+
+  <h2>Hits by IP (prefix) — plain text</h2>
+  <div class="muted">Identity = IP prefix. IPv6 grouped by first 4 hextets; IPv4 by exact address (toggleable).</div>
+  <pre id="ip-table">Building…</pre>
+
+  <div class="divider"></div>
+
+  <h2>Manual IP → Location stash</h2>
+  <div class="muted">Add exactly the <em>ip (prefix)</em> shown in the table, e.g. <code>2a02:c7c:7c84:c700</code> or <code>70.119.124.187</code>. Location can be a timezone or “Country/Region” string.</div>
+
+  <div class="row">
+    <label>IP/prefix</label>
+    <input id="ip-input" type="text" size="26" placeholder="e.g. 2a02:c7c:7c84:c700" />
+    <label>Location</label>
+    <input id="loc-input" type="text" size="24" placeholder="e.g. Europe/London" />
+    <button id="add-update">Add / Update</button>
+    <button id="delete-entry">Delete</button>
+  </div>
+
+  <div class="row">
+    <button id="export-stash">Export JSON</button>
+    <input id="import-file" type="file" accept="application/json" />
+    <button id="clear-stash">Clear all</button>
+    <label class="muted" title="When on, IPv4 entries are grouped by /24: 70.119.124.*">(IPv4 /24 grouping:)
+      <input id="group24" type="checkbox" />
+    </label>
+  </div>
+
+  <div class="muted">Unknown prefixes (click to prefill):</div>
+  <div id="unknown-list"></div>
+
+<script>
+/* =================== SETTINGS =================== */
+const MIN_COUNT = 3;                 // hide rows with fewer hits than this
+let GROUP_IPV4_BY_24 = false;        // when true, IPv4 prefix = first 3 octets + ".*"
+/* ================================================= */
+
+const STASH_KEY = 'ipPrefixStash.v1';        // prefix -> location
+const STASH_SEEDED_KEY = 'ipPrefixStashSeeded.v1';
+const localIps = new Set(['127.0.0.1','::1']);
+let myIp = null;
+
+const fmt = n => n.toLocaleString();
+
+/* ---------- IP normalization (must match table behavior) ---------- */
+function normalizeIp(ip){
+  if (ip.includes(':')) {
+    const left = ip.split('::')[0];
+    const parts = left.split(':').filter(Boolean);
+    const keep = parts.slice(0,4).join(':');
+    return keep || '::';
+  }
+  if (GROUP_IPV4_BY_24) return ip.split('.').slice(0,3).join('.') + '.*';
+  return ip;
+}
+
+/* ---------- Stash (localStorage) ---------- */
+function loadStash(){
+  try { return JSON.parse(localStorage.getItem(STASH_KEY) || '{}'); }
+  catch { return {}; }
+}
+function saveStash(s){ localStorage.setItem(STASH_KEY, JSON.stringify(s)); }
+function seedStashOnce(){
+  if (localStorage.getItem(STASH_SEEDED_KEY)) return;
+  const s = loadStash();
+  const seeds = {
+    '70.119.124.187': 'America/Chicago',
+    '71.230.229.75':  'America/New_York',
+    '77.164.170.109': 'Europe/Amsterdam',
+    '81.217.84.9':    'Europe/Vienna',
+    '24.94.4.106':    'America/Los_Angeles'
+  };
+  for (const [k,v] of Object.entries(seeds)) if (!(k in s)) s[k] = v;
+  saveStash(s);
+  localStorage.setItem(STASH_SEEDED_KEY, '1');
+}
+
+/* ---------- UI wiring for stash ---------- */
+const ipInput  = document.getElementById('ip-input');
+const locInput = document.getElementById('loc-input');
+document.getElementById('add-update').onclick = () => {
+  const key = ipInput.value.trim();
+  const loc = locInput.value.trim();
+  if (!key) { alert('Enter an IP/prefix.'); return; }
+  if (!loc) { alert('Enter a location.'); return; }
+  const s = loadStash();
+  s[key] = loc;
+  saveStash(s);
+  ipInput.value = ''; locInput.value = '';
+  buildIpTable(globalIps, globalIpData); // refresh
+};
+document.getElementById('delete-entry').onclick = () => {
+  const key = ipInput.value.trim();
+  if (!key) { alert('Enter the IP/prefix to delete.'); return; }
+  const s = loadStash();
+  if (s[key]) { delete s[key]; saveStash(s); buildIpTable(globalIps, globalIpData); }
+  ipInput.value=''; locInput.value='';
+};
+
+document.getElementById('export-stash').onclick = () => {
+  const blob = new Blob([JSON.stringify(loadStash(), null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ip-stash.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+document.getElementById('import-file').onchange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const txt = await file.text();
+    const obj = JSON.parse(txt);
+    if (typeof obj !== 'object' || Array.isArray(obj)) throw 0;
+    const s = loadStash();
+    Object.assign(s, obj);  // merge (import wins)
+    saveStash(s);
+    buildIpTable(globalIps, globalIpData);
+    alert('Imported.');
+  } catch { alert('Import failed: not valid JSON object.'); }
+  e.target.value = '';
+};
+document.getElementById('group24').onchange = (e) => {
+  GROUP_IPV4_BY_24 = e.target.checked;
+  buildIpTable(globalIps, globalIpData);
+};
+
+/* ---------- Load + summarize log ---------- */
+let globalIps = [];
+let globalIpData = {};
+
+seedStashOnce();
+
+// figure out my IP (to exclude)
+fetch('https://api.ipify.org?format=json')
+  .then(r=>r.json())
+  .then(({ip})=>{ myIp=ip; if (location.hostname==='localhost'||localIps.has(location.hostname)) document.getElementById('env-note').textContent='(Running locally — localhost filtered)'; loadSummary(); })
+  .catch(()=>{ document.getElementById('env-note').textContent='(Could not determine your IP — showing all data)'; loadSummary(); });
+
+async function loadSummary(){
+  try{
+    const r = await fetch('/apps/log_summary.php');
+    if(!r.ok) throw new Error('log http '+r.status);
+    const text = await r.text();
+
+    const lines = text.trim().split('\n').filter(Boolean);
+    const pages = {};
+    const visitors = new Set();
+    const ipData = {};  // ip -> {count, dates[]}
+    const dateCounts = {}; // date -> hits
+    const dates = [];
+    let validHits=0;
+
+    for (const raw of lines){
+      const [timestamp, ip, page] = raw.split(',');
+      if (!timestamp || !ip || !page) continue;
+      if (ip === myIp || ip === '::1' || ip === '127.0.0.1') continue;
+
+      validHits++;
+      const date = timestamp.slice(0,10);
+      const cleanPage = page.trim();
+
+      pages[cleanPage] = (pages[cleanPage]||0)+1;
+      dateCounts[date] = (dateCounts[date]||0)+1;
+
+      if (!ipData[ip]) ipData[ip] = {count:0, dates:[]};
+      ipData[ip].count++;
+      ipData[ip].dates.push(date);
+
+      dates.push(date);
+    }
+
+    dates.sort();
+    const startDate = dates[0] || 'N/A';
+    const endDate   = dates[dates.length-1] || 'N/A';
+
+    // summary text
+    let report = `Date range: ${startDate} to ${endDate}\n\nHits per app/page:\n`;
+    for (const p of Object.keys(pages).sort()) report += `  ${p}: ${pages[p]}\n`;
+    report += `\nTotal hits: ${validHits}\nUnique IPs (excluding yours): ${new Set(Object.keys(ipData)).size}`;
+    document.getElementById('summary').textContent = report;
+
+    // by-day table and bar graph
+    renderByDayTable(dateCounts);
+    renderByDayBars(dateCounts);
+
+    // save globally and build IP table
+    globalIps = Object.keys(ipData);
+    globalIpData = ipData;
+    buildIpTable(globalIps, globalIpData);
+  }catch(e){
+    document.getElementById('summary').textContent = 'Error loading log.';
+    console.error(e);
+  }
+}
+
+/* ---------- Render: Hits by Day (table) ---------- */
+function renderByDayTable(dateCounts){
+  const entries = Object.entries(dateCounts).sort((a,b)=> a[0].localeCompare(b[0])); // chronological
+  if (!entries.length) { document.getElementById('day-table').textContent='(no data)'; return; }
+
+  const pad = (s,n)=>String(s).padEnd(n,' ');
+  const num = (n,w)=>String(n).padStart(w,' ');
+  const header = `${pad('date', 12)}  ${pad('hits', 6)}`;
+  const lines = [header, '-'.repeat(header.length)];
+  for (const [d, c] of entries) lines.push(`${pad(d,12)}  ${num(c,6)}`);
+  document.getElementById('day-table').textContent = lines.join('\n');
+}
+
+/* ---------- Render: Hits by Day (bar graph) ---------- */
+function renderByDayBars(dateCounts){
+  const entries = Object.entries(dateCounts).sort((a,b)=> a[0].localeCompare(b[0]));
+  const el = document.getElementById('day-bars');
+  if (!entries.length){ el.textContent='(no data)'; return; }
+
+  const MAX_BAR = 40; // characters wide
+  const max = Math.max(...entries.map(([,c])=>c));
+  const scale = max > 0 ? MAX_BAR / max : 1;
+
+  const header = `date         hits   bar`;
+  const lines = [header, '-'.repeat(header.length)];
+  for (const [d, c] of entries){
+    lines.push(`${d.padEnd(12)}  ${String(c).padStart(5)}  ${'x'.repeat(Math.round(c*scale))}`);
+  }
+  el.textContent = lines.join('\n');
+}
+
+/* ---------- Build the plain text IP table from the stash ---------- */
+function buildIpTable(ips, ipData){
+  const buckets = {}; // prefix -> {hits, location}
+  const unknowns = {}; // prefix -> hits
+  const stash = loadStash();
+
+  for (const ip of ips){
+    const k = normalizeIp(ip);
+    const count = ipData[ip]?.count || 0;
+    if (!buckets[k]) buckets[k] = {hits:0, location:''};
+    buckets[k].hits += count;
+
+    if (!buckets[k].location && stash[k]) buckets[k].location = stash[k];
+  }
+
+  const rows = Object.entries(buckets)
+    .map(([key,v]) => {
+      const loc = v.location || 'Unknown';
+      if (loc === 'Unknown') unknowns[key] = (unknowns[key]||0) + v.hits;
+      return {key, hits:v.hits, location: loc};
+    })
+    .filter(r => r.hits >= MIN_COUNT)
+    .sort((a,b)=> b.hits - a.hits || a.key.localeCompare(b.key));
+
+  // render fixed width text
+  const pad = (s,n)=>String(s).padEnd(n,' ');
+  const num = (n,w)=>String(n).padStart(w,' ');
+  const header = `${pad('hits',7)}  ${pad('ip (prefix)',32)}  location`;
+  const lines = [header, '-'.repeat(header.length)];
+  for (const r of rows) lines.push(`${num(r.hits,7)}  ${pad(r.key,32)}  ${r.location}`);
+  document.getElementById('ip-table').textContent =
+    lines.length>2 ? lines.join('\n') : `(no entries with >= ${MIN_COUNT} hits)`;
+
+  // render unknown helper pills
+  const unknownMount = document.getElementById('unknown-list');
+  unknownMount.innerHTML = '';
+  const entries = Object.entries(unknowns).sort((a,b)=>b[1]-a[1]);
+  for (const [prefix,hits] of entries){
+    const span = document.createElement('span');
+    span.className = 'pill';
+    span.title = 'Click to prefill the form';
+    span.textContent = `${prefix} (${fmt(hits)})`;
+    span.onclick = () => { ipInput.value = prefix; locInput.focus(); };
+    unknownMount.appendChild(span);
+  }
+  if (!entries.length) {
+    unknownMount.innerHTML = '<span class="muted">None 🎉</span>';
+  }
+}
+</script>
+</body>
+</html>
