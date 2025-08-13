@@ -41,7 +41,7 @@
     });
 
   function loadSummary() {
-    fetch('/apps/log_summary.php')
+    fetch('log-echo.php')
       .then(response => {
         if (!response.ok) throw new Error("Failed to load log");
         return response.text();
@@ -126,6 +126,7 @@
   }
 
   function clearLog() {
+	   /*
     if (!confirm("Are you sure you want to clear the log?")) return;
 
     fetch('/apps/clear_log.php', { method: 'POST' })
@@ -138,6 +139,7 @@
         alert("Error clearing log.");
         console.error(err);
       });
+			*/
   }
 </script>
 

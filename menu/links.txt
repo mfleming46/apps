@@ -49,7 +49,7 @@ classification: private
 new: true
 description: Hit count report for apps
 
-url: ../summary.html
+url: ../log-report/old-summary.html
 title: Usage Summary
 classification: private
 description: Hit count report for apps
