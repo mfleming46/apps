@@ -1,6 +1,7 @@
 
 
 url: ../icu/icu.html
+appid: icu
 title: ICU (Interleaved Clicking Up)
 classification: live
 new: true
@@ -11,6 +12,7 @@ practice tool, but it can sometimes feel like navigating a maze.
 This app provides turn-by-turn guidance to keep you on the right path.
 
 url: ../flashcards/flash.html
+appid: flash
 title: Name that Note
 classification: beta
 new: true
@@ -21,6 +23,7 @@ This quiz trains you to quickly identify clarinet notes across
 an extended range — from low E below the staff up to super-high C.
 
 url: ../random/random.html
+appid: random
 title: Random Practice
 classification: beta
 new:
@@ -30,12 +33,14 @@ description: Stay on track in your random practice routine. Automatically record
 uccessful reps to track progress without breaking focus.
 
 url: ../pp/app_practice_priority.html
+appid: pp
 title: Red-Yellow-Green Practice Priority
 classification: private
 date: released: 
 description: Prioritize your practice sessions to focus on parts of your music that need the most work.
 
 url: ../fund/app_fundamentals.html
+appid: fund
 title: Fundamentals Checklist
 classification: private
 image: boxshots/fundamentals1.png
@@ -44,17 +49,20 @@ description: A tool for reflecting on whether we are
 keeping up with those things we are supposed to practice every day.
 
 url: ../log-report/index.html
+appid: new-log
 title: Usage Summary
 classification: private
 new: true
 description: Hit count report for apps
 
 url: ../log-report/old-summary.html
+appid: old-log
 title: Usage Summary
 classification: private
 description: Hit count report for apps
 
 url: ../random/old/app_interleave.html
+appid: old-interleave
 title: Interleave - old version
 classification: private
 description: 

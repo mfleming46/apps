@@ -121,7 +121,25 @@ function renderLinks(links) {
         return;
       }
 
-      if (link.url) window.open(link.url, '_blank');
+      // if (link.url) window.open(link.url, '_blank');
+			// ---- patch
+			// NEW: per-item control
+			function sanitizeName(s) {
+				return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 24) || 'app';
+			}
+
+			if (link.url) {
+				const allowDup = (link.dup || '').toLowerCase() === 'true';
+				const name = link.appid ? sanitizeName(link.appid) : null;
+
+				if (allowDup || !name) {
+					window.open(link.url, '_blank');          // explicit dup behavior
+				} else {
+					const w = window.open(link.url, name);     // reuse/focus this app’s tab
+					if (w) w.opener = null;                    // safety
+				}
+			}
+			// ---- end patch
     });
 
     container.appendChild(card);
