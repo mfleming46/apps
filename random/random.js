@@ -180,6 +180,7 @@ function subdiv_change() {
 	handleStart()
 }
 
+
 function btnPass_click() {
 	console.log("btnPass_click");
 	v = doPass(currentID);
@@ -272,7 +273,7 @@ function setCurrent(i) {
 	}
 }
 
-function doFail(i) {
+function XdoFail(i) {
 	logClick();
 	s = ("00" + i).slice (-2);
 	objStrk(i).value= "";
@@ -280,10 +281,19 @@ function doFail(i) {
 	return 0;
 }
 
+
+function doFail(i) {
+	logClick();
+	v = max(0, parseInt(objStrkH(i).value)) - 1;
+	objStrk(i).value = "F" + (-v).toString();
+	objStrkH(i).value = v;
+	return v;
+}
+
 function doPass(i) {
 	logClick();
-	v = parseInt(objStrkH(i).value)+1;
-	objStrk(i).value = strkDisplay(v);
+	v = min(0, parseInt(objStrkH(i).value)) + 1;
+	objStrk(i).value = "P" + v.toString();
 	objStrkH(i).value = v;
 	return v;
 }
