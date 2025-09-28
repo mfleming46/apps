@@ -284,7 +284,9 @@ function XdoFail(i) {
 
 function doFail(i) {
 	logClick();
-	v = max(0, parseInt(objStrkH(i).value)) - 1;
+	v = parseInt(objStrkH(i).value);
+	if (v>0) v=0;
+	v -= 1;
 	objStrk(i).value = "F" + (-v).toString();
 	objStrkH(i).value = v;
 	return v;
@@ -292,7 +294,9 @@ function doFail(i) {
 
 function doPass(i) {
 	logClick();
-	v = min(0, parseInt(objStrkH(i).value)) + 1;
+	v = parseInt(objStrkH(i).value);
+	if (v<0) v=0;
+	v += 1;
 	objStrk(i).value = "P" + v.toString();
 	objStrkH(i).value = v;
 	return v;
